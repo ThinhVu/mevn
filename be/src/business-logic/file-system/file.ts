@@ -1,4 +1,4 @@
-import File, {IFile} from '../../db/models/fe/file';
+import File, {IFile} from '../../db/models/file-system/file';
 import {Types} from "mongoose";
 
 export const get = async (fileId: Types.ObjectId) : Promise<IFile> => File.findOne({_id: fileId});

@@ -1,4 +1,4 @@
-import Folder , {IFolder} from "../../db/models/fe/folder";
+import Folder , {IFolder} from "../../db/models/file-system/folder";
 import _ from 'lodash';
 import {Types} from "mongoose";
 
