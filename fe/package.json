@@ -1,0 +1,30 @@
+{
+  "scripts": {
+    "dev": "npm run server",
+    "prod": "npm run build && npm run server:prod",
+    "build": "vite build",
+    "server": "node ./server",
+    "server:prod": "cross-env NODE_ENV=production node ./server"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/compiler-sfc": "^3.2.33",
+    "@vue/server-renderer": "^3.2.33",
+    "axios": "^1.3.4",
+    "compression": "^1.7.4",
+    "cross-env": "^7.0.3",
+    "express": "^4.18.1",
+    "hmm": "Thinhvu/hmmjs#0.69.420",
+    "json-fn": "^1.1.1",
+    "lodash": "^4.17.21",
+    "pinia": "^2.0.32",
+    "sirv": "^2.0.2",
+    "uuid": "^9.0.0",
+    "vite": "^4.0.3",
+    "vite-plugin-ssr": "^0.4.86",
+    "vue": "^3.2.33"
+  },
+  "devDependencies": {
+    "unocss": "^0.50.1"
+  }
+}
