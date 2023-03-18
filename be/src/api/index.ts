@@ -17,8 +17,8 @@ router.post('/user/logout', rateLimit({windowMs: 15 * 60 * 1000, max: 50, standa
 router.post('/user/change-password', rateLimit({windowMs: 15 * 60 * 1000, max: 50, standardHeaders: true, legacyHeaders: false }), UserCtl.changePassword);
 router.post('/user/forgot-password', rateLimit({windowMs: 15 * 60 * 1000, max: 50, standardHeaders: true, legacyHeaders: false }), UserCtl.forgotPassword);
 router.post('/user/reset-password', rateLimit({windowMs: 15 * 60 * 1000, max: 50, standardHeaders: true, legacyHeaders: false}), UserCtl.resetPassword);
-router.get('/users/profile/:id', requireUser, UserCtl.getProfile);
-router.put('/users/profile', requireUser, UserCtl.updateProfile);
+router.get('/user/profile/:id', requireUser, UserCtl.getProfile);
+router.put('/user/profile', requireUser, UserCtl.updateProfile);
 router.get('/users', requireAdmin, UserCtl.getAll);
 
 // health check

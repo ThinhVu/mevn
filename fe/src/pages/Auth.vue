@@ -20,7 +20,9 @@ import Spacer from '@/components/UiLib/Spacer.vue';
 import Txt from '@/components/UiLib/Txt.vue';
 import dialog from '@/components/UiLib/System/dialog';
 import UserInfoDialog from '@/components/App/UserInfoDialog.vue';
-const emit = defineEmits(['close'])
+import {useRouter} from 'vue-router';
+
+const router = useRouter()
 
 const email = ref()
 const password = ref()
@@ -29,13 +31,13 @@ const cancel = () => emit('close')
 const signIn = async () => {
   const succeeded = await userAPI.signIn(email.value, password.value)
   if (succeeded)
-    emit('close')
+    router.push({path: '/'})
 }
 const signUp = async () => {
   const succeeded = await userAPI.signUp(email.value, password.value)
   if (succeeded) {
     await dialog.show({component: UserInfoDialog})
-    emit('close')
+    router.push({path: '/'})
   }
 }
 </script>
