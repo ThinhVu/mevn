@@ -1,5 +1,5 @@
 import DAUModel from '../../db/models/metric/DAU'
-import DAULogModel from '../../db/models/metric/DAULog'
+import DAULogModel from '../../db/models/metric/DAU-log'
 import dayjs from 'dayjs'
 
 export async function snapshot() {

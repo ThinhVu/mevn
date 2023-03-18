@@ -10,7 +10,7 @@ export const logSetting = {
    maximumLogLine: 1000,
    keepLogInDays: 1
 }
-let _console = { log: console.log, info: console.info, warn: console.warn, error: console.error, debug: console.debug }
+export let _console = { log: console.log, info: console.info, warn: console.warn, error: console.error, debug: console.debug }
 let writeStream : fs.WriteStream = null;
 let lineCtr = 0;
 let cleanThreadId : Timeout;

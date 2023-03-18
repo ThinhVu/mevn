@@ -31,9 +31,12 @@ const bool = (v: any): boolean => !(v == false || v == undefined || (typeof(v) =
 
 const date = (v: any): Date => dayjs(v).toDate()
 
+const str = (v: any): string => v + "";
+
 export default {
    objectId,
    number,
    bool,
-   date
+   date,
+   str
 }

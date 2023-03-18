@@ -1,16 +1,5 @@
 <template>
   <div>Home</div>
 </template>
-<script>
-export default {
-  name: 'Home',
-  props: {},
-  data: function () {
-    return {}
-  },
-  computed: {},
-  methods: {}
-}
+<script setup>
 </script>
-<style scoped>
-</style>

@@ -10,13 +10,15 @@
   </div>
 </template>
 <script setup>
-import {ref} from 'vue';
-import {user} from '@/appState';
-import notification from '@/components/UiLib/Api/notification';
-import {userAPI} from '@/logic/api';
-import Spacer from '@/components/UiLib/Spacer';
-import Txt from '@/components/UiLib/Txt';
-import {openUploadFileDialog, uploadFile} from '@/components/UiLib/FileUpload/fileUploadLogic';
+import {ref} from 'vue'
+import notification from '@/components/UiLib/System/notification'
+import {uploadFile} from '@/components/UiLib/FileUpload/fs-util'
+import {openUploadFileDialog} from '@/utils/file.js'
+import Spacer from '@/components/UiLib/Spacer.vue'
+import Txt from '@/components/UiLib/Txt.vue'
+import {user} from '@/app-state'
+import {userAPI} from '@/api'
+
 const emit = defineEmits(['close'])
 const avatar = ref(user.value && user.value.avatar || '')
 const fullName = ref(user.value && user.value.fullName || '')

@@ -5,6 +5,7 @@ export default {
 
    // auth
    jwtSecret: process.env.SECRET,
+   adminCode: process.env.ADMIN_CODE,
 
    //
    mailConfig: {
@@ -54,11 +55,5 @@ export default {
          url: process.env.SOCKET_IO__REDIS_ADAPTER_URL,
          password: process.env.SOCKET_IO__REDIS_ADAPTER_PASSWORD
       }
-   },
-
-   // email
-   email: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD
    }
 }

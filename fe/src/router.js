@@ -1,6 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router';
-import SignIn from '@/pages/SignIn.vue';
-import SignUp from '@/pages/SignUp.vue';
+import Auth from '@/pages/Auth.vue';
 import Home from '@/pages/Home.vue';
 import {user} from '@/app-state.js';
 
@@ -8,12 +7,11 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {path: '/', component: Home},
-    {path: '/sign-in', component: SignIn},
-    {path: '/sign-up', component: SignUp},
+    {path: '/auth', component: Auth},
   ]
 }, {default: '/'})
 
-const publicRoutes = ['/sign-in', '/sign-up']
+const publicRoutes = ['/auth']
 
 router.beforeEach((to, from, next) => {
   console.log('to', to.path)
@@ -25,7 +23,7 @@ router.beforeEach((to, from, next) => {
     return next()
   }
 
-  next('/sign-in')
+  next('/auth')
 })
 
 export default router;

@@ -1,7 +1,7 @@
 <template>
   <div class="w-100 h-100 fr ai-c fix z-index-999">
-    <div class="px-4 py-4 br-10 mx-a fc fg-1"
-         style="border: 1px solid rgba(255,255,255,0.2); background: rgb(113 113 113); min-width: 300px">
+    <div class="px-4 py-4 br-10px mx-a fc fg-1"
+         style="border: 1px solid rgba(255,255,255,0.2); min-width: 300px">
       <p><txt v-model="email" class="w-100" placeholder="Email"/></p>
       <p><txt v-model="password" class="w-100" placeholder="Password"/></p>
       <div class="fr ai-c fg-1 mt-2">
@@ -16,10 +16,10 @@
 <script setup>
 import {ref} from 'vue'
 import {userAPI} from '@/api';
-import Spacer from '@/components/UiLib/Spacer';
-import Txt from '@/components/UiLib/Txt';
+import Spacer from '@/components/UiLib/Spacer.vue';
+import Txt from '@/components/UiLib/Txt.vue';
 import dialog from '@/components/UiLib/System/dialog';
-import UserInfoDialog from '@/components/Dialogs/UserInfoDialog';
+import UserInfoDialog from '@/components/App/UserInfoDialog.vue';
 const emit = defineEmits(['close'])
 
 const email = ref()
@@ -39,10 +39,3 @@ const signUp = async () => {
   }
 }
 </script>
-<style scoped>
-button {
-  background: transparent;
-  border: 1px solid #ccc;
-  color: #fff;
-}
-</style>

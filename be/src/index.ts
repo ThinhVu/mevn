@@ -11,13 +11,13 @@ import Db from "./db";
 import api from './api/index';
 import {requireAdmin} from "./middlewares/auth";
 import {apiError} from "./utils/common-util";
-import {enableLog} from "./utils/logger-util";
+import {enableLog, _console} from "./utils/logger-util";
 import registerAppHooks from "./hooks/register-app-hooks";
 
 process.on('uncaughtException', err => console.error((err && err.stack) ? err.stack : err))
 
 if (config.startLogOnBoot) {
-   console.log('[cfg] startLogOnBoot')
+   _console.log('[cfg] startLogOnBoot')
    enableLog();
 }
 
@@ -29,15 +29,15 @@ Db.init().then(Db.migrate).then(async () => {
    app.use(cors());
    app.use(express.json({limit: config.requestBodyMaxSize}));
    app.use(express.urlencoded({limit: config.requestBodyMaxSize, extended: true, parameterLimit: 50000}));
-   app.use('/api', api);
+   app.use('/', api);
 
    if (config.useHmmAPI) {
-      console.log('[cfg] useHmmAPI')
+      _console.log('[cfg] useHmmAPI')
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const jsonFn = require("json-fn");
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const hmm = require("./api/hmm");
-      app.use('/hmm-api', requireAdmin, bodyParser.raw({limit: config.requestBodyMaxSize, type: () => true}),
+      const hmm = require("./api/hmm").default;
+      app.use('/hmm', requireAdmin, bodyParser.raw({limit: config.requestBodyMaxSize, type: () => true}),
          (req, res) => hmm(jsonFn.parse(req.body.toString()))
          .then(rs => res.send(rs))
          .catch(e => apiError(e, res))
@@ -45,7 +45,7 @@ Db.init().then(Db.migrate).then(async () => {
    }
 
    if (config.usePrometheus) {
-      console.log('[cfg] usePrometheus');
+      _console.log('[cfg] usePrometheus');
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const {collectDefaultMetrics, register} = require("prom-client");
       collectDefaultMetrics();
@@ -60,17 +60,17 @@ Db.init().then(Db.migrate).then(async () => {
    }
 
    if (config.useRabbitMQ) {
-      console.log('[cfg] useRabbitMQ', config.rabbitMQConnection)
+      _console.log('[cfg] useRabbitMQ', config.rabbitMQConnection)
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const RabbitMQ = require("./utils/rabbitmq");
+      const RabbitMQ = require("./utils/rabbitmq").default;
       // @ts-ignore
       global.rabbitMQ = new RabbitMQ(config.rabbitMQConnection)
    }
 
    if (config.socketIO.enable) {
-      console.log('[cfg] useSocketIO')
+      _console.log('[cfg] useSocketIO')
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const createSocketServer = require("./utils/socket");
+      const createSocketServer = require("./utils/socket").default;
       // @ts-ignore
       global.io = createSocketServer(httpServer);
    }
@@ -78,11 +78,10 @@ Db.init().then(Db.migrate).then(async () => {
    registerAppHooks();
 
    if (config.runCronJob) {
-      console.log('[cfg] runCronJob')
+      _console.log('[cfg] runCronJob')
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const cronjob = require("./cronjob");
-      cronjob();
+      require("./cronjob").default();
    }
 
-   httpServer.listen({ port: config.port }, () => console.log(`httpServer ready at http://localhost:${config.port}`));
+   httpServer.listen({ port: config.port }, () => _console.log(`[http server] ready at http://localhost:${config.port}`));
 });
