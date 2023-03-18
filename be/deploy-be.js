@@ -1,10 +1,9 @@
+require('dotenv').config();
 const child_process = require('child_process');
 const packageJson = require('./package.json');
 
-const DOCKER_REGISTRY = '{your registry server}';
 const {name, version} = packageJson;
-const buildVersion = `${version}.${Date.now()}`;
-const imageTag = `${DOCKER_REGISTRY}/${name}:${buildVersion}`;
+const imageTag = `${process.env.DOCKER_REGISTRY}/${name}:${version}.${Date.now()}`;
 
 const cmds = [
   `yarn build`,
