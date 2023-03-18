@@ -1,19 +1,25 @@
 import vue from '@vitejs/plugin-vue'
-import ssr from 'vite-plugin-ssr/plugin'
+import vueJsx from "@vitejs/plugin-vue-jsx"
 import UnoCSS from 'unocss/vite'
 // import {presetUno} from 'unocss';
-import tvuxCss from './client/css/tvuxcss'
+import tvuxCss from './src/styles/tvuxcss'
+import path from 'path';
 
 export default {
   plugins: [
     vue(),
-    ssr(),
+    vueJsx({}),
     UnoCSS({
       /* https://github.com/unocss/unocss#using-presets */
       presets: [
-          // presetUno()
+        // presetUno()
       ],
       rules: tvuxCss
     })
-  ]
+  ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
 }
