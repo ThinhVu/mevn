@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({path: `.env.${process.env.NODE_ENV}`});
 import config from "./config";
 import {createServer} from "http";
 import express from "express";

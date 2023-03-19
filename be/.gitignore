@@ -6,7 +6,7 @@ node_modules/
 .vscode/
 
 # Misc
-.env
+.env.production
 .DS_Store
 
 # Package manager
