@@ -3,6 +3,10 @@ import path from 'path'
 import dayjs from 'dayjs'
 import Timeout = NodeJS.Timeout;
 import _ from 'lodash';
+import appHooks from "../hooks";
+
+// TODO: extract file logger to another file, this file should only contain log interface
+// log implementations (file logger, frontend pipe, jeager, sentry) should be in another files.
 
 export const logSetting = {
    enableLog: false,
@@ -80,6 +84,7 @@ function getMethodArgsString(methodArgs) {
 function write(level: string, methodArgs: any[]) {
    ensureWritable();
    writeStream.write(`[${dayjs().toISOString()}] [${level}] ${getMethodArgsString(methodArgs)}\n`,);
+   appHooks.trigger('logger:write', level, methodArgs);
    lineCtr++;
 }
 

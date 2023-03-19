@@ -107,6 +107,8 @@ export default (httpServer) => {
    io.on(SSE_EVENTS.connection, (userId, socketId) => onUserOnline(userId, socketId));
    io.on(SSE_EVENTS.disconnect, (userId, socketId) => onUserOffline(userId, socketId));
 
+   appHooks.on('logger:write', (level, ...methodArgs) => io.to('server-log').emit('server-log:data', level, ...methodArgs))
+
    io.on('connection', async (socket: Socket) => {
       // @ts-ignore
       const userId = socket.authUser._id;
@@ -116,9 +118,7 @@ export default (httpServer) => {
       onUserOnline(userId, socket.id);
       // update socket connection status in remote servers
       isRedisAdapterAvailable && io.serverSideEmit(SSE_EVENTS.connection, userId, socket.id);
-
       appHooks.trigger('user:online', userId);
-
       socket.on('disconnect', reason => {
          console.log(`Socket: ${userId} disconnect with reason ${reason}`);
          // There is a case when user disconnect from server A at time (t)
@@ -132,8 +132,9 @@ export default (httpServer) => {
             appHooks.trigger('user:offline', userId);
          }
       });
-
       socket.emit("__TEST__", "__TEST__");
+      socket.on('server-log:pipe', () => socket.join('server-log'));
+      socket.on('server-log:unpipe', () => socket.leave('server-log'));
    });
 
    return io;
