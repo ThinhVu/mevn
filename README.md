@@ -45,5 +45,6 @@ Mevn
 
 ![admin-dashboard.png](images%2Fadmin-dashboard.png)
 
+![the-second-dashboard.png](images%2Fthe-second-dashboard.png)
 
 ![log-viewer.png](images%2Flog-viewer.png)
