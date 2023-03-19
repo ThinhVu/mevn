@@ -4,7 +4,7 @@ Mevn
 
 ### Backend
 - db mongoose with predefined collections (User, DAU, DbMigration, HealthCheck, API Metric, FileStorage, SystemConfig, Tasks, Notification, Announcement).
-- mongoose replication configuration (incomming).
+- mongoose replication configuration (coming soon).
 - Built-in database migration workflow.
 - Built-in authentication using json web token.
 - User API: predefined api to create user, modifier user profile, forgot password, recover password via email, delete account request & cancel.
