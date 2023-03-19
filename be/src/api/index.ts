@@ -5,6 +5,7 @@ import {apiError} from "../utils/common-util";
 import UserCtl from './user';
 import LogCtl from './log';
 import SystemConfigCtl from './system-config';
+import SytemMetricCtl from "./system-metric";
 
 const router = express.Router();
 const $ = fn => (req, res) => fn(req, res).then(rs => res.send(rs)).catch(e => apiError(e, res));
@@ -37,5 +38,9 @@ router.get('/log/:logFile', requireAdmin, LogCtl.getLog)
 // log setting
 router.get('/log-setting', requireAdmin, LogCtl.getLogSetting)
 router.post('/log-setting', requireAdmin, LogCtl.updateLogSetting)
+
+// ================== metric ==================
+router.get('/metric/api-call', requireAdmin, SytemMetricCtl.apiCallMetric);
+router.get('/metric/api-call-history', requireAdmin, SytemMetricCtl.apiCallMetricHistory)
 
 export default router;

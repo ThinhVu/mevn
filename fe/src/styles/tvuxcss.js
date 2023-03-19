@@ -250,8 +250,8 @@ const layouts = [
   ['ovf-x-h', {'overflow-x': 'hidden'}],
   ['ovf-y-s', {'overflow-y': 'scroll'}],
   ['ovf-y-h', {'overflow-y': 'hidden'}],
-  ['hide-scroll-bar', {'-ms-overflow-style': 'none', /* IE and Edge */ 'scrollbar-width': 'none'  /* Firefox */}],
-  ['hide-scroll-bar::-webkit-scrollbar', {display: 'none'}], /* Hide scrollbar for Chrome, Safari and Opera */
+  ['hide-scroll-bar', {'-ms-overflow-style': 'none', /* IE, Edge */ 'scrollbar-width': 'none'  /* Firefox */}],
+  ['hide-scroll-bar::-webkit-scrollbar', {display: 'none'}], /* Chrome, Safari and Opera */
 
   /* flex */
   ['fr', {display: 'flex'}],

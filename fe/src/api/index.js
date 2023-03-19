@@ -76,15 +76,23 @@ export const userAPI = {
       return null;
     }
   },
+  signOut: async () => exec(() => axios.post(`${API_URL}/user/sign-out`), {}, axiosOpts)
 }
 
 export const systemAPI = {
-  getLogs: async () => (await axios.get(`${API_URL}/logs`)).data,
-  getLog: async logFile => (await axios.get(`${API_URL}/log/${logFile}`)).data,
-  getLogSetting: async () => (await axios.get(`${API_URL}/logSetting`)).data,
-  updateLogSetting: async ({enable, maximumLogLine, keepLogInDays}) => (await axios.post(`${API_URL}/logSetting`, { enable, maximumLogLine, keepLogInDays })).data,
-  getApiCallCounter: async () => (await axios.get(`${API_URL}/metric/api-call`)).data,
-  getApiCallHistory: async (from, to) => (await axios.get(`${API_URL}/metric/api-call-history?from=${from}&to=${to}`)).data,
-  getAppMetric: async () => (await axios.get(`${API_URL}/metric/app`)).data,
-  healthCheck: async api_url => await axios.get(`${api_url}/health-check`)
+  getLogs: async () => exec(() => axios.get(`${API_URL}/logs`, axiosOpts)),
+  getLog: async logFile => exec(() => axios.get(`${API_URL}/log/${logFile}`, axiosOpts)),
+  getLogSetting: async () => exec(() => axios.get(`${API_URL}/logSetting`, axiosOpts)),
+  updateLogSetting: async ({enable, maximumLogLine, keepLogInDays}) => exec(() => axios.post(`${API_URL}/logSetting`, { enable, maximumLogLine, keepLogInDays }, axiosOpts)),
+  getApiCallCounter: async () => exec(() => axios.get(`${API_URL}/metric/api-call`, axiosOpts)),
+  getApiCallHistory: async (from, to) => exec(() => axios.get(`${API_URL}/metric/api-call-history?from=${from}&to=${to}`, axiosOpts)),
+  getAppMetric: async () => exec(() => axios.get(`${API_URL}/metric/app`, axiosOpts)),
+  healthCheck: async api_url => await axios.get(`${api_url}/health-check`, axiosOpts)
+}
+
+export const systemConfigAPI = {
+  gets: async () => exec(() => axios.get(`${API_URL}/system-configs`, axiosOpts)),
+  get: async key => exec(() => axios.get(`${API_URL}/system-config/${key}`, axiosOpts)),
+  set: async (key, value) => exec(() => axios.post(`${API_URL}/system-config/${key}`, { payload: value }, axiosOpts)).then(() => notification.success('Saved')),
+  unset: async key => exec(() => axios.delete(`${API_URL}/system-config/${key}`, axiosOpts)),
 }

@@ -112,7 +112,7 @@ export default (httpServer) => {
    io.on('connection', async (socket: Socket) => {
       // @ts-ignore
       const userId = socket.authUser._id;
-      console.log(`Socket: ${userId} connect`);
+      console.log(`[Socket] ${userId} connect`);
       DAULog.log(userId)
       // update socket connection status in current server
       onUserOnline(userId, socket.id);
@@ -133,8 +133,16 @@ export default (httpServer) => {
          }
       });
       socket.emit("__TEST__", "__TEST__");
-      socket.on('server-log:pipe', () => socket.join('server-log'));
-      socket.on('server-log:unpipe', () => socket.leave('server-log'));
+      socket.on('watch', (...args) => {
+         const gr = args.join(':');
+         console.log('[Socket] watch', gr)
+         socket.join(gr);
+      })
+      socket.on('un-watch', (...args) => {
+         const gr = args.join(':');
+         console.log('[Socket] unwatch', gr)
+         socket.leave(gr)
+      })
    });
 
    return io;

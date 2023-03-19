@@ -14,7 +14,6 @@ const router = createRouter({
 const publicRoutes = ['/auth']
 
 router.beforeEach((to, from, next) => {
-  console.log('to', to.path)
   if (publicRoutes.includes(to.path)) {
     return next()
   }

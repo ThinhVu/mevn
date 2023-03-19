@@ -12,7 +12,10 @@ export default {
    async clearMetric() {
       await ApiMetricModel.deleteMany({})
    },
-   get() {
+   getCurrent() {
+      return apiMetric;
+   },
+   getHistory() {
       return ApiMetricModel.find({}).sort({at: -1}).limit(60)
    }
 }

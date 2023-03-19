@@ -96,23 +96,23 @@ onMounted(() => {
   loadItems()
 
   console.log(`listen on "${props.edge}:update"`)
-  window.socket.emit('watch', props.edge)
-  window.socket.on(`${props.edge}:update`, (_id, change) => {
+  window.$socket.emit('watch', props.edge)
+  window.$socket.on(`${props.edge}:update`, (_id, change) => {
     for (const item of items.value) {
       if (item._id === _id) {
         Object.keys(change).forEach(k => item[k] = change[k])
       }
     }
   })
-  window.socket.on(`${props.edge}:delete`, ids => {
+  window.$socket.on(`${props.edge}:delete`, ids => {
     items.value = items.value.filter(item => !ids.includes(item._id))
   })
 })
 onBeforeUnmount(() => {
   console.log(`listen off "${props.edge}:update"`)
-  window.socket.emit('un-watch', props.edge)
-  window.socket.off(`${props.edge}:update`)
-  window.socket.off(`${props.edge}:delete`)
+  window.$socket.emit('un-watch', props.edge)
+  window.$socket.off(`${props.edge}:update`)
+  window.$socket.off(`${props.edge}:delete`)
 })
 
 defineExpose({ loadItems })

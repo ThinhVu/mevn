@@ -24,12 +24,9 @@ if (config.startLogOnBoot) {
 Db.init().then(Db.migrate).then(async () => {
    const app = express();
    const httpServer = createServer(app);
+   app.use(cors());
    app.use(compression());
    app.use(cookieParser());
-   app.use(cors());
-   app.use(express.json({limit: config.requestBodyMaxSize}));
-   app.use(express.urlencoded({limit: config.requestBodyMaxSize, extended: true, parameterLimit: 50000}));
-   app.use('/', api);
 
    if (config.useHmmAPI) {
       _console.log('[cfg] useHmmAPI')
@@ -43,6 +40,8 @@ Db.init().then(Db.migrate).then(async () => {
          .catch(e => apiError(e, res))
       )
    }
+
+   app.use('/', bodyParser.json({limit: config.requestBodyMaxSize}), bodyParser.urlencoded({limit: config.requestBodyMaxSize}), api);
 
    if (config.usePrometheus) {
       _console.log('[cfg] usePrometheus');
