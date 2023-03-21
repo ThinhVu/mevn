@@ -10,7 +10,7 @@ import appHooks from "../hooks";
 
 export const logSetting = {
    enableLog: false,
-   logDirPath: './logs',
+   logDirPath: 'logs',
    maximumLogLine: 1000,
    keepLogInDays: 1
 }
