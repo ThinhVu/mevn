@@ -22,7 +22,7 @@ Mevn
 - Email delivery
 - Docker script to built & publish container.
 
-### File Server (fs)
+### File Server (https://github.com/ThinhVu/file-server)
 - mongodb gridfs
 - detect media file
 - generate image thumbnail
