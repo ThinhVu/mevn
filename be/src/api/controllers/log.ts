@@ -5,9 +5,9 @@ import {requireAdmin} from "../../middlewares/auth";
 
 const router = express.Router()
 
-router.get('/', requireAdmin, $(async () => getLogs()));
+router.get('/', requireAdmin, $(async () => getLogs()))
 router.get('/file/:logFile', requireAdmin, $(async (req, res) => {
-   res.header('Content-Type', 'text/plain');
+   res.header('Content-Type', 'text/plain')
    return getLog(req.params.logFile)
 }));
 router.get('/setting', requireAdmin, $(async () => logSetting));
@@ -25,4 +25,4 @@ router.post('/setting', requireAdmin, $(async (req) => {
    }
 }));
 
-export default router;
+export default router

@@ -58,7 +58,7 @@ function selectSidebarItem(i) {
 .sidebar {
   width: 56px;
   min-width: 56px;
-  background-color: #363636;
+  background-color: #06070c;
   color: #fff
 }
 
@@ -79,8 +79,6 @@ function selectSidebarItem(i) {
   .sidebar {
     width: 200px;
     min-width: 200px;
-    background-color: #06070c;
-    color: #fff
   }
 
   .item-icon {
