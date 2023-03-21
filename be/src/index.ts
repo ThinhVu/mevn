@@ -13,6 +13,7 @@ import {requireAdmin} from "./middlewares/auth";
 import {apiError} from "./utils/common-util";
 import {enableLog, _console} from "./utils/logger-util";
 import registerAppHooks from "./hooks/register-app-hooks";
+import {collectDefaultMetrics, register} from "prom-client";
 
 process.on('uncaughtException', err => console.error((err && err.stack) ? err.stack : err))
 
@@ -28,20 +29,12 @@ Db.init().then(Db.migrate).then(async () => {
    app.use(compression());
    app.use(cookieParser());
 
-   if (config.useHmmAPI) {
-      _console.log('[cfg] useHmmAPI')
+   if (config.useAPIMetric) {
+      _console.log('[cfg] useAPIMetric')
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const jsonFn = require("json-fn");
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const hmm = require("./api/hmm").default;
-      app.use('/hmm', requireAdmin, bodyParser.raw({limit: config.requestBodyMaxSize, type: () => true}),
-         (req, res) => hmm(jsonFn.parse(req.body.toString()))
-         .then(rs => res.send(rs))
-         .catch(e => apiError(e, res))
-      )
+      const perfMon = require('./middlewares/performance').default;
+      app.use(perfMon)
    }
-
-   app.use('/', bodyParser.json({limit: config.requestBodyMaxSize}), bodyParser.urlencoded({limit: config.requestBodyMaxSize}), api);
 
    if (config.usePrometheus) {
       _console.log('[cfg] usePrometheus');
@@ -57,6 +50,21 @@ Db.init().then(Db.migrate).then(async () => {
          }
       })
    }
+
+   if (config.useHmmAPI) {
+      _console.log('[cfg] useHmmAPI')
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const jsonFn = require("json-fn");
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const hmm = require("./api/hmm").default;
+      app.use('/hmm', requireAdmin, bodyParser.raw({limit: config.requestBodyMaxSize, type: () => true}),
+         (req, res) => hmm(jsonFn.parse(req.body.toString()))
+         .then(rs => res.send(rs))
+         .catch(e => apiError(e, res))
+      )
+   }
+
+   app.use('/', bodyParser.json({limit: config.requestBodyMaxSize}), bodyParser.urlencoded({limit: config.requestBodyMaxSize}), api);
 
    if (config.useRabbitMQ) {
       _console.log('[cfg] useRabbitMQ', config.rabbitMQConnection)

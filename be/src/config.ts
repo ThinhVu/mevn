@@ -38,6 +38,7 @@ export default {
    requestBodyMaxSize: process.env.REQUEST_BODY_MAX_SIZE || '50mb',
    useHmmAPI: process.env.USE_HMM_API,
    usePrometheus: process.env.USE_PROMETHEUS,
+   useAPIMetric: process.env.USE_API_METRIC,
 
    // rabbitmq
    useRabbitMQ: process.env.USE_RABBIT_MQ,
