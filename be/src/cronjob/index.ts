@@ -1,8 +1,10 @@
 import {CronJob} from "cron";
 import * as AppMetric from "../business-logic/metric/app-metric";
+import APIMetric from "../business-logic/metric/api-metric";
 import * as DAU from "../business-logic/metric/DAU";
 import Tasks from "../db/models/tasks";
 import appHooks from "../hooks";
+import config from "../config";
 
 export default function () {
    // https://crontab.guru/
@@ -27,4 +29,8 @@ export default function () {
          }
       }
    }, null, true, 'America/Los_Angeles');
+
+   if (config.useAPIMetric) {
+      APIMetric.clearMetric().then(() => setInterval(() => APIMetric.create().catch(console.error), 60000))
+   }
 }
