@@ -2,7 +2,7 @@
 Mevn
 
 
-### Backend
+### Backend (be)
 - db mongoose with predefined collections (User, DAU, DbMigration, HealthCheck, API Metric, FileStorage, SystemConfig, Tasks, Notification, Announcement).
 - mongoose replication configuration (coming soon).
 - Built-in database migration workflow.
@@ -22,8 +22,12 @@ Mevn
 - Email delivery
 - Docker script to built & publish container.
 
+### File Server (fs)
+- mongodb gridfs
+- detect media file
+- generate image thumbnail
 
-### Frontend
+### Frontend (fe)
 - vue3 + vite + UnoCSS
 - vitest (coming soon)
 - predefined CSS rules (of course you can use another plugins)
