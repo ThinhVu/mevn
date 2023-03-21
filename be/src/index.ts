@@ -8,7 +8,7 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import Db from "./db";
-import api from './api/index';
+import api from './api';
 import {requireAdmin} from "./middlewares/auth";
 import {apiError} from "./utils/common-util";
 import {enableLog, _console} from "./utils/logger-util";
