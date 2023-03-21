@@ -40,7 +40,7 @@ function generateFileName() : string {
  */
 function createNewLogFile() : string {
    ensureLogFolderExist()
-   const filePath = path.join(logSetting.logDirPath, generateFileName());
+   const filePath = path.resolve(logSetting.logDirPath, generateFileName());
    _console.log(`creating log file: ${filePath}`);
    lineCtr = 0;
    writeStream = fs.createWriteStream(filePath);
