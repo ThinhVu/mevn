@@ -14,6 +14,8 @@ import {apiError} from "./utils/common-util";
 import {enableLog, _console} from "./utils/logger-util";
 import registerAppHooks from "./hooks/register-app-hooks";
 import {collectDefaultMetrics, register} from "prom-client";
+import routerDocsFactory from "./utils/router-docs";
+import RouteSchema from "./db/models/route-schema";
 
 process.on('uncaughtException', err => console.error((err && err.stack) ? err.stack : err))
 
@@ -64,7 +66,14 @@ Db.init().then(Db.migrate).then(async () => {
       )
    }
 
-   app.use('/', bodyParser.json({limit: config.requestBodyMaxSize}), bodyParser.urlencoded({limit: config.requestBodyMaxSize}), api);
+   const routerDocs = routerDocsFactory(async routeSchemas => {
+      await RouteSchema.deleteMany({})
+      await RouteSchema.create(routeSchemas)
+   });
+   app.use(...routerDocs('/', [
+      bodyParser.json({limit: config.requestBodyMaxSize}),
+      bodyParser.urlencoded({limit: config.requestBodyMaxSize})
+   ], api));
 
    if (config.useRabbitMQ) {
       _console.log('[cfg] useRabbitMQ', config.rabbitMQConnection)
