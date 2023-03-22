@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import express from 'express';
 import UserModel from "../../db/models/user";
 import {
    createUser,
@@ -19,10 +18,40 @@ import To from "../../utils/data-parser";
 import rateLimit from "../../middlewares/rate-limit";
 import $ from "../../middlewares/safe-call";
 import {requireUser} from "../../middlewares/auth";
+import Router from "routerex";
 
-const router = express.Router()
+const router = Router()
 
-router.post('/sign-up/0.0.1/', rateLimit(), $(async (req, res) => {
+router.post('/sign-up/0.0.1/', {
+   title: 'Sign up',
+   description: 'Using this request to create new account',
+   schema: {
+      body: {
+         email: {
+            type: 'string',
+            desc: 'User email which will be used to verify ...',
+            required: true
+         },
+         password: {
+            type: 'string',
+            desc: 'A strong password is: At least 12 characters long but 14 or more is better. ' +
+               'A combination of uppercase letters, lowercase letters, numbers, and symbols. ' +
+               'Not a word that can be found in a dictionary or the name of a person, character, product, or organization.',
+            required: true
+         }
+      }
+   },
+   response: {
+      user: {
+         type: 'object',
+         description: 'created user'
+      },
+      token: {
+         type: 'string',
+         description: 'access_token which will be use for authorization'
+      }
+   }
+}, rateLimit(), $(async (req, res) => {
    const {email, password} = req.body
    if (!email || !password)
       throw new Error('Missing field "email" or "password"')
@@ -127,4 +156,4 @@ router.put('/profile/0.1.1/', requireUser, $(async (req: UserRequest) => {
    return updateUser(req.user._id, {avatar, fullName});
 }))
 
-export default router;
+export default router

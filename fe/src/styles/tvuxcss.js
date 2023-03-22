@@ -237,6 +237,9 @@ const layouts = [
   [/^h-(\d+)px/, ([, d]) => ({height: `${d}px`})],
   [/^w-(\d+)px/, ([, d]) => ({width: `${d}px`})],
 
+  [/^min-h-(\d+)px/, ([, d]) => ({['min-height']: `${d}px`})],
+  [/^min-w-(\d+)px/, ([, d]) => ({['min-width']: `${d}px`})],
+
   ['h-50', {height: '100%'}],
   ['h-100', {height: '100%'}],
   ['h-100vh', {height: '100vh'}],
@@ -274,16 +277,17 @@ const layouts = [
 
   /* grid */
   ['grid', {display: 'grid'}],
-  [/^gtc-(\d+)-(\d+)$/, ([, d1, d2]) => ({'grid-template-columns': `${d1} ${d2}`})],
-  [/^gtc-(\d+)-(\d+)-(\d+)$/, ([, d1, d2, d3]) => ({'grid-template-columns': `${d1} ${d2} ${d3}`})],
-  [/^gtc-(\d+)-(\d+)-(\d+)-(\d+)$/, ([, d1, d2, d3, d4]) => ({'grid-template-columns': `${d1} ${d2} ${d3} ${d4}`})],
-  [/^gtc-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)$/, ([, d1, d2, d3, d4, d5]) => ({'grid-template-columns': `${d1} ${d2} ${d3} ${d4} ${d5}`})],
-  [/^gtc-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)$/, ([, d1, d2, d3, d4, d5, d6]) => ({'grid-template-columns': `${d1} ${d2} ${d3} ${d4} ${d5} ${d6}`})],
-  [/^gtr-(\d+)-(\d+)$/, ([, d1, d2]) => ({'grid-template-rows': `${d1} ${d2}`})],
-  [/^gtr-(\d+)-(\d+)-(\d+)$/, ([, d1, d2, d3]) => ({'grid-template-rows': `${d1} ${d2} ${d3}`})],
-  [/^gtr-(\d+)-(\d+)-(\d+)-(\d+)$/, ([, d1, d2, d3, d4]) => ({'grid-template-rows': `${d1} ${d2} ${d3} ${d4}`})],
-  [/^gtr-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)$/, ([, d1, d2, d3, d4, d5]) => ({'grid-template-rows': `${d1} ${d2} ${d3} ${d4} ${d5}`})],
-  [/^gtr-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)$/, ([, d1, d2, d3, d4, d5, d6]) => ({'grid-template-rows': `${d1} ${d2} ${d3} ${d4} ${d5} ${d6}`})],
+  [/^gg-(\w+)$/, ([, w]) => ({['grid-gap']: w})],
+  [/^gtc-(\w+)-(\w+)$/, ([, w1, w2]) => ({'grid-template-columns': `${w1} ${w2}`})],
+  [/^gtc-(\w+)-(\w+)-(\w+)$/, ([, w1, w2, w3]) => ({'grid-template-columns': `${w1} ${w2} ${w3}`})],
+  [/^gtc-(\w+)-(\w+)-(\w+)-(\w+)$/, ([, w1, w2, w3, w4]) => ({'grid-template-columns': `${w1} ${w2} ${w3} ${w4}`})],
+  [/^gtc-(\w+)-(\w+)-(\w+)-(\w+)-(\w+)$/, ([, w1, w2, w3, w4, w5]) => ({'grid-template-columns': `${w1} ${w2} ${w3} ${w4} ${w5}`})],
+  [/^gtc-(\w+)-(\w+)-(\w+)-(\w+)-(\w+)-(\w+)$/, ([, w1, w2, w3, w4, w5, w6]) => ({'grid-template-columns': `${w1} ${w2} ${w3} ${w4} ${w5} ${w6}`})],
+  [/^gtr-(\w+)-(\w+)$/, ([, w1, w2]) => ({'grid-template-rows': `${w1} ${w2}`})],
+  [/^gtr-(\w+)-(\w+)-(\w+)$/, ([, w1, w2, w3]) => ({'grid-template-rows': `${w1} ${w2} ${w3}`})],
+  [/^gtr-(\w+)-(\w+)-(\w+)-(\w+)$/, ([, w1, w2, w3, w4]) => ({'grid-template-rows': `${w1} ${w2} ${w3} ${w4}`})],
+  [/^gtr-(\w+)-(\w+)-(\w+)-(\w+)-(\w+)$/, ([, w1, w2, w3, w4, w5]) => ({'grid-template-rows': `${w1} ${w2} ${w3} ${w4} ${w5}`})],
+  [/^gtr-(\w+)-(\w+)-(\w+)-(\w+)-(\w+)-(\w+)$/, ([, w1, w2, w3, w4, w5, w6]) => ({'grid-template-rows': `${w1} ${w2} ${w3} ${w4} ${w5} ${w6}`})],
 ]
 
 const borderRadius = [
@@ -317,7 +321,7 @@ const spacing = [
   [/^mb-(\d+)$/, ([, d]) => ({'margin-bottom': `${d / 2}em`})],
   [/^mr-(\d+)$/, ([, d]) => ({'margin-right': `${d / 2}em`})],
   [/^mx-(\d+)$/, ([, d]) => ({'margin-left': `${d / 2}em`, 'margin-right': `${d / 2}em`})],
-  [/^my-(\d+)$/, ([, d]) => ({'margin-left': `${d / 2}em`, 'margin-right': `${d / 2}em`})],
+  [/^my-(\d+)$/, ([, d]) => ({'margin-top': `${d / 2}em`, 'margin-bottom': `${d / 2}em`})],
   ['mx-a', {margin: '0 auto'}],
 ]
 

@@ -1,11 +1,23 @@
 import $ from "../../middlewares/safe-call";
-import RouterX from "../../utils/routerx";
 import {requireAdmin} from "../../middlewares/auth";
 import SystemConfigModel from "../../db/models/system-config";
-const router = RouterX();
+import Router from "routerex";
+
+const router = Router();
 
 router.get('/', requireAdmin, $(async () => SystemConfigModel.find()));
-router.get('/:key', {schema: {params: {key: 'string'}}}, $(async req => {
+router.get('/:key', {
+   title: 'Get system config value',
+   description: 'Get current value of system config',
+   schema: {
+      params: {
+         key: {
+            type: 'string',
+            desc: 'A string containing the name of the key you want to create/update.'
+         }
+      }
+   }
+}, $(async req => {
    const rs = await SystemConfigModel.findOne({key: req.params.key})
    return rs && rs.value
 }));

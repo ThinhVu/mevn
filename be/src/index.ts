@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+
 dotenv.config({path: `.env.${process.env.NODE_ENV}`});
 import config from "./config";
 import {createServer} from "http";
@@ -14,8 +15,8 @@ import {apiError} from "./utils/common-util";
 import {enableLog, _console} from "./utils/logger-util";
 import registerAppHooks from "./hooks/register-app-hooks";
 import {collectDefaultMetrics, register} from "prom-client";
-import routerDocsFactory from "./utils/router-docs";
-import RouteSchema from "./db/models/route-schema";
+import RouteMetadataModel from "./db/models/route-metadata";
+import {routeMetadataCollectorFactory} from "routerex";
 
 process.on('uncaughtException', err => console.error((err && err.stack) ? err.stack : err))
 
@@ -66,11 +67,13 @@ Db.init().then(Db.migrate).then(async () => {
       )
    }
 
-   const routerDocs = routerDocsFactory(async routeSchemas => {
-      await RouteSchema.deleteMany({})
-      await RouteSchema.create(routeSchemas)
-   });
-   app.use(...routerDocs('/', [
+   const exdogen = routeMetadataCollectorFactory({
+      onMetadataGathered: async metadatas => {
+         await RouteMetadataModel.deleteMany({})
+         await RouteMetadataModel.create(metadatas)
+      }
+   })
+   app.use(...exdogen('/', [
       bodyParser.json({limit: config.requestBodyMaxSize}),
       bodyParser.urlencoded({limit: config.requestBodyMaxSize})
    ], api));
@@ -99,5 +102,5 @@ Db.init().then(Db.migrate).then(async () => {
       require("./cronjob").default();
    }
 
-   httpServer.listen({ port: config.port }, () => _console.log(`[http server] ready at http://localhost:${config.port}`));
+   httpServer.listen({port: config.port}, () => _console.log(`[http server] ready at http://localhost:${config.port}`));
 });

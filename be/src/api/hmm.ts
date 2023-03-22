@@ -4,7 +4,7 @@ import UserModel from '../db/models/user';
 import Announcement from "../db/models/announcement";
 import TaskModel from "../db/models/tasks";
 import HealthCheck from "../db/models/healthCheck";
-import RouteSchema from "../db/models/route-schema";
+import RouteMetadata from "../db/models/route-metadata";
 
 export default hmmExecFactory({
   systemConfig: SystemConfigModel,
@@ -12,6 +12,6 @@ export default hmmExecFactory({
   announcement: Announcement,
   task: TaskModel,
   healthCheck: HealthCheck,
-  routeSchema: RouteSchema
+  routeMetadata: RouteMetadata
   // add more models as you want
 })
