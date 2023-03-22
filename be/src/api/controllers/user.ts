@@ -22,7 +22,7 @@ import {requireUser} from "../../middlewares/auth";
 
 const router = express.Router()
 
-router.post('/sign-up/0.0.1/', rateLimit, $(async (req, res) => {
+router.post('/sign-up/0.0.1/', rateLimit(), $(async (req, res) => {
    const {email, password} = req.body
    if (!email || !password)
       throw new Error('Missing field "email" or "password"')
@@ -36,7 +36,7 @@ router.post('/sign-up/0.0.1/', rateLimit, $(async (req, res) => {
    return {user, token}
 }))
 
-router.post('/sign-in/0.0.1/', rateLimit, $(async (req, res) => {
+router.post('/sign-in/0.0.1/', rateLimit(), $(async (req, res) => {
    const {email, password} = req.body
    const user = await UserModel.findOne({email})
    if (!user)
@@ -49,7 +49,7 @@ router.post('/sign-in/0.0.1/', rateLimit, $(async (req, res) => {
    return {user, token}
 }))
 
-router.get('/auth/0.0.1/', rateLimit, $(async (req, res) => {
+router.get('/auth/0.0.1/', rateLimit(), $(async (req, res) => {
    // eslint-disable-next-line prefer-const
    const authData = parseAuthorization(req)
    const {email, password} = authData.user
