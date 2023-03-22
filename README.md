@@ -3,6 +3,7 @@ Mevn
 
 
 ### Backend (be)
+- Automatically generate API documents (as images below), you don't need to create/maintain it manually
 - db mongoose with predefined collections (User, DAU, DbMigration, HealthCheck, API Metric, FileStorage, SystemConfig, Tasks, Notification, Announcement).
 - mongoose replication configuration (coming soon).
 - Built-in database migration workflow.
@@ -46,6 +47,7 @@ Mevn
 - and a lot more...
 
 ### Images
+![api-doc.png](images%2Fapi-doc.png)
 
 ![admin-dashboard.png](images%2Fadmin-dashboard.png)
 
