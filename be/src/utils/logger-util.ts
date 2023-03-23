@@ -151,7 +151,7 @@ export function disableLog() {
    }
 }
 
-export function getLogs() {
+export function getLogs(): string[] {
    return _.reverse(fs.readdirSync(logSetting.logDirPath));
 }
 

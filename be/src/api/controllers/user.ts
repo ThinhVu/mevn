@@ -22,9 +22,9 @@ import Router from "routerex";
 
 const router = Router()
 
-router.post('/sign-up/0.0.1/', {
+router.post('/sign-up/v1', {
    title: 'Sign up',
-   description: 'Using this request to create new account',
+   desc: 'Using this request to create new account',
    schema: {
       body: {
          email: {
@@ -65,8 +65,39 @@ router.post('/sign-up/0.0.1/', {
    return {user, token}
 }))
 
-router.post('/sign-in/0.0.1/', rateLimit(), $(async (req, res) => {
+router.post('/sign-in/v1', {
+   title: 'Sign in',
+   desc: 'Using this request to sign in',
+   schema: {
+      body: {
+         email: {
+            type: 'string',
+            desc: 'User email which will be used to verify ...',
+            required: true
+         },
+         password: {
+            type: 'string',
+            desc: 'A strong password is: At least 12 characters long but 14 or more is better. ' +
+               'A combination of uppercase letters, lowercase letters, numbers, and symbols. ' +
+               'Not a word that can be found in a dictionary or the name of a person, character, product, or organization.',
+            required: true
+         }
+      }
+   },
+   response: {
+      user: {
+         type: 'object',
+         description: 'created user'
+      },
+      token: {
+         type: 'string',
+         description: 'access_token which will be use for authorization'
+      }
+   }
+}, rateLimit(), $(async (req, res) => {
    const {email, password} = req.body
+   if (!email || !password)
+      throw new Error('Missing field "email" or "password"')
    const user = await UserModel.findOne({email})
    if (!user)
       throw new Error('User with provided email is not exists')
@@ -78,10 +109,33 @@ router.post('/sign-in/0.0.1/', rateLimit(), $(async (req, res) => {
    return {user, token}
 }))
 
-router.get('/auth/0.0.1/', rateLimit(), $(async (req, res) => {
+router.get('/auth/v1', {
+   title: 'Auth',
+   desc: 'Using this request to get user info',
+   schema: {
+      headers: {
+         authorization: {
+            type: 'string',
+            desc: 'Authorization header',
+         }
+      }
+   },
+   response: {
+      user: {
+         type: 'object',
+         description: 'created user'
+      },
+      token: {
+         type: 'string',
+         description: 'access_token which will be use for authorization'
+      }
+   }
+}, rateLimit(), $(async (req, res) => {
    // eslint-disable-next-line prefer-const
    const authData = parseAuthorization(req)
    const {email, password} = authData.user
+   if (!email || !password)
+      throw new Error('Missing field "email" or "password"')
    const user = await UserModel.findOne({email, password})
    if (!user)
       throw new Error('Invalid user')
@@ -90,7 +144,24 @@ router.get('/auth/0.0.1/', rateLimit(), $(async (req, res) => {
    return {user, token}
 }))
 
-router.get('/sign-out/0.0.1/', async (req, res) => {
+router.get('/sign-out/v1', {
+   title: 'Sign out',
+   desc: 'Using this request to sign out',
+   schema: {
+      headers: {
+         authorization: {
+            type: 'string',
+            desc: 'Authorization header',
+         }
+      }
+   },
+   response: {
+      result: {
+         type: 'boolean',
+         description: 'true if sign out successfully'
+      }
+   }
+}, async (req, res) => {
    if (req.cookies['token']) {
       return res.clearCookie('token').send({data: {result: true}})
    } else {
@@ -98,8 +169,35 @@ router.get('/sign-out/0.0.1/', async (req, res) => {
    }
 })
 
-router.post('/change-password/0.0.1/', $(async (req, res) => {
+router.post('/change-password/v1', {
+   title: 'Change password',
+   desc: 'Using this request to change password',
+   schema: {
+      body: {
+         email: {
+            type: 'string',
+            desc: 'User email which will be used to verify ...',
+            required: true
+         },
+         password: {
+            type: 'string',
+            desc: 'A strong password is: At least 12 characters long but 14 or more is better. ' +
+               'A combination of uppercase letters, lowercase letters, numbers, and symbols. ' +
+               'Not a word that can be found in a dictionary or the name of a person, character, product, or organization.',
+            required: true
+         }
+      }
+   },
+   response: {
+      result: {
+         type: 'boolean',
+         description: 'true if change password successfully'
+      }
+   }
+}, $(async (req, res) => {
    const {email, password, newPassword} = req.body
+   if (!email || !password || !newPassword)
+      throw new Error('Missing field "email" or "password" or "newPassword"')
    const newPasswordHash = await bcrypt.hash(newPassword, 10)
    const user = await UserModel.findOne({email})
    if (!user)
@@ -111,8 +209,28 @@ router.post('/change-password/0.0.1/', $(async (req, res) => {
    res.status(204)
 }))
 
-router.post('/forgot-password/0.0.1/', $(async (req) => {
+router.post('/forgot-password/v1', {
+   title: 'Forgot password',
+   desc: 'Using this request to forgot password',
+   schema: {
+      body: {
+         email: {
+            type: 'string',
+            desc: 'User email which will be used to verify ...',
+            required: true
+         }
+      }
+   },
+   response: {
+      result: {
+         type: 'boolean',
+         description: 'true if forgot password successfully'
+      }
+   }
+}, $(async (req) => {
    const {email} = req.body
+   if (!email)
+      throw new Error('Missing field "email"')
    const user = await getAuthUserByEmail(email)
    if (!user)
       throw new Error('User with provided email is not exists')
@@ -124,8 +242,40 @@ router.post('/forgot-password/0.0.1/', $(async (req) => {
    return true
 }))
 
-router.post('/reset-password/0.0.1/', $(async (req, res) => {
+router.post('/reset-password/v1', {
+   title: 'Reset password',
+   desc: 'Using this request to reset password',
+   schema: {
+      body: {
+         email: {
+            type: 'string',
+            desc: 'User email which will be used to verify ...',
+            required: true
+         },
+         password: {
+            type: 'string',
+            desc: 'A strong password is: At least 12 characters long but 14 or more is better. ' +
+               'A combination of uppercase letters, lowercase letters, numbers, and symbols. ' +
+               'Not a word that can be found in a dictionary or the name of a person, character, product, or organization.',
+            required: true
+         },
+         code: {
+            type: 'string',
+            desc: 'Reset password code',
+            required: true
+         }
+      }
+   },
+   response: {
+      user: {
+         type: 'object',
+         description: 'created user'
+      }
+   }
+}, $(async (req, res) => {
    const {password, code, email} = req.body
+   if (!password || !code || !email)
+      throw new Error('Missing field "password" or "code" or "email"')
    const user = await getAuthUserByEmail(email)
    if (!user)
       throw new Error('User not exists')
@@ -139,7 +289,25 @@ router.post('/reset-password/0.0.1/', $(async (req, res) => {
    return {user, token}
 }))
 
-router.get('/profile/0.0.1/:id', requireUser, $(async (req: UserRequest) => {
+router.get('/profile/v1/:id', {
+   title: 'Get user profile',
+   desc: 'Using this request to get user profile',
+   schema: {
+      params: {
+         id: {
+            type: 'string',
+            desc: 'User id',
+            required: true
+         }
+      }
+   },
+   response: {
+      user: {
+         type: 'object',
+         description: 'user profile'
+      }
+   }
+}, requireUser, $(async (req: UserRequest) => {
    let user
    if (req.params.id === 'me') {
       user = await getUserPublicInfoById(req.user._id)
@@ -151,7 +319,29 @@ router.get('/profile/0.0.1/:id', requireUser, $(async (req: UserRequest) => {
    return user
 }))
 
-router.put('/profile/0.1.1/', requireUser, $(async (req: UserRequest) => {
+router.put('/profile/v1', {
+   title: 'Update user profile',
+   desc: 'Using this request to update user profile',
+   schema: {
+      body: {
+         avatar: {
+            type: 'string',
+            desc: 'User avatar',
+            required: false
+         },
+         fullName: {
+            type: 'string',
+            desc: 'User full name',
+         }
+      }
+   },
+   response: {
+      user: {
+         type: 'object',
+         description: 'updated user'
+      }
+   }
+}, requireUser, $(async (req: UserRequest) => {
    const {avatar, fullName} = req.body;
    return updateUser(req.user._id, {avatar, fullName});
 }))
