@@ -44,11 +44,11 @@ router.post('/sign-up/v1', {
    response: {
       user: {
          type: 'object',
-         description: 'created user'
+         desc: 'created user'
       },
       token: {
          type: 'string',
-         description: 'access_token which will be use for authorization'
+         desc: 'access_token which will be use for authorization'
       }
    }
 }, rateLimit(), $(async (req, res) => {
@@ -87,11 +87,11 @@ router.post('/sign-in/v1', {
    response: {
       user: {
          type: 'object',
-         description: 'created user'
+         desc: 'created user'
       },
       token: {
          type: 'string',
-         description: 'access_token which will be use for authorization'
+         desc: 'access_token which will be use for authorization'
       }
    }
 }, rateLimit(), $(async (req, res) => {
@@ -123,11 +123,11 @@ router.get('/auth/v1', {
    response: {
       user: {
          type: 'object',
-         description: 'created user'
+         desc: 'created user'
       },
       token: {
          type: 'string',
-         description: 'access_token which will be use for authorization'
+         desc: 'access_token which will be use for authorization'
       }
    }
 }, rateLimit(), $(async (req, res) => {
@@ -158,7 +158,7 @@ router.get('/sign-out/v1', {
    response: {
       result: {
          type: 'boolean',
-         description: 'true if sign out successfully'
+         desc: 'true if sign out successfully'
       }
    }
 }, async (req, res) => {
@@ -191,7 +191,7 @@ router.post('/change-password/v1', {
    response: {
       result: {
          type: 'boolean',
-         description: 'true if change password successfully'
+         desc: 'true if change password successfully'
       }
    }
 }, $(async (req, res) => {
@@ -224,7 +224,7 @@ router.post('/forgot-password/v1', {
    response: {
       result: {
          type: 'boolean',
-         description: 'true if forgot password successfully'
+         desc: 'true if forgot password successfully'
       }
    }
 }, $(async (req) => {
@@ -269,7 +269,7 @@ router.post('/reset-password/v1', {
    response: {
       user: {
          type: 'object',
-         description: 'created user'
+         desc: 'created user'
       }
    }
 }, $(async (req, res) => {
@@ -293,6 +293,12 @@ router.get('/profile/v1/:id', {
    title: 'Get user profile',
    desc: 'Using this request to get user profile',
    schema: {
+      headers: {
+         authorization: {
+            type: 'string',
+            desc: 'Authorization header',
+         }
+      },
       params: {
          id: {
             type: 'string',
@@ -304,7 +310,7 @@ router.get('/profile/v1/:id', {
    response: {
       user: {
          type: 'object',
-         description: 'user profile'
+         desc: 'user profile'
       }
    }
 }, requireUser, $(async (req: UserRequest) => {
@@ -338,7 +344,7 @@ router.put('/profile/v1', {
    response: {
       user: {
          type: 'object',
-         description: 'updated user'
+         desc: 'updated user'
       }
    }
 }, requireUser, $(async (req: UserRequest) => {

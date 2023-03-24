@@ -333,6 +333,7 @@ const text = [
   ['ta-r', {'text-align': 'right'}],
   ['ta-c', {'text-align': 'center'}],
   [/^fw-(\d)/, ([_, d]) => ({'font-weight': `${d}00`})],
+  ['fs-xs', {'font-size': '0.75em'}],
   ['fs-s', {'font-size': '0.85em'}],
   ['fs-m', {'font-size': '1em'}],
   ['fs-l', {'font-size': '1.15em'}],

@@ -9,7 +9,8 @@ const router = Router()
 
 router.get('/health-check', {
    title: 'Health check',
-   description: 'Server health monitor provides built-in capacity forecast charts and metrics designed to help you more easily identify when server resources reach warning'
+   desc: 'Server health monitor provides built-in capacity forecast charts and metrics designed to help you more easily identify when server resources reach warning',
+   response: {200: {type: 'string', desc: 'The server is live'}, 408: {type: 'string', desc: 'The server is down'}}
 }, (_, res) => res.status(200).end())
 router.use('/user', UserCtl)
 router.use('/system-config', SystemConfigCtl)

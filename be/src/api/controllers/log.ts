@@ -11,7 +11,6 @@ router.get('/', {
    schema: {query: {limit: 'number', offset: 'number'}},
    response: {200: {type: 'array', items: {type: 'string'}}}
 }, requireAdmin, $(async () => getLogs()))
-
 router.get('/file/:logFile', {
    schema: {params:{logFile: 'string'}},
    title: 'Read specified log file',
@@ -21,7 +20,6 @@ router.get('/file/:logFile', {
    res.header('Content-Type', 'text/plain')
    return getLog(req.params.logFile)
 }));
-
 router.get('/setting', {
    title: 'Get all system setting',
    desc: 'get all system setting',
