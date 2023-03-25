@@ -1,10 +1,10 @@
 <template>
-  <div style="height: 50px; background-color: #272727; color: #fff" class="fr ai-c jc-sb px-2 fg-1">
-    <h3>{{title}}</h3>
-    <div class="f1"></div>
+  <div style="height: 50px; background-color: rgba(0,0,0,0.2); color: #fff" class="fr ai-c jc-sb px-2">
     <slot></slot>
+    <div class="f1"></div>
+    <h3>{{title}}</h3>
   </div>
 </template>
 <script setup>
-const props = defineProps({title: String})
+defineProps({title: String})
 </script>

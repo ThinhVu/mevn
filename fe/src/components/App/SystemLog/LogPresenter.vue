@@ -91,7 +91,7 @@ export default {
       }
     }
 
-    return () => <div style="background-color: rgb(33, 33, 33); border-bottom: 1px solid #222; font-size: 13px">
+    return () => <div style="border-bottom: 1px solid #222; font-size: 13px">
       {props.fallback ? <pre style="white-space: pre-wrap; max-width: 100%; color: #aaa">{props.content}</pre> : renderLogLines()}
     </div>
   }

@@ -1,14 +1,16 @@
 <template>
-  <section data-name="system-config" class="fc w-100 h-100 fg-3 py-3 px-3 ovf-y-s hide-scroll-bar c-b-0">
-    <table border>
-      <thead>
+  <section data-name="system-config" class="fc w-100 h-100 fg-3 c-b-0">
+    <page-header title="System config"/>
+    <page-content class="px-2 pt-2">
+      <table class="w-100" border>
+        <thead>
         <tr>
           <th>Key</th>
           <th>Value</th>
           <th>Action</th>
         </tr>
-      </thead>
-      <tbody>
+        </thead>
+        <tbody>
         <tr v-for="cfg in configs">
           <td>{{cfg.key}}</td>
           <td>{{cfg.value}}</td>
@@ -18,16 +20,14 @@
             </button>
           </td>
         </tr>
-      </tbody>
-    </table>
-    <div>
-      <button @click="uploadFileS">Upload</button>
-    </div>
-    <div class="fr ai-c fg-1">
-      <input class="f1" placeholder="Key" :value="key" @input="key = $event.target.value"/>
-      <input class="f3" placeholder="Value" :value="value" @input="value = $event.target.value"/>
-      <button @click="setConfig">Add</button>
-    </div>
+        </tbody>
+      </table>
+      <div class="fr ai-c fg-1">
+        <input class="f1" placeholder="Key" :value="key" @input="key = $event.target.value"/>
+        <input class="f3" placeholder="Value" :value="value" @input="value = $event.target.value"/>
+        <button @click="setConfig">Add</button>
+      </div>
+    </page-content>
   </section>
 </template>
 <script setup>
@@ -38,6 +38,8 @@ import {openUploadFileDialog} from '@/utils/file.js';
 import {copyToClipboard} from '@/utils/common.js';
 import notification from '@/components/UiLib/System/notification';
 import Icon from '@/components/UiLib/Icon.vue';
+import PageHeader from '@/components/App/PageHeader.vue';
+import PageContent from '@/components/App/PageContent.vue';
 
 const configs = ref([])
 const key = ref('')
@@ -46,19 +48,6 @@ const setConfig = () => {
   systemConfigAPI.set(key.value, value.value)
   key.value = ''
   value.value = ''
-}
-
-const uploadFileS = () => {
-  openUploadFileDialog({multiple: false, mimeType: '*/*'}, async (files) => {
-    try {
-      const filePath = (await Promise.all(uploadFile(files)))[0]
-      console.log('uploaded', filePath)
-      await copyToClipboard(filePath)
-      notification.success('Upload completed. Url path has been copy to clipboard');
-    } catch (e) {
-      notification.err(e);
-    }
-  })
 }
 const loadConfigs = () => {
   console.log('load config');

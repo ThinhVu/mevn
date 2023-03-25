@@ -21,18 +21,26 @@ export default {
         try {
           if (props.multiple) {
             const uploadedFiles = (await Promise.all(uploadFile(files)))
-            emit('uploaded', uploadedFiles.map((uploadedFile, i) => ({
-              name: files[i].name,
-              src: `${FILE_API_URL}/${uploadedFile.filename}`,
-              thumbnail: `${FILE_API_URL}/${uploadedFile.metadata.thumbnail}`
-            })))
+            emit('uploaded', uploadedFiles.map((uploadedFile, i) => {
+              return {
+                name: files[i].name,
+                src: `${FILE_API_URL}/${uploadedFile.filename}`,
+                size: uploadedFile.chunkSize,
+                type: uploadedFile.contentType,
+                thumbnail: `${FILE_API_URL}/${uploadedFile.metadata.thumbnail}`,
+                createdAt: new Date()
+              }
+            }))
           } else {
             const file = files[0]
             const uploadedFile = (await Promise.all(uploadFile([file])))[0]
             emit('uploaded', {
               name: file.name,
               src: `${FILE_API_URL}/${uploadedFile.filename}`,
-              thumbnail: `${FILE_API_URL}/${uploadedFile.metadata.thumbnail}`
+              size: uploadedFile.chunkSize,
+              type: uploadedFile.contentType,
+              thumbnail: `${FILE_API_URL}/${uploadedFile.metadata.thumbnail}`,
+              createdAt: new Date()
             })
           }
           notification.success('[upload-zone] Upload completed');

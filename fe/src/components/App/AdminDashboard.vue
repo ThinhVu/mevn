@@ -1,6 +1,6 @@
 <template>
   <section data-name="dashboard" class="fc w-100 h-100 fg-3 py-3 px-3 ovf-y-s hide-scroll-bar">
-    <section class="bc-lb-0 px-2 py-2" style="border-radius: 6px">
+    <section class="metric-block px-2 py-2" style="border-radius: 6px">
       <p class="mb-2" style="font-size: 20px; font-weight: 600">Health check</p>
       <span v-for="hc in healthCheck" class="mr-2">
         <span class="mr-1" :style="[
@@ -11,7 +11,7 @@
       </span>
     </section>
 
-    <section data-name="chart" class="bc-r-2 px-2 py-2" style="border-radius: 6px">
+    <section data-name="chart" class="metric-block" style="border-radius: 6px">
       <div class="fr ai-c fg-1 mb-2">
         <span style="font-size: 20px; font-weight: 600">API Call ({{viewMode}})</span>
         <spacer/>
@@ -20,7 +20,7 @@
       </div>
 
       <section>
-        <div class="bc-r-0 px-1 py-1" style="border-radius: 6px">
+        <div class="px-1 py-1" style="border-radius: 6px">
           <line-chart :chart-data="apiMetricHistoryChart" :chart-options="chartOptions"/>
         </div>
       </section>
@@ -151,6 +151,8 @@ const chartData = computed(() => {
         final.push({
           label: key,
           backgroundColor: color[final.length],
+          borderColor: color[final.length],
+          tension: 0.2,
           data: metric
         })
       } else {
@@ -158,6 +160,8 @@ const chartData = computed(() => {
         final.push({
           label: key,
           backgroundColor: color[final.length],
+          borderColor: color[final.length],
+          tension: 0.4,
           data: diffs
         })
       }
@@ -168,7 +172,9 @@ const chartData = computed(() => {
   total.shift()
   final.push({
     label: 'Total',
-    backdropColor: '#000',
+    backgroundColor: '#79f8d6',
+    borderColor: '#478d7b',
+    tension: 0.4,
     data: total
   })
   return final
@@ -242,16 +248,20 @@ onBeforeUnmount(() => {
 </script>
 <style scoped>
 .metric-block {
-  border-radius: 6px;
+  background: linear-gradient(90deg, #272b34, #1a1a22);
+  box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 40%);
+
+  border-radius: 10px;
   padding: 20px;
-}
+  color: #676b79;
 
 .label {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 12px;
+  color: #adaeaf;
 }
 
 .val {
   font-size: 30px;
+}
 }
 </style>

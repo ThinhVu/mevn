@@ -18,12 +18,20 @@ import System from '@/components/UiLib/System/System.vue';
 }
 
 button {
+  background: #1f252f;
+  color: #eee;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  padding-left: 1em; padding-right: 1em;
-  padding-top: 0.5em; padding-bottom: 0.5em;
+  padding: 0.5em 1em;
+  box-shadow: 2px 2px 4px 0 rgba(0,0,0,.4);
 }
+
+button.active {
+  background: #eee;
+  color: #1f252f;
+}
+
 
 input {
   height: 30px;

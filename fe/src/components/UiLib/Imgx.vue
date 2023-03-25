@@ -1,7 +1,9 @@
 <template>
-  <img draggable="false" v-show="imgState === 'loaded'" :style="mediaStyle" ref="image" @click="emit('click')"/>
-  <pulse-block v-if="imgState === 'loading'" :style="mediaStyle"/>
-  <div v-if="imgState === 'error'" :style="mediaStyle"></div>
+  <div >
+    <img draggable="false" v-show="imgState === 'loaded'" :style="mediaStyle" ref="image" @click="emit('click')"/>
+    <pulse-block v-if="imgState === 'loading'" :style="mediaStyle"/>
+    <div v-if="imgState === 'error'" :style="mediaStyle"></div>
+  </div>
 </template>
 <script setup>
 import {ref, onMounted, watch, computed} from 'vue';

@@ -22,7 +22,7 @@
     </div>
   </div>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
 import {ref, computed} from 'vue';
 import Icon from '@/components/UiLib/Icon.vue';
 import {user} from '@/app-state.js';

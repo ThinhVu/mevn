@@ -15,13 +15,7 @@ export function uploadFile(files) {
     uploadProgress.push(new Promise((resolve, reject) => {
       showFileUploadProgressDialog.value = true
       uploadingItems.value.push(FsClient.uploadFile(file, {
-        uploadCompletedCallback: async response => {
-          if (response && response.status === 200) {
-            resolve(FsClient.resolveFile(response.data.data));
-          } else {
-            reject(response.data)
-          }
-        },
+        uploadCompletedCallback: async response => resolve(response.data),
         uploadProgressCallback: console.log
       }))
     }))

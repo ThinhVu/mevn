@@ -2,6 +2,7 @@ import UserCtl from './controllers/user';
 import LogCtl from './controllers/log';
 import SystemConfigCtl from './controllers/system-config';
 import SystemMetricCtl from "./controllers/system-metric";
+import fileSystemCtl from "./controllers/file-system";
 import config from "../config";
 import Router from "routerex";
 
@@ -17,5 +18,6 @@ router.use('/system-config', SystemConfigCtl)
 router.use('/log', LogCtl)
 if (config.useAPIMetric)
    router.use('/system-metric', SystemMetricCtl)
+router.use('/file-system', fileSystemCtl)
 
 export default router

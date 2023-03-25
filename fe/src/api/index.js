@@ -93,3 +93,20 @@ export const systemConfigAPI = {
   set: async (key, value) => exec(() => axios.post(`${API_URL}/system-config/${key}`, { payload: value }, axiosOpts)).then(() => notification.success('Saved')),
   unset: async key => exec(() => axios.delete(`${API_URL}/system-config/${key}`, axiosOpts)),
 }
+
+export const feAPI = {
+  folder: {
+    create: async (name, parent) => exec(() => axios.post(`${API_URL}/file-system/folder`, {name, parent}, axiosOpts)),
+    update: async (id, change) => exec(() => axios.put(`${API_URL}/file-system/folder/${id}`, change, axiosOpts)),
+    remove: async (id) => exec(() => axios.delete(`${API_URL}/file-system/folder/${id}`, axiosOpts)),
+    getFolderTree: async () => exec(() => axios.get(`${API_URL}/file-system/folder`, axiosOpts)),
+    getFiles: async (folderId) => exec(() => axios.get(`${API_URL}/file-system/folder/${folderId}`, axiosOpts)),
+    addFileToFolder: async (folderId, fileId) => exec(() => axios.post(`${API_URL}/file-system/folder/add-file`, {folderId, fileId}, axiosOpts)),
+    removeFileFromFolder: async (folderId, fileId) => exec(() => axios.post(`${API_URL}/file-system/folder/remove-file`, {folderId, fileId}, axiosOpts)),
+  },
+  file: {
+    create: async (item, folderId) => exec(() => axios.post(`${API_URL}/file-system/file`, {...item, folderId}, axiosOpts)),
+    update: async (fileId, change) => exec(() => axios.put(`${API_URL}/file-system/file/${fileId}`, {change}, axiosOpts)),
+    remove: async (fileId, folderId) => exec(() => axios.delete(`${API_URL}/file-system/file/${fileId}?folderId=${folderId}`, axiosOpts))
+  }
+}
