@@ -12,7 +12,7 @@ dependencies:
     version: 0.10.3
   axios:
     specifier: ^0.26.1
-    version: 0.26.1
+    version: 0.26.1(debug@4.3.4)
   bcrypt:
     specifier: ^5.0.1
     version: 5.0.1
@@ -34,6 +34,9 @@ dependencies:
   dayjs:
     specifier: ^1.11.0
     version: 1.11.0
+  debug:
+    specifier: ^4.3.4
+    version: 4.3.4
   dotenv:
     specifier: ^8.2.0
     version: 8.2.0
@@ -1495,10 +1498,10 @@ packages:
     engines: {node: '>=8.0.0'}
     dev: false
 
-  /axios@0.26.1:
+  /axios@0.26.1(debug@4.3.4):
     resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==}
     dependencies:
-      follow-redirects: 1.15.2
+      follow-redirects: 1.15.2(debug@4.3.4)
     transitivePeerDependencies:
       - debug
     dev: false
@@ -2725,7 +2728,7 @@ packages:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
     dev: true
 
-  /follow-redirects@1.15.2:
+  /follow-redirects@1.15.2(debug@4.3.4):
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
     engines: {node: '>=4.0'}
     peerDependencies:
@@ -2733,6 +2736,8 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+    dependencies:
+      debug: 4.3.4
     dev: false
 
   /forwarded@0.2.0:
