@@ -53,7 +53,6 @@
   </section>
 </template>
 <script setup>
-import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
 import {CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip as CharTooltip} from 'chart.js'
 import {Line as LineChart} from 'vue-chartjs'
 import dayjs from 'dayjs'
@@ -61,8 +60,6 @@ import _ from 'lodash'
 import hmm from '@/api/hmm.js'
 import {systemAPI} from '@/api'
 import loading from '@/components/UiLib/System/loading'
-import Spacer from '@/components/UiLib/Spacer.vue'
-import CollapsableSection from '@/components/UiLib/CollapsableSection.vue'
 
 ChartJS.register(Title, CharTooltip, Legend, LineElement, PointElement, CategoryScale, LinearScale)
 

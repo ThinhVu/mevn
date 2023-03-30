@@ -2,7 +2,6 @@
   <div>{{fmtNow}}</div>
 </template>
 <script setup>
-import {ref, watch, onMounted, onBeforeUnmount} from 'vue';
 import dayjs from 'dayjs';
 const props = defineProps({interval: Number})
 const fmtNow = ref();

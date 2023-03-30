@@ -13,8 +13,6 @@
   </div>
 </template>
 <script setup>
-import {ref, toRaw} from 'vue'
-
 const emit = defineEmits(['close'])
 
 const name = ref()

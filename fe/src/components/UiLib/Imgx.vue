@@ -6,9 +6,6 @@
   </div>
 </template>
 <script setup>
-import {ref, onMounted, watch, computed} from 'vue';
-import PulseBlock from '@/components/UiLib/PulseBlock.vue';
-
 const props = defineProps({
   src: String,
   style: [String, Object],

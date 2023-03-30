@@ -1,5 +1,4 @@
 <script lang="jsx">
-import {computed} from 'vue';
 import uploadCompleted from '@/assets/images/upload-completed.svg';
 import uploadFailed from '@/assets/images/upload-failed.svg';
 import {

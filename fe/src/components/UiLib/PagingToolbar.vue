@@ -12,7 +12,6 @@
   </template>
 </template>
 <script setup>
-import {computed} from 'vue';
 import {round} from 'lodash';
 
 const props = defineProps({

@@ -11,9 +11,6 @@
   </div>
 </template>
 <script setup>
-import {computed, onMounted, ref} from 'vue';
-import Imgx from '@/components/UiLib/Imgx';
-import Icon from '@/components/UiLib/Icon';
 const props = defineProps({ media: Array, idx: Number })
 
 const idx = ref(props.idx || 0)

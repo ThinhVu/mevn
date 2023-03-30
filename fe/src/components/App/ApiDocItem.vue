@@ -20,8 +20,6 @@
   </div>
 </template>
 <script setup>
-import {computed} from 'vue';
-import FieldSpec from '@/components/App/FieldSpec.vue';
 const props = defineProps({
   path: String,
   methods: Object,

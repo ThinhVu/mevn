@@ -31,16 +31,7 @@
   </section>
 </template>
 <script setup>
-import {onBeforeMount, onBeforeUnmount, onMounted, ref} from 'vue';
 import {systemConfigAPI} from '@/api';
-import {uploadFile} from '@/components/UiLib/FileUpload/fs-util';
-import {openUploadFileDialog} from '@/utils/file.js';
-import {copyToClipboard} from '@/utils/common.js';
-import notification from '@/components/UiLib/System/notification';
-import Icon from '@/components/UiLib/Icon.vue';
-import PageHeader from '@/components/App/PageHeader.vue';
-import PageContent from '@/components/App/PageContent.vue';
-
 const configs = ref([])
 const key = ref('')
 const value = ref('')

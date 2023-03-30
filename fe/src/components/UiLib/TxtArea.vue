@@ -2,8 +2,6 @@
   <textarea style="border: none; resize: none; outline: none; background: transparent" :value="v" :placeholder="placeholder" @input="updateV"/>
 </template>
 <script setup>
-import {ref, watch} from 'vue'
-
 const props = defineProps({
   modelValue: String,
   type: String,

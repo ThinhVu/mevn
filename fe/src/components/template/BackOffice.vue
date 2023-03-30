@@ -23,11 +23,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import {ref, computed} from 'vue';
-import Icon from '@/components/UiLib/Icon.vue';
 import {user} from '@/app-state.js';
 import {userAPI} from '@/api/index.js';
-import Spacer from "../UiLib/Spacer.vue";
 
 interface ISideBarItem {
   title: string;

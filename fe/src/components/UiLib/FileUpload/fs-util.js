@@ -1,4 +1,3 @@
-import {ref, isRef} from 'vue'
 import FsClient from './fs-client'
 
 export const uploadingItems = ref([])

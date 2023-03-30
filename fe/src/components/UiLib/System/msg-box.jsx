@@ -3,7 +3,6 @@
  * https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.messagebox.show
  */
 
-import {ref} from 'vue';
 import layer from '../Layer/layer';
 
 const Buttons = {

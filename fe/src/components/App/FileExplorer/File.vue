@@ -5,9 +5,7 @@
   </div>
 </template>
 <script setup>
-import {computed, defineProps} from 'vue';
 import {copyToClipboard} from '@/utils/common.js';
-import Imgx from '@/components/UiLib/Imgx.vue';
 const props = defineProps({name: String, src: String, size: Number, thumbnail: String, type: String})
 const copySrc = () => copyToClipboard(props.src)
 const shortenName = computed(() => {

@@ -1,6 +1,4 @@
 <script lang="jsx">
-import {computed} from 'vue';
-
 export default {
   props: { label: String, modelValue: Boolean },
   emits: ['update:modelValue'],

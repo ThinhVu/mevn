@@ -21,14 +21,12 @@
   </div>
 </template>
 <script setup>
-import {onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import notification from '@/components/UiLib/System/notification';
 import msgBox from '@/components/UiLib/System/msg-box';
 import loading from '@/components/UiLib/System/loading';
-import {readFile, removeCarry} from '@/utils';
+import {removeCarry} from '@/utils/common';
+import {readFile} from '@/utils/file.js';
 import {compact} from 'lodash';
-import PagingToolbar from '@/components/UiLib/PagingToolbar';
-import Load from '@/components/UiLib/Load';
 
 const props = defineProps({
   api: Object,

@@ -13,9 +13,6 @@
   </collapsable-section>
 </template>
 <script setup>
-import {computed} from 'vue'
-import CollapsableSection from '@/components/UiLib/CollapsableSection.vue';
-
 const props = defineProps({
   title: String,
   value: Object

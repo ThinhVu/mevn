@@ -1,6 +1,5 @@
 <script lang="jsx">
 import _ from 'lodash'
-import {computed} from 'vue'
 import dayjs from 'dayjs';
 /**
  * Parse log line to parts

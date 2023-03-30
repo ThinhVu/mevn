@@ -1,5 +1,4 @@
 <script lang="jsx">
-import { watch, computed } from 'vue';
 
 function convertToUnit(str, unit = 'px') {
   if (str == null || str === '') {

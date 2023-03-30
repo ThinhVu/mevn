@@ -2,8 +2,6 @@
   <input :value="v" :placeholder="placeholder" @input="updateV" style="outline: none">
 </template>
 <script setup>
-import {ref, watch} from 'vue'
-
 const props = defineProps({
   modelValue: String,
   type: {
