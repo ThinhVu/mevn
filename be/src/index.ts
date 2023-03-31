@@ -15,8 +15,7 @@ import {apiError} from "./utils/common-util";
 import {enableLog, _console} from "./utils/logger-util";
 import registerAppHooks from "./hooks/register-app-hooks";
 import {collectDefaultMetrics, register} from "prom-client";
-import RouteMetadataModel from "./db/models/route-metadata";
-import {routeMetadataCollectorFactory} from "routerex";
+import Exdogen from "exdogen";
 
 process.on('uncaughtException', err => console.error((err && err.stack) ? err.stack : err))
 
@@ -67,16 +66,16 @@ Db.init().then(Db.migrate).then(async () => {
       )
    }
 
-   const exdogen = routeMetadataCollectorFactory({
-      onMetadataGathered: async metadatas => {
-         await RouteMetadataModel.deleteMany({})
-         await RouteMetadataModel.create(metadatas)
-      }
+   const cache = { html: '', postman: ''};
+   const exdogen = Exdogen({
+      onHtmlGenerated: html => cache.html = html,
+      onPostmanGenerated: postman => cache.postman = postman,
+      onError: console.error
    })
-   app.use(...exdogen('/', [
-      bodyParser.json({limit: config.requestBodyMaxSize}),
-      bodyParser.urlencoded({limit: config.requestBodyMaxSize})
-   ], api));
+   app.use(...exdogen('/', bodyParser.json({limit: config.requestBodyMaxSize}), bodyParser.urlencoded({limit: config.requestBodyMaxSize}), api));
+   app.get('/docs', (req, res) => res.send(cache.html));
+   app.get('/docs/index.html', (req, res) => res.send(cache.html));
+   app.get('/docs/postman.json', (req, res) => res.send(cache.postman));
 
    if (config.useRabbitMQ) {
       _console.log('[cfg] useRabbitMQ', config.rabbitMQConnection)

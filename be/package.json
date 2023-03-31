@@ -24,6 +24,7 @@
     "debug": "^4.3.4",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
+    "exdogen": "Thinhvu/exdogen",
     "express": "^4.16.4",
     "express-rate-limit": "^6.4.0",
     "hmm": "Thinhvu/hmmjs#0.69.420",
