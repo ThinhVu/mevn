@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "rome:check": "rome check .",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "@vitejs/plugin-vue-jsx": "^3.0.1",
     "@vue/compiler-sfc": "^3.2.33",
     "conventional-changelog-cli": "^2.2.2",
+    "rome": "^12.0.0",
     "dotenv": "^16.0.3",
     "unocss": "^0.50.1",
     "unplugin-auto-import": "^0.15.2",
