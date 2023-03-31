@@ -34,7 +34,7 @@ const warn = (content, duration) => showNotify(content, '#fff3cd', duration)
 const success = (content, duration) => showNotify(content, '#d4edda', duration)
 
 const render = () => {
-  const marginTop = i => ({marginTop: ((i * 60 + 10) + 'px')})
+  const marginTop = i => ({marginTop: `${i * 60 + 10}px`})
   return <>
     {Object.values(notifyState.value).map((notify, i) =>
         <div class="fix fr top-0 right-0 ai-c jc-c px-2 py-2 br-1" style={[marginTop(i), { marginRight: '10px', backgroundColor: notify.color}]}>

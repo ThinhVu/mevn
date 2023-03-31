@@ -25,7 +25,7 @@ class FsClient {
     function onUploadProgress(progress) {
       const progressPercentage = Math.round(progress.loaded * 100 / progress.total);
       upload.value.progress = progressPercentage;
-      uploadProgressCallback && uploadProgressCallback(progressPercentage);
+      uploadProgressCallback?.(progressPercentage);
     }
 
     let responseData

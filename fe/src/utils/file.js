@@ -1,10 +1,11 @@
-export function openUploadFileDialog(options = { multiple: false, mimeType: '*/*' }, onFileOpened) {
+export function openUploadFileDialog(options, onFileOpened) {
+  options = options || { multiple: false, mimeType: '*/*' }
   const input = document.createElement('input')
   input.type = 'file'
   input.accept = options.mimeType
   input.multiple = options.multiple
   input.addEventListener('change', e => {
-    onFileOpened && onFileOpened(e.target.files)
+    onFileOpened?.(e.target.files)
   });
   document.body.appendChild(input)
   input.style.display = 'none'

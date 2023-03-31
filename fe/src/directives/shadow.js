@@ -1,7 +1,7 @@
 const r = 4;
 
 const shadow = () => {
-  let h = new Date().getHours();
+  const h = new Date().getHours();
   if (6 <= h && h <= 18) {
     const rad = (h - 6) * Math.PI / 12;
     const x = Math.floor(Math.cos(rad) * r)

@@ -4,12 +4,13 @@ import layer from '../Layer/layer'
 const dialogState = ref([])
 
 const show = (target) => {
-  let component, data
+  let component
+  let data
   if (target && typeof target.setup === 'function') {
     component= markRaw(target)
   } else if (typeof target === 'function') {
     component = markRaw({setup: target})
-  } else if (target && target.component) {
+  } else if (target?.component) {
     component = markRaw(target.component)
     data = target.data
   } else {
