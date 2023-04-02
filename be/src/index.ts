@@ -7,7 +7,6 @@ import express from "express";
 import cors from "cors";
 import compression from "compression";
 import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
 import Db from "./db";
 import api from './api';
 import {requireAdmin} from "./middlewares/auth";
@@ -59,7 +58,7 @@ Db.init().then(Db.migrate).then(async () => {
       const jsonFn = require("json-fn");
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const hmm = require("./api/hmm").default;
-      app.use('/hmm', requireAdmin, bodyParser.raw({limit: config.requestBodyMaxSize, type: () => true}),
+      app.use('/hmm', requireAdmin, express.raw({limit: config.requestBodyMaxSize, type: () => true}),
          (req, res) => hmm(jsonFn.parse(req.body.toString()))
          .then(rs => res.send(rs))
          .catch(e => apiError(e, res))
@@ -72,7 +71,7 @@ Db.init().then(Db.migrate).then(async () => {
       onPostmanGenerated: postman => cache.postman = postman,
       onError: console.error
    })
-   app.use(...exdogen('/', bodyParser.json({limit: config.requestBodyMaxSize}), bodyParser.urlencoded({limit: config.requestBodyMaxSize}), api));
+   app.use(...exdogen('/', express.json({limit: config.requestBodyMaxSize}), express.urlencoded({limit: config.requestBodyMaxSize}), api));
    app.get('/docs', (req, res) => res.send(cache.html));
    app.get('/docs/index.html', (req, res) => res.send(cache.html));
    app.get('/docs/postman.json', (req, res) => res.send(cache.postman));
