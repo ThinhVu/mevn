@@ -26,6 +26,7 @@ declare module '@vue/runtime-core' {
     Load: typeof import('./src/components/UiLib/Load.vue')['default']
     LoadMore: typeof import('./src/components/UiLib/LoadMore.vue')['default']
     LogPresenter: typeof import('./src/components/App/SystemLog/LogPresenter.vue')['default']
+    NoThrow: typeof import('./src/components/UiLib/NoThrow.vue')['default']
     Overlay: typeof import('./src/components/UiLib/Layer/Overlay.vue')['default']
     PageContent: typeof import('./src/components/App/PageContent.vue')['default']
     PageHeader: typeof import('./src/components/App/PageHeader.vue')['default']
