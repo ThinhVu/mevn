@@ -7,6 +7,7 @@ import express from "express";
 import cors from "cors";
 import compression from "compression";
 import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 import Db from "./db";
 import api from './api';
 import {requireAdmin} from "./middlewares/auth";
@@ -58,7 +59,7 @@ Db.init().then(Db.migrate).then(async () => {
       const jsonFn = require("json-fn");
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const hmm = require("./api/hmm").default;
-      app.use('/hmm', requireAdmin, express.raw({limit: config.requestBodyMaxSize, type: () => true}),
+      app.use('/hmm', requireAdmin, bodyParser.raw({limit: config.requestBodyMaxSize, type: () => true}),
          (req, res) => hmm(jsonFn.parse(req.body.toString()))
          .then(rs => res.send(rs))
          .catch(e => apiError(e, res))
