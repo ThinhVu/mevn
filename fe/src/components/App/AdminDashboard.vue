@@ -26,34 +26,53 @@
       </section>
     </section>
 
-    <collapsable-section title="Api Call">
-      <table style="width: 500px" bordered class="c-b-0">
+    <collapsible-section title="Api Call">
+      <table border class="c-b-0">
         <thead>
           <tr>
-            <td class="clickable" @click="sortApiMetricByName"><b>Api</b></td>
-            <td class="clickable" @click="sortApiMetricByCalled"><b>Called</b></td>
-            <td class="clickable" @click="sortApiMetricByAvgs"><b>Average (ms)</b></td>
-            <td class="clickable" @click="sortApiMetricByError"><b>Error</b></td>
+            <th>
+              <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByName">
+                <b>Api</b>
+                <icon>fas fa-sort@16:#eee</icon>
+              </div>
+            </th>
+            <th>
+              <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByCalled">
+                <b>Called</b>
+                <icon>fas fa-sort@16:#eee</icon>
+              </div>
+            </th>
+            <th>
+              <div class="fr ai-c fg-1 clickable" @click="sortApiMetricBySuccess">
+                <b>Success</b>
+                <icon>fas fa-sort@16:#eee</icon>
+              </div>
+            </th>
+            <th>
+              <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByAvgs">
+                <b>Average (ms)</b>
+                <icon>fas fa-sort@16:#eee</icon>
+              </div>
+            </th>
+            <th>
+              <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByError">
+                <b>Error</b>
+                <icon>fas fa-sort@16:#eee</icon>
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>
         <tr v-for="apiCall in apiCallCounterCpt" :key="apiCall.api">
-          <td>
-            {{apiCall.api}}
-          </td>
-          <td>
-            {{apiCall.called.n}}
-          </td>
-          <td>
-            {{apiCall.called.avg_ms}}
-          </td>
-          <td>
-            {{apiCall.called.e}}
-          </td>
+          <td>{{apiCall.api}}</td>
+          <td>{{apiCall.called.n}}</td>
+          <td>{{apiCall.called.s}}</td>
+          <td>{{apiCall.called.avg_ms}}</td>
+          <td>{{apiCall.called.e}}</td>
         </tr>
         </tbody>
       </table>
-    </collapsable-section>
+    </collapsible-section>
   </section>
 </template>
 <script setup>
@@ -219,19 +238,28 @@ const apiCallCounterCpt = computed(() => {
 })
 const sortApiMetricByName = () => {
   apiCallMetricSorters.value.field = 'api';
-  apiCallMetricSorters.value.order = 'asc';
+  const order = apiCallMetricSorters.value.order;
+  apiCallMetricSorters.value.order = order === 'desc' ? 'asc' : 'desc'
 }
 const sortApiMetricByCalled = () => {
   apiCallMetricSorters.value.field = 'called.n';
-  apiCallMetricSorters.value.order = 'desc';
+  const order = apiCallMetricSorters.value.order;
+  apiCallMetricSorters.value.order = order === 'desc' ? 'asc' : 'desc'
 }
 const sortApiMetricByAvgs = () => {
   apiCallMetricSorters.value.field = 'called.avg_ms';
-  apiCallMetricSorters.value.order = 'desc';
+  const order = apiCallMetricSorters.value.order;
+  apiCallMetricSorters.value.order = order === 'desc' ? 'asc' : 'desc'
+}
+const sortApiMetricBySuccess = () => {
+  apiCallMetricSorters.value.field = 'called.s';
+  const order = apiCallMetricSorters.value.order;
+  apiCallMetricSorters.value.order = order === 'desc' ? 'asc' : 'desc'
 }
 const sortApiMetricByError = () => {
   apiCallMetricSorters.value.field = 'called.e';
-  apiCallMetricSorters.value.order = 'desc';
+  const order = apiCallMetricSorters.value.order;
+  apiCallMetricSorters.value.order = order === 'desc' ? 'asc' : 'desc'
 }
 
 let healthCheckInterval

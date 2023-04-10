@@ -13,6 +13,7 @@ declare module '@vue/runtime-core' {
     ApiDocItem: typeof import('./src/components/App/ApiDocItem.vue')['default']
     BackOffice: typeof import('./src/components/template/BackOffice.vue')['default']
     CollapsableSection: typeof import('./src/components/UiLib/CollapsableSection.vue')['default']
+    CollapsibleSection: typeof import('./src/components/UiLib/CollapsibleSection.vue')['default']
     CreateFolderDlg: typeof import('./src/components/App/FileExplorer/CreateFolderDlg.vue')['default']
     Emojis: typeof import('./src/components/UiLib/Emojis.vue')['default']
     FieldSpec: typeof import('./src/components/App/FieldSpec.vue')['default']

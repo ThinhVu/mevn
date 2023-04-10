@@ -23,20 +23,22 @@ function apiCallPerformanceMiddleWare(req, res, next) {
 
       if (res.__error) {
          if (!apiMetric[route]) {
-            apiMetric[route] = {n: 0, avg_ms: 0, e: 1}
+            apiMetric[route] = {n: 1, s: 0, e: 1, avg_ms: 0}
          } else {
             const routeAnalysis = apiMetric[route];
+            routeAnalysis.n++;
             routeAnalysis.e++;
          }
       } else {
          const end = Date.now();
          const duration = end - start;
          if (!apiMetric[route]) {
-            apiMetric[route] = { n: 1, avg_ms: duration, e: 0 }
+            apiMetric[route] = { n: 1, s: 1, e: 0, avg_ms: duration }
          } else {
             const routeAnalysis = apiMetric[route];
-            const { avg_ms, n } = routeAnalysis
-            routeAnalysis.avg_ms = _.round((avg_ms * n + duration) / (n + 1), 2);
+            const { avg_ms, s } = routeAnalysis
+            routeAnalysis.avg_ms = _.round((avg_ms * s + duration) / (s + 1), 2);
+            routeAnalysis.s++;
             routeAnalysis.n++;
          }
       }
