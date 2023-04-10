@@ -42,6 +42,7 @@ declare module '@vue/runtime-core' {
     SystemConfig: typeof import('./src/components/App/SystemConfig.vue')['default']
     SystemLog: typeof import('./src/components/App/SystemLog/SystemLog.vue')['default']
     Tableu: typeof import('./src/components/UiLib/Tableu.vue')['default']
+    Tablex: typeof import('./src/components/UiLib/Tablex.vue')['default']
     TimeFormat: typeof import('./src/components/UiLib/TimeFormat.vue')['default']
     TimeSpan: typeof import('./src/components/UiLib/TimeSpan.vue')['default']
     Tooltip: typeof import('./src/components/UiLib/Tooltip.vue')['default']

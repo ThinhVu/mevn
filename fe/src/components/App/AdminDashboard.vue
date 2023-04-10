@@ -29,11 +29,12 @@
     <collapsable-section title="Api Call">
       <table style="width: 500px" bordered class="c-b-0">
         <thead>
-        <tr>
-          <td @click="sortApiMetricByName"><b>Api</b></td>
-          <td @click="sortApiMetricByCalled"><b>Called</b></td>
-          <td @click="sortApiMetricByAvgs"><b>Average (ms)</b></td>
-        </tr>
+          <tr>
+            <td class="clickable" @click="sortApiMetricByName"><b>Api</b></td>
+            <td class="clickable" @click="sortApiMetricByCalled"><b>Called</b></td>
+            <td class="clickable" @click="sortApiMetricByAvgs"><b>Average (ms)</b></td>
+            <td class="clickable" @click="sortApiMetricByError"><b>Error</b></td>
+          </tr>
         </thead>
         <tbody>
         <tr v-for="apiCall in apiCallCounterCpt" :key="apiCall.api">
@@ -45,6 +46,9 @@
           </td>
           <td>
             {{apiCall.called.avg_ms}}
+          </td>
+          <td>
+            {{apiCall.called.e}}
           </td>
         </tr>
         </tbody>
@@ -225,6 +229,10 @@ const sortApiMetricByAvgs = () => {
   apiCallMetricSorters.value.field = 'called.avg_ms';
   apiCallMetricSorters.value.order = 'desc';
 }
+const sortApiMetricByError = () => {
+  apiCallMetricSorters.value.field = 'called.e';
+  apiCallMetricSorters.value.order = 'desc';
+}
 
 let healthCheckInterval
 
@@ -251,6 +259,7 @@ onBeforeUnmount(() => {
   border-radius: 10px;
   padding: 20px;
   color: #676b79;
+}
 
 .label {
   font-size: 12px;
@@ -259,6 +268,5 @@ onBeforeUnmount(() => {
 
 .val {
   font-size: 30px;
-}
 }
 </style>

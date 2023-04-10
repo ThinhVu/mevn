@@ -19,16 +19,26 @@ function apiCallPerformanceMiddleWare(req, res, next) {
    const start = Date.now();
 
    res.on('finish', () => {
-      const end = Date.now();
-      const duration = end - start;
       const route = getRoute(req);
-      if (!apiMetric[route]) {
-         apiMetric[route] = { n: 1, avg_ms: duration }
+
+      if (res.__error) {
+         if (!apiMetric[route]) {
+            apiMetric[route] = {n: 0, avg_ms: 0, e: 1}
+         } else {
+            const routeAnalysis = apiMetric[route];
+            routeAnalysis.e++;
+         }
       } else {
-         const routeAnalysis = apiMetric[route];
-         const { avg_ms, n } = routeAnalysis
-         routeAnalysis.avg_ms = _.round((avg_ms * n + duration) / (n + 1), 2);
-         routeAnalysis.n++;
+         const end = Date.now();
+         const duration = end - start;
+         if (!apiMetric[route]) {
+            apiMetric[route] = { n: 1, avg_ms: duration, e: 0 }
+         } else {
+            const routeAnalysis = apiMetric[route];
+            const { avg_ms, n } = routeAnalysis
+            routeAnalysis.avg_ms = _.round((avg_ms * n + duration) / (n + 1), 2);
+            routeAnalysis.n++;
+         }
       }
    })
 
