@@ -11,13 +11,7 @@ import bcrypt from 'bcrypt';
 async function init() {
    try {
       const db = await mongoose.connect(config.mongoDBConn, {
-         useCreateIndex: true,
-         useNewUrlParser: true,
-         useFindAndModify: false,
-         useUnifiedTopology: true,
-         reconnectTries: Number.MAX_VALUE,
-         reconnectInterval: 1000,
-         connectTimeoutMS: 10000,
+         connectTimeoutMS: 10000
       });
       const adminUser = await UserModel.findOne({email: 'admin'})
       if (!adminUser) {

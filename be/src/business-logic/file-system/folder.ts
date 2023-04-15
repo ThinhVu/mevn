@@ -34,6 +34,6 @@ export const getFiles = async (folderId: Types.ObjectId) => {
 };
 export const create = async (name: string, parent: Types.ObjectId): Promise<IFolder> => Folder.create({name, parent});
 export const update = async (folderId: Types.ObjectId, change: Partial<IFolder>): Promise<IFolder> => Folder.findOneAndUpdate({_id: folderId}, change, {new: true});
-export const remove = async (folderId: Types.ObjectId): Promise<any> => Folder.remove({_id: folderId});
+export const remove = async (folderId: Types.ObjectId): Promise<any> => Folder.deleteOne({_id: folderId});
 export const addFileToFolder = async (folderId: Types.ObjectId, fileId: Types.ObjectId) : Promise<IFolder> => Folder.findOneAndUpdate({_id: folderId}, {$push: {files: fileId}}, {new: true});
 export const removeFileFromFolder = async (folderId: Types.ObjectId, fileId: Types.ObjectId) : Promise<IFolder> => Folder.findOneAndUpdate({_id: folderId}, {$pull: {files: fileId}}, {new: true});
