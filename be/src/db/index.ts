@@ -15,6 +15,9 @@ async function init() {
          useNewUrlParser: true,
          useFindAndModify: false,
          useUnifiedTopology: true,
+         reconnectTries: Number.MAX_VALUE,
+         reconnectInterval: 1000,
+         connectTimeoutMS: 10000,
       });
       const adminUser = await UserModel.findOne({email: 'admin'})
       if (!adminUser) {
