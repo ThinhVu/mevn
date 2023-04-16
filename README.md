@@ -24,7 +24,7 @@ Mevn
 - Docker script to built & publish container.
 
 ### File Server (https://github.com/ThinhVu/file-server)
-- mongodb gridfs
+- mongodb gridfs, s3
 - detect media file
 - generate image thumbnail
 
@@ -59,3 +59,11 @@ File System
 
 System log viewer
 ![log-viewer.png](images%2Flog-viewer.png)
+
+
+### ROADMAP
+- API input validation (like zod)
+- domain driven design (considering)
+- i18n
+- unit test
+- e2e test
