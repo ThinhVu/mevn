@@ -41,8 +41,8 @@ dependencies:
     specifier: ^8.2.0
     version: 8.2.0
   exdogen:
-    specifier: Thinhvu/exdogen
-    version: github.com/Thinhvu/exdogen/a49c9d91be2835fb2650d52abe490bdb08dce343
+    specifier: Thinhvu/exdogen#0.0.3
+    version: github.com/Thinhvu/exdogen/806ce5347d6a17d052f3b1864251ba1f59807a19
   express:
     specifier: ^4.18.2
     version: 4.18.2
@@ -74,8 +74,8 @@ dependencies:
     specifier: ^4.6.5
     version: 4.6.5
   routerex:
-    specifier: Thinhvu/routerex
-    version: github.com/Thinhvu/routerex/022f320bba81025ae89997ff908f96dacdf770c7
+    specifier: Thinhvu/routerex#1.0.2
+    version: github.com/Thinhvu/routerex/2800e0943354fe66ec65f6549159100508301ed6
   semver:
     specifier: ^7.3.8
     version: 7.3.8
@@ -5656,16 +5656,13 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/Thinhvu/exdogen/a49c9d91be2835fb2650d52abe490bdb08dce343:
-    resolution: {tarball: https://codeload.github.com/Thinhvu/exdogen/tar.gz/a49c9d91be2835fb2650d52abe490bdb08dce343}
+  github.com/Thinhvu/exdogen/806ce5347d6a17d052f3b1864251ba1f59807a19:
+    resolution: {tarball: https://codeload.github.com/Thinhvu/exdogen/tar.gz/806ce5347d6a17d052f3b1864251ba1f59807a19}
     name: exdogen
-    version: 0.0.1
+    version: 0.0.3
     dependencies:
-      routerex: github.com/Thinhvu/routerex/022f320bba81025ae89997ff908f96dacdf770c7
       uuid: 9.0.0
       vue: 3.2.47
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   github.com/Thinhvu/hmmjs/ce81ae254e945bb96db94a9da2f82e5260aee3d5:
@@ -5674,10 +5671,10 @@ packages:
     version: 0.69.420
     dev: false
 
-  github.com/Thinhvu/routerex/022f320bba81025ae89997ff908f96dacdf770c7:
-    resolution: {tarball: https://codeload.github.com/Thinhvu/routerex/tar.gz/022f320bba81025ae89997ff908f96dacdf770c7}
+  github.com/Thinhvu/routerex/2800e0943354fe66ec65f6549159100508301ed6:
+    resolution: {tarball: https://codeload.github.com/Thinhvu/routerex/tar.gz/2800e0943354fe66ec65f6549159100508301ed6}
     name: routerex
-    version: 1.0.0
+    version: 1.0.2
     dependencies:
       express: 4.18.2
       methods: 1.1.2
