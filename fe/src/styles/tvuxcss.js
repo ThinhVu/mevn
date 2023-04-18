@@ -303,9 +303,9 @@ const position = [
   ['sta', {position: 'static'}],
   ['sti', {position: 'sticky'}],
   [/^top-(\d+)/, ([, d]) => ({top: `${d}px`})],
-  [/^left-(\d+)/, ([, d]) => ({top: `${d}px`})],
-  [/^bottom-(\d+)/, ([, d]) => ({top: `${d}px`})],
-  [/^right-(\d+)/, ([, d]) => ({top: `${d}px`})],
+  [/^left-(\d+)/, ([, d]) => ({left: `${d}px`})],
+  [/^bottom-(\d+)/, ([, d]) => ({bottom: `${d}px`})],
+  [/^right-(\d+)/, ([, d]) => ({right: `${d}px`})],
 ]
 
 const spacing = [
