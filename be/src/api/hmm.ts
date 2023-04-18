@@ -3,7 +3,7 @@ import SystemConfigModel from "../db/models/system-config";
 import UserModel from '../db/models/user';
 import Announcement from "../db/models/announcement";
 import TaskModel from "../db/models/tasks";
-import HealthCheck from "../db/models/healthCheck";
+import HealthCheck from "../db/models/health-check";
 
 export default hmmExecFactory({
   systemConfig: SystemConfigModel,
