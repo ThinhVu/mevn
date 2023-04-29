@@ -12,10 +12,10 @@ const cmds = [
 ]
 
 console.log(`Deploying ${imageTag}`);
-const process = child_process.exec(cmds.join(' && '));
-process.stdout.on('data', console.log)
-process.stderr.on('data', console.log)
-process.on('exit', (code, signal) => {
+const buildProcess = child_process.exec(cmds.join(' && '));
+buildProcess.stdout.on('data', console.log)
+buildProcess.stderr.on('data', console.log)
+buildProcess.on('exit', (code, signal) => {
   console.log('on exit', code, signal)
   console.log(imageTag)
 })

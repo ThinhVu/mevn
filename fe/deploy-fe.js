@@ -10,10 +10,10 @@ const buildDockerImage = `docker build -t ${imageTag} .`;
 const pushDockerToRegistry = `docker push ${imageTag}`;
 
 console.log(`Deploying ${imageTag}`)
-const process = child_process.exec(`${buildDist} && ${buildDockerImage} && ${pushDockerToRegistry}`)
-process.stdout.on('data', console.log)
-process.stderr.on('data', console.log)
-process.on('exit', (code, signal) => {
+const buildProcess = child_process.exec(`${buildDist} && ${buildDockerImage} && ${pushDockerToRegistry}`)
+buildProcess.stdout.on('data', console.log)
+buildProcess.stderr.on('data', console.log)
+buildProcess.on('exit', (code, signal) => {
   console.log('on exit', code, signal)
   console.log('image', imageTag)
 })
