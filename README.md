@@ -1,6 +1,6 @@
-# mevn
-Mevn
+# MEVN
 
+MEVN stand for MongoDB, Express, Vue, Nodejs. It's an all-in-one solution for building web application with Vue3, Express, MongoDB, Nodejs.
 
 ### Backend (be)
 - Automatically generate API documents (as images below), you don't need to create/maintain it manually
@@ -46,7 +46,7 @@ Mevn
 - built-in authentication (jsonwebtoken).
 - and a lot more...
 
-### Images
+### Example images
 
 API document generated automatically
 ![api-doc.png](images%2Fapi-doc.png)
@@ -60,6 +60,10 @@ File System
 System log viewer
 ![log-viewer.png](images%2Flog-viewer.png)
 
+### Research
+- https://dev.to/samchon/typia-15000x-faster-validator-and-its-histories-1fmg
+- https://dev.to/samchon/i-made-express-faster-than-fastify-4h8g
+- https://github.com/honojs/hono/
 
 ### ROADMAP
 - API input validation (like zod)
@@ -67,3 +71,5 @@ System log viewer
 - i18n
 - unit test
 - e2e test
+- Auth0, Clerk integration
+- more UI components
