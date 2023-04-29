@@ -66,6 +66,7 @@ System log viewer
 - https://github.com/honojs/hono/
 
 ### TODO
+- Add File API
 - API input validation (like zod)
 - domain driven design (considering)
 - i18n
