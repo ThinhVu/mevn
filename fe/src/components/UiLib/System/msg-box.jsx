@@ -6,7 +6,7 @@
 import layer from '../Layer/layer';
 
 const Buttons = {
-  OK: 0,
+  OK: 6,
   OKCancel: 1,
   AbortRetryIgnore: 2,
   YesNoCancel: 3,
