@@ -2,8 +2,8 @@ import {createApp} from 'vue';
 import {userAPI} from '@/api';
 import App from '@/App.vue';
 import router from '@/router';
-import directives from '@/directives';
-import socket from '@/socket/socket.js';
+import socket from '@/socket/socket';
+import Jinguji from 'jinguji';
 import 'uno.css';
 
 async function initApp() {
@@ -13,7 +13,7 @@ async function initApp() {
     window.$socket = socket(access_token);
   }
   const app = createApp(App);
-  directives(app);
+  app.use(Jinguji)
   app.use(router);
   await router.isReady();
   app.mount('#app');

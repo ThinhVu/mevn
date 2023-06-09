@@ -1,12 +1,12 @@
 <template>
-  <router-view #default="{ Component }">
-    <component :is="Component"/>
-  </router-view>
-  <system/>
+  <t-system>
+    <router-view #default="{ Component }">
+      <component :is="Component"/>
+    </router-view>
+  </t-system>
 </template>
 
 <script setup>
-import System from '@/components/UiLib/System/System.vue';
 </script>
 
 <style>

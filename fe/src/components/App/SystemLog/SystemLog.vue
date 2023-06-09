@@ -1,13 +1,12 @@
 <script lang="jsx">
-import MSwitch from '@/components/UiLib/Switch.vue'
 import LogPresenter from '@/components/App/SystemLog/LogPresenter.vue';
-import PageHeader from '@/components/App/PageHeader.vue';
 import {systemAPI} from '@/api'
 import dayjs from 'dayjs';
+import {ref, onMounted} from 'vue';
 
 export default {
   name: 'SystemLog',
-  components: {LogPresenter, MSwitch, PageHeader},
+  components: {LogPresenter},
   props: {},
   setup() {
     const logSetting = ref({ })
@@ -34,11 +33,11 @@ export default {
     }
 
     return () => <div class="h-100 w-100">
-      <page-header title="System Log">
+      <t-page-header title="System Log">
         <div class="fr ai-c">
-          <m-switch v-model={logSetting.value.enableLog} onUpdate:modelValue={setLogEnable} label="Enable Log"/>
+          <t-switch v-model={logSetting.value.enableLog} onUpdate:modelValue={setLogEnable} label="Enable Log"/>
         </div>
-      </page-header>
+      </t-page-header>
       <div class="fr" style="height: calc(100% - 50px); color: #ddd;">
         <div style="width: 160px; border-right: 1px solid hsla(0deg, 0%, 100%, 0.12)" class="ovf-y-s hide-scroll-bar">
           {logFiles.value.map(logFile => <div style="padding: 5px 10px; border-bottom: 1px solid hsla(0deg, 0%, 100%, 0.12); font-size: 12px; cursor: pointer;"
@@ -48,8 +47,8 @@ export default {
           {logFile.value && <div style="height: 41px;" class="fr ai-c fg-2 px-1 py-1">
             <span class="fw-700">File:</span> {dayjs(logFile.value).format('YYYY-MM-DD HH:mm:ss')}
             <span style="flex: 1"></span>
-            <m-switch v-model={showErrorOnly.value} label="Error only"/>
-            <m-switch v-model={fallback.value} label="Fallback"/>
+            <t-switch v-model={showErrorOnly.value} label="Error only"/>
+            <t-switch v-model={fallback.value} label="Fallback"/>
           </div>}
           { (!!logContent.value) && <log-presenter
               class="ovf-y-s hide-scroll-bar"

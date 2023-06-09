@@ -1,21 +1,18 @@
 <script lang="tsx">
 import _ from 'lodash';
-import msgBox from '@/components/UiLib/System/msg-box';
-import dialog from '@/components/UiLib/System/dialog.jsx';
-import notification from '@/components/UiLib/System/notification';
 import CreateFolderDlg from './CreateFolderDlg.vue';
-import PageHeader from '@/components/App/PageHeader.vue';
 import IcoFolder from '@/assets/images/folder.svg';
-import UploadZone from '@/components/UiLib/FileUpload/UploadZone.vue';
+import UploadZone from '@/components/App/FileUpload/UploadZone.vue';
 import File from './File.vue';
 import {feAPI} from '@/api/index.js';
-import Imgx from "../../UiLib/Imgx.vue";
+import {ref, inject, onMounted} from 'vue';
 
 export default {
-  components: {PageHeader, File, UploadZone},
+  components: {File, UploadZone},
   setup() {
     const folderTree = ref([])
     const selectedFolder = ref();
+    const {dialog, msgBox, notification} = inject('TSystem')
 
     const loadFolderTree = async () => {
       folderTree.value = await feAPI.folder.getFolderTree()
@@ -68,11 +65,10 @@ export default {
       console.log('onFileClicked', file)
       dialog.show({
         component: {
-          components: {Imgx},
           setup: (__, {emit}) => {
             const close = () => emit('close')
             return () => <div class="fr ai-c w-100 h-100 bc-gray-6-5 clickable" onClick={close}>
-              <imgx class="mx-a" src={file.src}/>
+              <t-img class="mx-a" src={file.src}/>
             </div>
           }
         }
@@ -123,15 +119,17 @@ export default {
     </div>
 
     return () => <div class="fc w-100 h-100">
-      <page-header title="File Explorer">
-        <upload-zone class="mr-1" multiple onUploaded={addNewFile}><button>Upload</button></upload-zone>
-        <button class="mr-1" onClick={createFolder}>New Folder</button>
-        <button class="mr-1" onClick={createSubFolder}>New Sub Folder</button>
-        {selectedFolder.value && <button class="mr-1" onClick={showDeleteFolderDialog}>Delete</button> }
-      </page-header>
+      <t-page-header title="File Explorer">
+        <upload-zone class="mr-1" multiple onUploaded={addNewFile}>
+          <t-btn>Upload</t-btn>
+        </upload-zone>
+        <t-btn class="mr-1" onClick={createFolder}>New Folder</t-btn>
+        <t-btn class="mr-1" onClick={createSubFolder}>New Sub Folder</t-btn>
+        {selectedFolder.value && <t-btn class="mr-1" onClick={showDeleteFolderDialog}>Delete</t-btn> }
+      </t-page-header>
       <div class="fr f1" style="height: calc(100% - 50px)">
         <div style="width: 200px; min-width: 200px; border-right: 1px solid #575665">
-          {renderFolderTree(folderTree.value)}
+          {renderFolderTree(folderTree.value, false)}
         </div>
         {renderFiles()}
       </div>

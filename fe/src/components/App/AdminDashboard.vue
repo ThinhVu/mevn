@@ -14,9 +14,9 @@
     <section data-name="chart" class="metric-block" style="border-radius: 6px">
       <div class="fr ai-c fg-1 mb-2">
         <span style="font-size: 20px; font-weight: 600">API Call ({{viewMode}})</span>
-        <spacer/>
-        <button @click="viewMode = CHART_MODE.PER_MINUTES">Per minutes</button>
-        <button @click="viewMode = CHART_MODE.OVERTIME">Overtime</button>
+        <t-spacer/>
+        <t-btn @click="viewMode = CHART_MODE.PER_MINUTES">Per minutes</t-btn>
+        <t-btn @click="viewMode = CHART_MODE.OVERTIME">Overtime</t-btn>
       </div>
 
       <section>
@@ -26,38 +26,38 @@
       </section>
     </section>
 
-    <collapsible-section title="Api Call">
+    <t-collapsible-section title="Api Call">
       <table border class="c-b-0">
         <thead>
           <tr>
             <th>
               <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByName">
                 <b>Api</b>
-                <icon>fas fa-sort@16:#eee</icon>
+                <t-icon>fas fa-sort@16:#eee</t-icon>
               </div>
             </th>
             <th>
               <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByCalled">
                 <b>Called</b>
-                <icon>fas fa-sort@16:#eee</icon>
+                <t-icon>fas fa-sort@16:#eee</t-icon>
               </div>
             </th>
             <th>
               <div class="fr ai-c fg-1 clickable" @click="sortApiMetricBySuccess">
                 <b>Success</b>
-                <icon>fas fa-sort@16:#eee</icon>
+                <t-icon>fas fa-sort@16:#eee</t-icon>
               </div>
             </th>
             <th>
               <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByAvgs">
                 <b>Average (ms)</b>
-                <icon>fas fa-sort@16:#eee</icon>
+                <t-icon>fas fa-sort@16:#eee</t-icon>
               </div>
             </th>
             <th>
               <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByError">
                 <b>Error</b>
-                <icon>fas fa-sort@16:#eee</icon>
+                <t-icon>fas fa-sort@16:#eee</t-icon>
               </div>
             </th>
           </tr>
@@ -72,7 +72,7 @@
         </tr>
         </tbody>
       </table>
-    </collapsible-section>
+    </t-collapsible-section>
   </section>
 </template>
 <script setup>
@@ -82,7 +82,9 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 import hmm from '@/api/hmm.js'
 import {systemAPI} from '@/api'
-import loading from '@/components/UiLib/System/loading'
+import {inject, ref, computed, onMounted, onBeforeUnmount} from 'vue'
+
+const {loading} = inject('TSystem')
 
 ChartJS.register(Title, CharTooltip, Legend, LineElement, PointElement, CategoryScale, LinearScale)
 

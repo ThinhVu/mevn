@@ -8,11 +8,9 @@ import {
   showFileUploadProgressDialog,
   uploadingItems
 } from './fs-util';
-import msgBox from '@/components/UiLib/System/msg-box';
-import ProgressCircular from '@/components/UiLib/ProgressCircular.vue';
+import {ref, computed} from 'vue';
 
 export default {
-  components: {ProgressCircular},
   setup() {
     const isUploading = computed(() => uploadingItems.value.find(item => item.value.inProgress))
     const title = computed(() => {
@@ -50,13 +48,13 @@ export default {
 
     const renderUploadItemStatusIcon = (uploadItem) => {
       if (uploadItem.value.hovered && !uploadItem.value.success) {
-        return <button small onClick={() => cancelUpload(uploadItem)}>
-          <icon color="#757575" medium>fas fa-times-circle</icon>
-        </button>
+        return <t-btn small onClick={() => cancelUpload(uploadItem)}>
+          <t-icon color="#757575" medium>fas fa-times-circle</t-icon>
+        </t-btn>
       }
 
       if (uploadItem.value.inProgress) {
-        return <progress-circular
+        return <t-spinner
             class="upload-item__progress--uploading"
             size="25"
             color="#536DFE"
@@ -91,7 +89,7 @@ export default {
     const renderUploadItemsDialog = () => <div class="file-upload-dialog">
       <div class="file-upload-dialog__header fr ai-c jc-sb">
         <div class="file-upload-dialog__header__title">{title.value}</div>
-        <button onClick={close}>x</button>
+        <t-btn onClick={close}>x</t-btn>
       </div>
       <div class="file-upload-dialog__items">
         {uploadingItems.value.map(renderUploadItem)}

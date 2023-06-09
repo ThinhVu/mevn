@@ -2,7 +2,7 @@
 import {uploadFile} from './fs-util';
 import {openUploadFileDialog} from '@/utils/file';
 import {FILE_API_URL} from '@/constants';
-import notification from '@/components/UiLib/System/notification';
+import {inject} from 'vue';
 
 export default {
   emits: ['uploaded'],
@@ -14,6 +14,7 @@ export default {
     }
   },
   setup(props, {emit, slots}) {
+    const {notification} = inject('TSystem')
     const addNewFile = async () => {
       openUploadFileDialog({multiple: props.multiple, mimeType: props.mimeType}, async (files) => {
         if (!files.length)

@@ -1,7 +1,7 @@
 <template>
   <section data-name="system-config" class="fc w-100 h-100 fg-3 c-b-0">
-    <page-header title="System config"/>
-    <page-content class="px-2 pt-2">
+    <t-page-header title="System config"/>
+    <t-page-content class="px-2 pt-2">
       <table class="w-100" border>
         <thead>
         <tr>
@@ -15,9 +15,9 @@
           <td>{{cfg.key}}</td>
           <td>{{cfg.value}}</td>
           <td>
-            <button class="fn-btn" @click="api.systemConfig.unset(cfg.key)">
-              <icon>fas fa-times@16:#d50404</icon>
-            </button>
+            <t-btn class="fn-btn" @click="api.systemConfig.unset(cfg.key)">
+              <t-icon>fas fa-times@16:#d50404</t-icon>
+            </t-btn>
           </td>
         </tr>
         </tbody>
@@ -25,13 +25,15 @@
       <div class="fr ai-c fg-1">
         <input class="f1" placeholder="Key" :value="key" @input="key = $event.target.value"/>
         <input class="f3" placeholder="Value" :value="value" @input="value = $event.target.value"/>
-        <button @click="setConfig">Add</button>
+        <t-btn @click="setConfig">Add</t-btn>
       </div>
-    </page-content>
+    </t-page-content>
   </section>
 </template>
 <script setup>
 import {systemConfigAPI} from '@/api';
+import {ref, onMounted, onBeforeMount, onBeforeUnmount} from 'vue'
+
 const configs = ref([])
 const key = ref('')
 const value = ref('')

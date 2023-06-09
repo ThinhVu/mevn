@@ -1,4 +1,5 @@
-import FsClient from './fs-client'
+import {ref} from 'vue';
+import FsClient from './fs-client';
 
 export const uploadingItems = ref([])
 export const showFileUploadProgressDialog = ref(false)

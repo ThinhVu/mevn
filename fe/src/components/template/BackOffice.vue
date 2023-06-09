@@ -8,12 +8,12 @@
            class="fr ai-c px-2 py-2 clickable"
            :style="getSidebarItemStyle(i)"
            @click="selectSidebarItem(i)">
-        <icon class="item-icon">{{ item.icon }}</icon>
+        <t-icon class="item-icon">{{ item.icon }}</t-icon>
         <span class="item-text">{{ item.title }}</span>
       </div>
-      <spacer/>
+      <t-spacer/>
       <div class="fr ai-c px-2 py-2 clickable" @click="userAPI.signOut">
-        <icon class="item-icon">fas fa-sign-out-alt@20:#aaa</icon>
+        <t-icon class="item-icon">fas fa-sign-out-alt@20:#aaa</t-icon>
         <span class="item-text">Sign out</span>
       </div>
     </div>
@@ -25,6 +25,7 @@
 <script setup lang="ts">
 import {user} from '@/app-state.js';
 import {userAPI} from '@/api/index.js';
+import {ref, computed} from "vue";
 
 interface ISideBarItem {
   title: string;

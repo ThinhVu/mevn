@@ -1,7 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import Auth from '@/pages/Auth.vue';
 import Home from '@/pages/Home.vue';
-import PoC from '@/pages/PoC.vue';
 import {user} from '@/app-state.js';
 
 const router = createRouter({
@@ -9,7 +8,6 @@ const router = createRouter({
   routes: [
     {path: '/', component: Home},
     {path: '/auth', component: Auth},
-    {path: '/poc', component: PoC}
   ]
 }, {default: '/'})
 

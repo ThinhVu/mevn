@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {API_URL} from '@/constants';
-import notification from '@/components/UiLib/System/notification';
 import {user} from '@/app-state';
 
 function getRespData({data, error}) {
@@ -45,7 +44,7 @@ export const userAPI = {
       }
       return data.token;
     } catch (e) {
-      notification.err(e)
+      console.error(e)
     }
   },
   signIn: async (email, password) => {
@@ -58,7 +57,7 @@ export const userAPI = {
       }
       return data.token;
     } catch (e) {
-      notification.err(e)
+      console.error(e)
     }
   },
   auth: async token => {
@@ -90,7 +89,7 @@ export const systemAPI = {
 export const systemConfigAPI = {
   gets: async () => exec(() => axios.get(`${API_URL}/system-config`, axiosOpts)),
   get: async key => exec(() => axios.get(`${API_URL}/system-config/${key}`, axiosOpts)),
-  set: async (key, value) => exec(() => axios.post(`${API_URL}/system-config/${key}`, { payload: value }, axiosOpts)).then(() => notification.success('Saved')),
+  set: async (key, value) => exec(() => axios.post(`${API_URL}/system-config/${key}`, { payload: value }, axiosOpts)).then(() => console.log('Saved')),
   unset: async key => exec(() => axios.delete(`${API_URL}/system-config/${key}`, axiosOpts)),
 }
 
