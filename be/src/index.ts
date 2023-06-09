@@ -70,7 +70,14 @@ Db.init().then(Db.migrate).then(async () => {
       onPostmanGenerated: postman => cache.postman = postman,
       onError: console.error
    })
-   app.use(...exdogen('/', express.json({limit: config.requestBodyMaxSize}), express.urlencoded({limit: config.requestBodyMaxSize}), api));
+   app.use(...exdogen('/',
+      express.json({limit: config.requestBodyMaxSize}),
+      express.urlencoded({limit: config.requestBodyMaxSize}),
+      function realIp(req, res, next) {
+         req.ip = req.headers['x-real-ip'] || req.ip
+         next()
+      },
+      api));
    app.get('/docs', (req, res) => res.send(cache.html));
    app.get('/docs/index.html', (req, res) => res.send(cache.html));
    app.get('/docs/postman.json', (req, res) => res.send(cache.postman));
