@@ -1,6 +1,6 @@
 # MEVN
 
-MEVN stand for MongoDB, Express, Vue, Nodejs. It's an all-in-one solution for building web application with Vue3, Express, MongoDB, Nodejs.
+MEVN stand for MongoDB, Express, Vue, Nodejs. It's an all-in-one solution for building monolith web app with Vue3, Express, MongoDB, Nodejs.
 
 ### Backend (be)
 - Automatically generate API documents (as images below), you don't need to create/maintain it manually
