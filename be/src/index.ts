@@ -5,7 +5,6 @@ import config from "./config";
 import {createServer} from "http";
 import express from "express";
 import cors from "cors";
-import compression from "compression";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import Db from "./db";
@@ -28,7 +27,6 @@ Db.init().then(Db.migrate).then(async () => {
    const app = express();
    const httpServer = createServer(app);
    app.use(cors());
-   app.use(compression());
    app.use(cookieParser());
 
    if (config.useAPIMetric) {
