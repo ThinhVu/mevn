@@ -49,22 +49,22 @@ MEVN stand for MongoDB, Express, Vue, Nodejs. It's an all-in-one solution for bu
 ### Example images
 
 API document generated automatically
-![api-doc.png](images%2Fapi-doc.png)
+![api-doc.png](images%2Fapi-doc-1.png)
 
 Postman file generated automatically
 ![postman.png](images%2Fpostman.png)
 
 Dashboard with API metric in chart & health check
-![admin-dashboard.png](images%2Fadmin-dashboard.png)
+![admin-dashboard.png](images%2Fadmin-dashboard-1.png)
 
 System config
 ![system-config.png](images%2Fsystem-config.png)
 
 File System
-![file-system.png](images%2Ffile-system.png)
+![file-system.png](images%2Ffile-system-1.png)
 
 System log viewer
-![log-viewer.png](images%2Flog-viewer.png)
+![log-viewer.png](images%2Flog-viewer-1.png)
 
 ### Research
 - https://dev.to/samchon/typia-15000x-faster-validator-and-its-histories-1fmg
