@@ -13,7 +13,7 @@ const objectId = (v: any, throwIfInvalid = true): Types.ObjectId => {
       else
          return null;
    }
-   return Types.ObjectId(v)
+   return new Types.ObjectId(v)
 }
 
 /**
