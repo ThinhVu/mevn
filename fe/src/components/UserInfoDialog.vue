@@ -10,7 +10,7 @@
   </div>
 </template>
 <script setup>
-import {uploadFile} from '@/components/App/FileUpload/fs-util'
+import {uploadFile} from '@/components/FileUpload/fs-util'
 import {openUploadFileDialog} from '@/utils/file.js'
 import {user} from '@/app-state'
 import {userAPI} from '@/api'

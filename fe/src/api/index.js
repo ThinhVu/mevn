@@ -32,11 +32,11 @@ async function _saveAuthSession({token}) {
 }
 
 export const userAPI = {
-  about: async (userId) => exec(() => axios.get(`${API_URL}/user/profile/v1/${userId}`, axiosOpts)),
-  update: async (change) => exec(() => axios.put(`${API_URL}/user/profile/v1/`, change, axiosOpts)),
+  about: async (userId) => exec(() => axios.get(`${API_URL}/user/profile/${userId}`, axiosOpts)),
+  update: async (change) => exec(() => axios.put(`${API_URL}/user/profile`, change, axiosOpts)),
   signUp: async (email, password) => {
     try {
-      const {data} = await axios.post(`${API_URL}/user/sign-up/v1/`, {email: email, password: password})
+      const {data} = await axios.post(`${API_URL}/user/sign-up/`, {email: email, password: password})
       if (data.token) {
         await _saveAuthSession(data);
       } else {
@@ -49,7 +49,7 @@ export const userAPI = {
   },
   signIn: async (email, password) => {
     try {
-      const {data} = await axios.post(`${API_URL}/user/sign-in/v1/`, {email, password})
+      const {data} = await axios.post(`${API_URL}/user/sign-in/`, {email, password})
       if (data.token) {
         await _saveAuthSession(data);
       } else {
@@ -62,7 +62,7 @@ export const userAPI = {
   },
   auth: async token => {
     try {
-      const {data} = await axios.get(`${API_URL}/user/auth/v1/`, {headers: {Authorization: `bearer ${token}`}});
+      const {data} = await axios.get(`${API_URL}/user/auth/`, {headers: {Authorization: `bearer ${token}`}});
       if (data.token) {
         await _saveAuthSession(data);
       } else {
@@ -73,7 +73,7 @@ export const userAPI = {
       return null;
     }
   },
-  signOut: async () => exec(() => axios.post(`${API_URL}/user/sign-out/v1/`), {}, axiosOpts)
+  signOut: async () => exec(() => axios.post(`${API_URL}/user/sign-out/`), {}, axiosOpts)
 }
 
 export const systemAPI = {

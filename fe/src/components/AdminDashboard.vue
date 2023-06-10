@@ -1,34 +1,40 @@
 <template>
-  <section data-name="dashboard" class="fc w-100 h-100 fg-3 py-3 px-3 ovf-y-s hide-scroll-bar">
-    <section class="metric-block px-2 py-2" style="border-radius: 6px">
-      <p class="mb-2" style="font-size: 20px; font-weight: 600">Health check</p>
-      <span v-for="hc in healthCheck" class="mr-2">
-        <span class="mr-1" :style="[
-              'display: inline-block; border-radius: 6px; width: 12px; height: 12px;',
-              { backgroundColor: hc.alive === 0 ? '#ffe05d' : hc.alive === 1 ? '#66bb6a': '#ff5d5d' }
-          ]"/>
-        {{hc.serviceName}}
-      </span>
-    </section>
-
-    <section data-name="chart" class="metric-block" style="border-radius: 6px">
-      <div class="fr ai-c fg-1 mb-2">
-        <span style="font-size: 20px; font-weight: 600">API Call ({{viewMode}})</span>
+  <section class="fc w-100 h-100 fg-12px py-3 px-3 ovf-y-s hide-scroll-bar bc:rgb(246,248,250)">
+    <!-- api call per duration -->
+    <section class="metric-block br-1">
+      <div class="fr ai-c fg-4px mb-2">
+        <span style="font-size: 14px; font-weight: 600">Api Call</span>
         <t-spacer/>
-        <t-btn @click="viewMode = CHART_MODE.PER_MINUTES">Per minutes</t-btn>
-        <t-btn @click="viewMode = CHART_MODE.OVERTIME">Overtime</t-btn>
+        <t-btn @click="viewMode = CHART_MODE.PER_MINUTES" :primary="viewMode === CHART_MODE.PER_MINUTES">
+          Per minutes
+        </t-btn>
+        <t-btn @click="viewMode = CHART_MODE.OVERTIME" :primary="viewMode === CHART_MODE.OVERTIME">
+          Overtime
+        </t-btn>
       </div>
 
       <section>
         <div class="px-1 py-1" style="border-radius: 6px">
-          <line-chart :chart-data="apiMetricHistoryChart" :chart-options="chartOptions"/>
+          <line-chart :height="320" :chart-data="apiMetricHistoryChart" :chart-options="chartOptions"/>
         </div>
       </section>
     </section>
 
-    <t-collapsible-section title="Api Call">
-      <table border class="c-b-0">
-        <thead>
+    <section class="grid gtc-200px-1fr gg-12px">
+      <section class="metric-block px-2 py-2 br-1">
+        <p class="mb-2" style="font-size: 14px; font-weight: 600">Health check</p>
+        <span v-for="hc in healthCheck" class="mr-2">
+          <span class="mr-1" :style="[
+              'display: inline-block; border-radius: 6px; width: 12px; height: 12px;',
+              { backgroundColor: hc.alive === 0 ? '#ffe05d' : hc.alive === 1 ? '#66bb6a': '#ff5d5d' }
+          ]"/>
+          {{hc.serviceName}}
+        </span>
+      </section>
+      <section class="metric-block br-1">
+        <p class="mb-2" style="font-size: 14px; font-weight: 600">Api Call Summary</p>
+        <t-table>
+          <thead>
           <tr>
             <th>
               <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByName">
@@ -61,18 +67,19 @@
               </div>
             </th>
           </tr>
-        </thead>
-        <tbody>
-        <tr v-for="apiCall in apiCallCounterCpt" :key="apiCall.api">
-          <td>{{apiCall.api}}</td>
-          <td>{{apiCall.called.n}}</td>
-          <td>{{apiCall.called.s}}</td>
-          <td>{{apiCall.called.avg_ms}}</td>
-          <td>{{apiCall.called.e}}</td>
-        </tr>
-        </tbody>
-      </table>
-    </t-collapsible-section>
+          </thead>
+          <tbody>
+          <tr v-for="apiCall in apiCallCounterCpt" :key="apiCall.api">
+            <td>{{apiCall.api}}</td>
+            <td>{{apiCall.called.n}}</td>
+            <td>{{apiCall.called.s}}</td>
+            <td>{{apiCall.called.avg_ms}}</td>
+            <td>{{apiCall.called.e}}</td>
+          </tr>
+          </tbody>
+        </t-table>
+      </section>
+    </section>
   </section>
 </template>
 <script setup>
@@ -211,7 +218,8 @@ const loadApiMetricHistory = () => {
 // charts
 const chartOptions = {
   responsive: true,
-  maintainAspectRatio: false
+  maintainAspectRatio: false,
+  height: 260
 }
 const apiMetricHistoryChart = computed(() => {
   return {
@@ -283,9 +291,9 @@ onBeforeUnmount(() => {
 </script>
 <style scoped>
 .metric-block {
-  background: linear-gradient(90deg, #272b34, #1a1a22);
-  box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 40%);
-
+  background-color: #fff;
+  border: 1px solid rgb(216, 222, 228);
+  box-shadow: 0 3px 6px rgba(140,149,159,0.15);;
   border-radius: 10px;
   padding: 20px;
   color: #676b79;

@@ -14,8 +14,8 @@ dependencies:
     specifier: Thinhvu/hmmjs#0.69.420
     version: github.com/Thinhvu/hmmjs/ce81ae254e945bb96db94a9da2f82e5260aee3d5
   jinguji:
-    specifier: ThinhVu/jinguji
-    version: github.com/ThinhVu/jinguji/ba96548ade2d9846f81879a9eaf28796e3228bb1
+    specifier: github:ThinhVu/jinguji
+    version: github.com/ThinhVu/jinguji/74c849122ebe41c50d0105db31f548adb0b43abb
   json-fn:
     specifier: ^1.1.1
     version: 1.1.1
@@ -3076,10 +3076,10 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/ThinhVu/jinguji/ba96548ade2d9846f81879a9eaf28796e3228bb1:
-    resolution: {tarball: https://codeload.github.com/ThinhVu/jinguji/tar.gz/ba96548ade2d9846f81879a9eaf28796e3228bb1}
+  github.com/ThinhVu/jinguji/74c849122ebe41c50d0105db31f548adb0b43abb:
+    resolution: {tarball: https://codeload.github.com/ThinhVu/jinguji/tar.gz/74c849122ebe41c50d0105db31f548adb0b43abb}
     name: vue-ui-lib
-    version: 1.0.0
+    version: 1.0.2
     dependencies:
       axios: 1.3.4
       dayjs: 1.11.5

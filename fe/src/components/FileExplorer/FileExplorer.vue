@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import CreateFolderDlg from './CreateFolderDlg.vue';
 import IcoFolder from '@/assets/images/folder.svg';
-import UploadZone from '@/components/App/FileUpload/UploadZone.vue';
+import UploadZone from '@/components/FileUpload/UploadZone.vue';
 import File from './File.vue';
 import {feAPI} from '@/api/index.js';
 import {ref, inject, onMounted} from 'vue';

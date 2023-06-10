@@ -14,7 +14,7 @@
     "chart.js": "^3.9.1",
     "dayjs": "^1.11.5",
     "hmm": "Thinhvu/hmmjs#0.69.420",
-    "jinguji": "ThinhVu/jinguji",
+    "jinguji": "github:ThinhVu/jinguji",
     "json-fn": "^1.1.1",
     "lodash": "^4.17.21",
     "pinia": "^2.0.32",
@@ -29,8 +29,8 @@
     "@vitejs/plugin-vue-jsx": "^3.0.1",
     "@vue/compiler-sfc": "^3.2.33",
     "conventional-changelog-cli": "^2.2.2",
-    "rome": "^12.0.0",
     "dotenv": "^16.0.3",
+    "rome": "^12.0.0",
     "unocss": "^0.52.4",
     "vite": "^4.3.9",
     "vite-plugin-inspect": "^0.7.18"

@@ -1,14 +1,12 @@
 <template>
   <div class="w-100 h-100 fr ai-c fix z-index-999">
-    <div class="px-4 py-4 br-10px mx-a fc fg-1"
+    <div class="px-4 py-4 br-10px mx-a fc fg-16px"
          style="border: 1px solid rgba(255,255,255,0.2); min-width: 300px">
-      <p><t-text v-model="email" class="w-100" placeholder="Email"/></p>
-      <p><t-text v-model="password" class="w-100" placeholder="Password"/></p>
-      <div class="fr ai-c fg-1 mt-2">
-        <t-btn @click="cancel">Close</t-btn>
+      <p><t-text v-model="email" class="w-100" label="Email" placeholder="enter your email"/></p>
+      <p><t-password v-model="password" class="w-100" label="Password"/></p>
+      <div class="fr ai-c jc-fe fg-4px">
         <t-btn @click="signUp">Sign Up</t-btn>
-        <t-spacer/>
-        <t-btn @click="signIn">Sign In</t-btn>
+        <t-btn primary @click="signIn">Sign In</t-btn>
       </div>
     </div>
   </div>
@@ -16,7 +14,7 @@
 <script setup>
 import {ref, inject} from 'vue'
 import {userAPI} from '@/api';
-import UserInfoDialog from '@/components/App/UserInfoDialog.vue';
+import UserInfoDialog from '@/components/UserInfoDialog.vue';
 import {useRouter} from 'vue-router';
 
 const router = useRouter()

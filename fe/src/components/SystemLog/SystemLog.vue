@@ -1,5 +1,5 @@
 <script lang="jsx">
-import LogPresenter from '@/components/App/SystemLog/LogPresenter.vue';
+import LogPresenter from '@/components/SystemLog/LogPresenter.vue';
 import {systemAPI} from '@/api'
 import dayjs from 'dayjs';
 import {ref, onMounted} from 'vue';
