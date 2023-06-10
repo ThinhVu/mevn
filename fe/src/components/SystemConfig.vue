@@ -1,29 +1,32 @@
 <template>
-  <section data-name="system-config" class="fc w-100 h-100 fg-3 c-b-0">
+  <section data-name="system-config" class="fc w-100 h-100 fg-12px px-3 py-3">
     <t-table class="w-100">
       <thead>
       <tr>
         <th>Key</th>
         <th>Value</th>
-        <th>Action</th>
+        <th class="w-10px">Action</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="cfg in configs">
         <td>{{cfg.key}}</td>
         <td>{{cfg.value}}</td>
-        <td>
-          <t-btn class="fn-btn" @click="api.systemConfig.unset(cfg.key)">
-            <t-icon>fas fa-times@16:#d50404</t-icon>
+        <td class="fr ai-c fg-4px">
+          <t-btn edit class="fn-btn" @click="prepareEdit(cfg)">
+            <t-icon>fas fa-edit@20px:#fff</t-icon>
+          </t-btn>
+          <t-btn delete class="fn-btn" @click="api.systemConfig.unset(cfg.key)">
+            <t-icon>fas fa-times@20px:#fff</t-icon>
           </t-btn>
         </td>
       </tr>
       </tbody>
     </t-table>
-    <div class="fr ai-c fg-1">
-      <t-text class="f1" placeholder="Key" v-model="key"/>
-      <t-text class="f3" placeholder="Value" v-model="value"/>
-      <t-btn @click="setConfig">Add</t-btn>
+    <div class="fc ai-c fg-12px ai-fs">
+      <t-text class="w-100" placeholder="Key" label="Key" v-model="key"/>
+      <t-text class="w-100" placeholder="Value" label="Value" v-model="value"/>
+      <t-btn @click="setConfig" save class="min-w-100px">Add</t-btn>
     </div>
   </section>
 </template>
@@ -34,6 +37,11 @@ import {ref, onMounted, onBeforeMount, onBeforeUnmount} from 'vue'
 const configs = ref([])
 const key = ref('')
 const value = ref('')
+
+const prepareEdit = (cfg) => {
+  key.value = cfg.key
+  value.value = cfg.value
+}
 const setConfig = () => {
   systemConfigAPI.set(key.value, value.value)
   key.value = ''
