@@ -74,7 +74,7 @@ Db.init().then(Db.migrate).then(async () => {
       express.json({limit: config.requestBodyMaxSize}),
       express.urlencoded({limit: config.requestBodyMaxSize}),
       function realIp(req, res, next) {
-         req.ip = req.headers['x-real-ip'] || req.ip
+         req.realIp = req.headers['x-real-ip'] || req.ip
          next()
       },
       api));
