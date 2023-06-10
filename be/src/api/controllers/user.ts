@@ -22,7 +22,7 @@ import Router from "routerex";
 
 const router = Router()
 
-router.post('/sign-up/v1', {
+router.post('/sign-up', {
    title: 'Sign up',
    desc: 'Using this request to create new account',
    schema: {
@@ -65,7 +65,7 @@ router.post('/sign-up/v1', {
    return {user, token}
 }))
 
-router.post('/sign-in/v1', {
+router.post('/sign-in', {
    title: 'Sign in',
    desc: 'Using this request to sign in',
    schema: {
@@ -109,7 +109,7 @@ router.post('/sign-in/v1', {
    return {user, token}
 }))
 
-router.get('/auth/v1', {
+router.get('/auth', {
    title: 'Auth',
    desc: 'Using this request to get user info',
    schema: {
@@ -144,7 +144,7 @@ router.get('/auth/v1', {
    return {user, token}
 }))
 
-router.get('/sign-out/v1', {
+router.get('/sign-out', {
    title: 'Sign out',
    desc: 'Using this request to sign out',
    schema: {
@@ -169,7 +169,7 @@ router.get('/sign-out/v1', {
    }
 })
 
-router.post('/change-password/v1', {
+router.post('/change-password', {
    title: 'Change password',
    desc: 'Using this request to change password',
    schema: {
@@ -209,7 +209,7 @@ router.post('/change-password/v1', {
    res.status(204)
 }))
 
-router.post('/forgot-password/v1', {
+router.post('/forgot-password', {
    title: 'Forgot password',
    desc: 'Using this request to forgot password',
    schema: {
@@ -242,7 +242,7 @@ router.post('/forgot-password/v1', {
    return true
 }))
 
-router.post('/reset-password/v1', {
+router.post('/reset-password', {
    title: 'Reset password',
    desc: 'Using this request to reset password',
    schema: {
@@ -289,7 +289,7 @@ router.post('/reset-password/v1', {
    return {user, token}
 }))
 
-router.get('/profile/v1/:id', {
+router.get('/profile/:id', {
    title: 'Get user profile',
    desc: 'Using this request to get user profile',
    schema: {
@@ -325,7 +325,7 @@ router.get('/profile/v1/:id', {
    return user
 }))
 
-router.put('/profile/v1', {
+router.put('/profile', {
    title: 'Update user profile',
    desc: 'Using this request to update user profile',
    schema: {
