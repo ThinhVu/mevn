@@ -1,6 +1,6 @@
 <template>
-  <div class="fc fg-1 px-1 py-1 clickable c:#fff" @click="copySrc">
-    <t-img v-shadow :src="thumbnail" :style="{width: '100px', height: '100px'}"/>
+  <div class="fc fg-1 px-1 py-1 clickable" @click="copySrc">
+    <t-img v-shadow :src="thumbnail" :style="{width: '100px', height: '100px', border: '1px solid #ddd'}"/>
     <span class="ta-c" style="line-break: anywhere">{{shortenName}}</span>
   </div>
 </template>

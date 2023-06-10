@@ -7,7 +7,6 @@ import {ref, onMounted} from 'vue';
 export default {
   name: 'SystemLog',
   components: {LogPresenter},
-  props: {},
   setup() {
     const logSetting = ref({ })
     const logFiles = ref([])
@@ -17,6 +16,7 @@ export default {
     // log present
     const showErrorOnly = ref()
     const fallback = ref()
+    const filter = ref('')
 
     onMounted(async () => {
       logSetting.value = await systemAPI.getLogSetting();
@@ -32,27 +32,32 @@ export default {
       await systemAPI.updateLogSetting({enable})
     }
 
-    return () => <div class="h-100 w-100">
-      <t-page-header title="System Log">
-        <div class="fr ai-c">
-          <t-switch v-model={logSetting.value.enableLog} onUpdate:modelValue={setLogEnable} label="Enable Log"/>
-        </div>
-      </t-page-header>
-      <div class="fr" style="height: calc(100% - 50px); color: #ddd;">
-        <div style="width: 160px; border-right: 1px solid hsla(0deg, 0%, 100%, 0.12)" class="ovf-y-s hide-scroll-bar">
-          {logFiles.value.map(logFile => <div style="padding: 5px 10px; border-bottom: 1px solid hsla(0deg, 0%, 100%, 0.12); font-size: 12px; cursor: pointer;"
-                                              onClick={() => showLogFile(logFile)}>{dayjs(logFile).format('YYYY-MM-DD HH:mm:ss')}</div>)}
+    return () => <div class="h-100 w-100 bc:rgb(246,248,250)">
+      <div class="fr ai-c h-50px px-2" style="border-bottom: 1px solid #ddd">
+        <t-switch v-model={logSetting.value.enableLog} onUpdate:modelValue={setLogEnable} label="Enable Log"/>
+      </div>
+      <div class="fr" style="height: calc(100% - 50px);">
+        <div style="width: 160px; border-right: 1px solid #ddd" class="ovf-y-s hide-scroll-bar">
+          {
+            logFiles.value.map(logFile =>
+              <div style="padding: 5px 10px; border-bottom: 1px solid #ddd; font-size: 12px; cursor: pointer;"
+                   onClick={() => showLogFile(logFile)}>
+                {dayjs(logFile).format('YYYY-MM-DD HH:mm:ss')}
+              </div>)
+          }
         </div>
         <div class="f1">
-          {logFile.value && <div style="height: 41px;" class="fr ai-c fg-2 px-1 py-1">
+          {logFile.value && <div style="height: 41px; border-bottom: 1px solid #ddd" class="fr ai-c fg-12px pl-1 pr-3 py-1">
             <span class="fw-700">File:</span> {dayjs(logFile.value).format('YYYY-MM-DD HH:mm:ss')}
-            <span style="flex: 1"></span>
+            <t-spacer/>
             <t-switch v-model={showErrorOnly.value} label="Error only"/>
             <t-switch v-model={fallback.value} label="Fallback"/>
+            <t-text v-model={filter.value} placeholder="Filter"/>
           </div>}
           { (!!logContent.value) && <log-presenter
               class="ovf-y-s hide-scroll-bar"
               style="height: calc(100% - 41px);"
+              filter={filter.value}
               content={logContent.value}
               showErrorOnly={showErrorOnly.value}
               fallback={fallback.value}/> }

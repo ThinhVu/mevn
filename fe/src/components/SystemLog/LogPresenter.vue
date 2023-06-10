@@ -38,13 +38,19 @@ const parseLogLine = logLine => {
 
 export default {
   name: 'LogPresenter',
-  props: { content: String, showErrorOnly: Boolean, fallback: Boolean },
+  props: { content: String, showErrorOnly: Boolean, fallback: Boolean, filter: String },
   setup(props) {
     const logLineStyle = computed(() => ({
       display: 'grid',
       gridTemplateColumns: '130px 1fr',
       borderBottom: '1px solid #5a5959'
     }))
+    const logLines = computed(() => _.compact(props.content.split('\n').map(_.trim)))
+    const filteredLogLines = computed(() => {
+      if (!props.filter)
+        return logLines.value
+      return logLines.value.filter(v => v.indexOf(props.filter) > -1)
+    })
 
     const processErrorLog = errLog => {
       const lines = errLog.split('\\n').map(line => line.replace(/\\"/g, '"').replace(/\s/g, '&nbsp;'));
@@ -76,10 +82,9 @@ export default {
       </div>,
     }
 
-
     const renderLogLines = () => {
       try {
-        return (props.content.split('\n').map(_.trim).filter(v => v) || []).map(parseLogLine).map(
+        return filteredLogLines.value.map(parseLogLine).map(
             ({timestamp, level, content}) => {
               if (level !== 'error' && props.showErrorOnly)
                 return <div style="visible: false"/>
@@ -92,7 +97,7 @@ export default {
       }
     }
 
-    return () => <div style="border-bottom: 1px solid #222; font-size: 13px">
+    return () => <div style="font-size: 13px" class="bc:#fff">
       {props.fallback ? <pre style="white-space: pre-wrap; max-width: 100%; color: #aaa">{props.content}</pre> : renderLogLines()}
     </div>
   }
@@ -104,12 +109,15 @@ export default {
   color: rgb(231, 172, 71);
 }
 .error .content > div {
-  color: rgb(239, 134, 133); background-color: rgb(37, 2, 1)
+  color: rgb(239, 134, 133);
 }
 .warn .content > div {
   color: rgb(231, 172, 71);
 }
-.log {color: #dbdbdb;}
+.line {padding: 4px}
+.line:hover {
+  background-color: #eee;
+}
 
 .content {
   color: inherit;
