@@ -1,7 +1,7 @@
 <template>
   <div class="fc fg-1 px-1 py-1 clickable" @click="copySrc">
     <t-img v-shadow :src="thumbnail" :style="{width: '100px', height: '100px', border: '1px solid #ddd'}"/>
-    <span class="ta-c" style="line-break: anywhere">{{shortenName}}</span>
+    <span class="ta-c mt-1" style="line-break: anywhere; font-size: 12px">{{shortenName}}</span>
   </div>
 </template>
 <script setup>

@@ -112,7 +112,7 @@ export default {
           v-slots={{
             default: () => (
                 <div class="w-100 h-100 ovf-y-s hide-scroll-bar px-1 py-1 grid"
-                     style="grid-template-columns: repeat(auto-fill, 100px); grid-template-rows: 160px; grid-auto-rows: 160px; gap: 0.5rem">
+                     style="grid-template-columns: repeat(auto-fill, 100px); grid-template-rows: 140px; grid-auto-rows: 140px; gap: 0.5rem">
                   {_.get(selectedFolder.value, 'files', []).map(v => <file {...v} onClick={() => onFileClicked(v)}/>)}
                 </div>
             )
@@ -128,7 +128,7 @@ export default {
         {selectedFolder.value && <t-btn delete onClick={showDeleteFolderDialog}>Delete</t-btn> }
       </div>
       <div class="fr f1" style="height: calc(100% - 50px)">
-        <div style="width: 200px; min-width: 200px; border-right: 1px solid #575665">
+        <div style="width: 200px; min-width: 200px; border-right: 1px solid #ddd">
           {renderFolderTree(folderTree.value, false)}
         </div>
         {renderFiles()}
