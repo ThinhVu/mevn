@@ -1,5 +1,5 @@
 import hmmExecFactory from 'hmm/src/executor';
-import SystemConfigModel from "../db/models/system-config";
+import SystemConfigModel from "../db/models/kv";
 import UserModel from '../db/models/user';
 import Announcement from "../db/models/announcement";
 import TaskModel from "../db/models/tasks";

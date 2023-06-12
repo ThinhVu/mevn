@@ -1,13 +1,13 @@
+import Router from "routerex";
 import $ from "../../middlewares/safe-call";
 import {requireAdmin} from "../../middlewares/auth";
-import SystemConfigModel from "../../db/models/system-config";
-import Router from "routerex";
+import {get, getValue, getAll, set, remove} from "../../business-logic/kv";
 
-const router = Router();
+const router = Router()
 
-router.get('/', {
-   title: 'Get all system config',
-   desc: 'Get all system config',
+const getAllKvsMetadata = {
+   title: 'Get all key-value pair',
+   desc: 'Get all key-value pair',
    response: {
       type: 'array',
       items: {
@@ -18,10 +18,12 @@ router.get('/', {
          }
       }
    }
-}, requireAdmin, $(async () => SystemConfigModel.find()));
-router.get('/:key', {
-   title: 'Get system config value',
-   desc: 'Get current value of system config',
+}
+router.get('/', getAllKvsMetadata, requireAdmin, $(async () => getAll()));
+
+const getSpecifiedKvMetadata = {
+   title: 'Get specified kv',
+   desc: 'Get specified kv',
    schema: {
       params: {
          key: {
@@ -34,11 +36,13 @@ router.get('/:key', {
       type: 'string',
       desc: 'The value of the key'
    }
-}, $(async req => {
-   const rs = await SystemConfigModel.findOne({key: req.params.key})
+}
+router.get('/:key', getSpecifiedKvMetadata, requireAdmin, $(async req => {
+   const rs = await getValue(req.params.key)
    return rs && rs.value
-}));
-router.post('/:key', {
+}))
+
+const setKvMetadata = {
    title: 'Set system config value',
    desc: 'Set value of system config',
    schema: {
@@ -65,17 +69,16 @@ router.post('/:key', {
          value: {type: 'string'}
       }
    }
-}, requireAdmin, $(async req => {
-   const cfg = await SystemConfigModel.updateOne(
-      {key: req.params.key},
-      {value: req.body.payload},
-      {upsert: true}
-   )
+}
+router.post('/:key', setKvMetadata, requireAdmin, $(async req => {
+   const {value, isSecret} = req.body
+   const cfg = await set(req.params.key, value, isSecret)
    // @ts-ignore
    global.io.to('system-config').emit(`system-config:set`, cfg)
    return cfg
-}));
-router.delete('/:key', {
+}))
+
+const unsetKvMetadata = {
    title: 'Delete system config',
    desc: 'Delete system config',
    schema: {
@@ -90,13 +93,18 @@ router.delete('/:key', {
       type: 'boolean',
       desc: 'Whether the key is deleted'
    }
-}, requireAdmin, $(async req => {
+}
+router.delete('/:key', unsetKvMetadata, requireAdmin, $(async req => {
    const {key} = req.params
-   const cfg = await SystemConfigModel.findOne({key})
-   // @ts-ignore
-   global.io.to('system-config').emit(`system-config:unset`, cfg)
-   SystemConfigModel.deleteOne({key})
-   return true
+   const cfg = await get(key)
+   if (!cfg) throw new Error("Not found")
+   const {deletedCount} = await remove(key)
+   const deleted = deletedCount === 1
+   if (deleted) {
+      // @ts-ignore
+      global.io.to('system-config').emit(`system-config:unset`, cfg)
+   }
+   return deleted
 }));
 
-export default router;
+export default router

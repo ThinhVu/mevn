@@ -86,11 +86,11 @@ export const systemAPI = {
   healthCheck: async api_url => await axios.get(`${api_url}/health-check`, axiosOpts)
 }
 
-export const systemConfigAPI = {
-  gets: async () => exec(() => axios.get(`${API_URL}/system-config`, axiosOpts)),
-  get: async key => exec(() => axios.get(`${API_URL}/system-config/${key}`, axiosOpts)),
-  set: async (key, value) => exec(() => axios.post(`${API_URL}/system-config/${key}`, { payload: value }, axiosOpts)).then(() => console.log('Saved')),
-  unset: async key => exec(() => axios.delete(`${API_URL}/system-config/${key}`, axiosOpts)),
+export const kvAPI = {
+  gets: async () => exec(() => axios.get(`${API_URL}/kv`, axiosOpts)),
+  get: async key => exec(() => axios.get(`${API_URL}/kv/${key}`, axiosOpts)),
+  set: async (key, value, isSecret) => exec(() => axios.post(`${API_URL}/kv/${key}`, {value, isSecret}, axiosOpts)),
+  unset: async key => exec(() => axios.delete(`${API_URL}/kv/${key}`, axiosOpts)),
 }
 
 export const feAPI = {

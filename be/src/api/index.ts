@@ -1,6 +1,6 @@
 import UserCtl from './controllers/user';
 import LogCtl from './controllers/log';
-import SystemConfigCtl from './controllers/system-config';
+import KvCtl from './controllers/kv';
 import SystemMetricCtl from "./controllers/system-metric";
 import fileSystemCtl from "./controllers/file-system";
 import config from "../config";
@@ -14,7 +14,7 @@ router.get('/health-check', {
    response: {200: {type: 'string', desc: 'The server is live'}, 408: {type: 'string', desc: 'The server is down'}}
 }, (_, res) => res.status(200).end())
 router.use('/user', UserCtl)
-router.use('/system-config', SystemConfigCtl)
+router.use('/kv', KvCtl)
 router.use('/log', LogCtl)
 if (config.useAPIMetric)
    router.use('/system-metric', SystemMetricCtl)
