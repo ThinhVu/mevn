@@ -2,28 +2,7 @@ import {Request} from "express";
 import {IUser} from "../db/models/user";
 import jwt from 'jsonwebtoken';
 import config from "../config";
-import {Types} from "mongoose";
-
-export interface IAuthUser {
-   _id: Types.ObjectId;
-   phone: string;
-   password: string;
-}
-
-export interface IAuthAdmin {
-   _id: Types.ObjectId;
-   email: string;
-   password: string;
-}
-
-export interface IAuthData {
-   user: Record<string, any>,
-   expired: boolean
-}
-
-export interface UserRequest extends Request {
-   user: IAuthUser
-}
+import {IAuthData} from "../constants/types";
 
 export function parseAuthorization(req: Request): IAuthData {
    const authorization = req.headers.authorization

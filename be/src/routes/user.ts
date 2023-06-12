@@ -13,12 +13,13 @@ import {
 import {parseAuthorization, randomNumberInRange} from "../utils/common-util";
 import {buildEmailPayload, sendEmail} from "../utils/email-util";
 import config from "../config";
-import {genToken, UserRequest} from "../utils/auth-util";
+import {genToken} from "../utils/auth-util";
 import To from "../utils/data-parser";
 import rateLimit from "../middlewares/rate-limit";
 import $ from "../middlewares/safe-call";
 import {requireUser} from "../middlewares/auth";
 import Router from "routerex";
+import {UserRequest} from "../constants/types";
 
 const router = Router()
 
