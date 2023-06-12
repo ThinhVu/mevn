@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development ts-node-dev --respawn --transpile-only --watch \"src/**\" --poll src/index.ts",
+    "dev-be": "NODE_ENV=development ts-node-dev --respawn --transpile-only --watch \"src/**\" --poll src/index.ts",
     "build": "tsc",
     "start": "cd build && NODE_ENV=production node index.js",
     "ts:check": "tsc -p tsconfig.json --noEmit",
