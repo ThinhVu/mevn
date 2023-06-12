@@ -21,7 +21,7 @@ let cleanThreadId : Timeout;
 
 function ensureLogFolderExist() {
    if (!fs.existsSync(logSetting.logDirPath)) {
-      _console.log('log file directory doesn\'t exist. create new one at: ', logSetting.logDirPath);
+      _console.log('[logger] log file directory doesn\'t exist. create new one at: ', logSetting.logDirPath);
       fs.mkdirSync(logSetting.logDirPath);
    }
 }
@@ -41,7 +41,7 @@ function generateFileName() : string {
 function createNewLogFile() : string {
    ensureLogFolderExist()
    const filePath = path.resolve(logSetting.logDirPath, generateFileName());
-   _console.log(`creating log file: ${filePath}`);
+   _console.log(`[logger] creating log file: ${filePath}`);
    lineCtr = 0;
    writeStream = fs.createWriteStream(filePath);
    return filePath;
@@ -94,7 +94,7 @@ function logToFile(...args: any[]) {
 }
 
 export function cleanOldLogs() {
-   _console.log('cleanOldLogs')
+   _console.log('[logger] clean old log files')
    if (!fs.existsSync(logSetting.logDirPath))
       return;
    const files = fs.readdirSync(path.resolve(logSetting.logDirPath));

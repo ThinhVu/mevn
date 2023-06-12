@@ -1,6 +1,5 @@
 import {Request} from "express";
 import jwt from 'jsonwebtoken';
-import config from "../config";
 import {IAuthData, IUser} from "../types";
 
 export function parseAuthorization(req: Request): IAuthData {
@@ -9,7 +8,7 @@ export function parseAuthorization(req: Request): IAuthData {
       return {user: null, expired: null}
 
    const jwtToken = req.headers.authorization.split(' ')[1];
-   const data = jwt.decode(jwtToken, config.jwtSecret);
+   const data = jwt.decode(jwtToken, process.env.JWT_SECRET);
    if (!data)
       return {user: null, expired: null}
 
@@ -20,5 +19,5 @@ export function genToken(user: IUser) {
    const payload = {
       user: {_id: user._id, email: user.email, password: user.password, role: user.role}
    }
-   return jwt.sign(payload, config.jwtSecret, {expiresIn: '7d'})
+   return jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '7d'})
 }

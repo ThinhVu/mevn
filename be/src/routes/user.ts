@@ -12,7 +12,6 @@ import {
 } from '../business-logic/user';
 import {parseAuthorization, randomNumberInRange} from "../utils/common-util";
 import {buildEmailPayload, sendEmail} from "../utils/email-util";
-import config from "../config";
 import {genToken} from "../utils/auth-util";
 import To from "../utils/data-parser";
 import rateLimit from "../middlewares/rate-limit";
@@ -285,7 +284,7 @@ router.post('/reset-password', {
    const passwordHash = await bcrypt.hash(password, 10)
    await updatePassword(user._id, passwordHash)
    const body = {_id: user._id, email: user.email, password: passwordHash}
-   const token = jwt.sign({user: body}, config.jwtSecret)
+   const token = jwt.sign({user: body}, process.env.JWT_SECRET)
    res.cookie('token', token)
    return {user, token}
 }))

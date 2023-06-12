@@ -29,4 +29,9 @@ class RabbitMQ {
    }
 }
 
-export default RabbitMQ
+export default function rabbitMqPlugin(app) {
+   if (!process.env.USE_RABBIT_MQ) return
+   console.log('[cfg] useRabbitMQ')
+   // @ts-ignore
+   global.rabbitMQ = new RabbitMQ(process.env.RABBITMQ_CONNECTION)
+}

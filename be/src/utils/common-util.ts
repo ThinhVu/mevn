@@ -3,7 +3,6 @@ import {Request, Response} from 'express'
 import packageJson from "../../package.json"
 import User from "../db/models/user";
 import jwt from 'jsonwebtoken';
-import config from "../config";
 import {IUser} from "../types";
 
 export function generateRandomCode(length) {
@@ -42,7 +41,7 @@ export function parseAuthorization(req: Request) {
    const authorization = req.headers.authorization
    if (authorization) {
       const jwtToken = req.headers.authorization.split(' ')[1];
-      const data = jwt.decode(jwtToken, config.jwtSecret);
+      const data = jwt.decode(jwtToken, process.env.JWT_SECRET);
       if (data) {
          return {
             user: data.user,
