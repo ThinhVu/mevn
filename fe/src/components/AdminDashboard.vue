@@ -86,7 +86,7 @@
 import {CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip as CharTooltip} from 'chart.js'
 import {Line as LineChart} from 'vue-chartjs'
 import dayjs from 'dayjs'
-import _ from 'lodash'
+import {reverse, orderBy} from 'lodash-es'
 import hmm from '@/api/hmm.js'
 import {systemAPI} from '@/api'
 import {inject, ref, computed, onMounted, onBeforeUnmount} from 'vue'
@@ -106,7 +106,7 @@ const CHART_MODE = {
 const viewMode = ref(CHART_MODE.PER_MINUTES)
 const apiMetricHistory = ref([])
 const chartLabels = computed(() => {
-  const labels = _.reverse(apiMetricHistory.value.map(item => dayjs(item.at).format('HH:mm')))
+  const labels = reverse(apiMetricHistory.value.map(item => dayjs(item.at).format('HH:mm')))
   labels.shift()
   return labels
 })
@@ -164,7 +164,7 @@ const chartData = computed(() => {
   const final = []
   const total = [0]
   Object.keys(immediate).forEach(key => {
-    const metric = _.reverse(immediate[key])
+    const metric = reverse(immediate[key])
     const diffs = [0]
     for (let i = 1; i < metric.length; ++i) {
       const diff = metric[i] - metric[i - 1]
@@ -244,7 +244,7 @@ const apiCallMetricSorters = ref({
 });
 const apiCallCounterCpt = computed(() => {
   const apiMetric = Object.entries(apiCallMetric.value).map(([api, called]) => ({api, called}));
-  return _.orderBy(apiMetric, [ apiCallMetricSorters.value.field ], [ apiCallMetricSorters.value.order ]);
+  return orderBy(apiMetric, [ apiCallMetricSorters.value.field ], [ apiCallMetricSorters.value.order ]);
 })
 const sortApiMetricByName = () => {
   apiCallMetricSorters.value.field = 'api';

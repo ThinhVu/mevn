@@ -1,5 +1,5 @@
 <script lang="jsx">
-import _ from 'lodash'
+import {compact, last} from 'lodash-es';
 import dayjs from 'dayjs';
 import {computed} from 'vue';
 
@@ -45,7 +45,7 @@ export default {
       gridTemplateColumns: '130px 1fr',
       borderBottom: '1px solid #5a5959'
     }))
-    const logLines = computed(() => _.compact(props.content.split('\n').map(_.trim)))
+    const logLines = computed(() => compact(props.content.split('\n').map(trim)))
     const filteredLogLines = computed(() => {
       if (!props.filter)
         return logLines.value
@@ -56,7 +56,7 @@ export default {
       const lines = errLog.split('\\n').map(line => line.replace(/\\"/g, '"').replace(/\s/g, '&nbsp;'));
       if (lines.length > 0) {
         lines[0] = lines[0].substr(1)
-        const lastLine = _.last(lines)
+        const lastLine = last(lines)
         lines[lines.length - 1] = lastLine.substr(0, lastLine.length - 1)
       }
 

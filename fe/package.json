@@ -16,7 +16,7 @@
     "hmm": "Thinhvu/hmmjs#0.69.420",
     "jinguji": "github:ThinhVu/jinguji",
     "json-fn": "^1.1.1",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "pinia": "^2.0.32",
     "socket.io-client": "^4.5.1",
     "uuid": "^9.0.0",

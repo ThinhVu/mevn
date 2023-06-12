@@ -1,5 +1,5 @@
 <script lang="tsx">
-import _ from 'lodash';
+import {get} from 'lodash-es';
 import CreateFolderDlg from './CreateFolderDlg.vue';
 import IcoFolder from '@/assets/images/folder.svg';
 import UploadZone from '@/components/FileUpload/UploadZone.vue';
@@ -113,7 +113,7 @@ export default {
             default: () => (
                 <div class="w-100 h-100 ovf-y-s hide-scroll-bar px-1 py-1 grid"
                      style="grid-template-columns: repeat(auto-fill, 100px); grid-template-rows: 140px; grid-auto-rows: 140px; gap: 0.5rem">
-                  {_.get(selectedFolder.value, 'files', []).map(v => <file {...v} onClick={() => onFileClicked(v)}/>)}
+                  {get(selectedFolder.value, 'files', []).map(v => <file {...v} onClick={() => onFileClicked(v)}/>)}
                 </div>
             )
       }}/>
