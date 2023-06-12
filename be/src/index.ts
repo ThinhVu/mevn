@@ -8,7 +8,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import Db from "./db";
-import api from './api';
+import api from './routes';
 import {requireAdmin} from "./middlewares/auth";
 import {apiError} from "./utils/common-util";
 import {enableLog, _console} from "./utils/logger-util";
@@ -56,7 +56,7 @@ Db.init().then(Db.migrate).then(async () => {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const jsonFn = require("json-fn");
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const hmm = require("./api/hmm").default;
+      const hmm = require("./routes/hmm").default;
       app.use('/hmm', requireAdmin, bodyParser.raw({limit: config.requestBodyMaxSize, type: () => true}),
          (req, res) => hmm(jsonFn.parse(req.body.toString()))
          .then(rs => res.send(rs))

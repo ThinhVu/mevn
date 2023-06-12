@@ -1,8 +1,8 @@
-import UserCtl from './controllers/user';
-import LogCtl from './controllers/log';
-import KvCtl from './controllers/kv';
-import SystemMetricCtl from "./controllers/system-metric";
-import fileSystemCtl from "./controllers/file-system";
+import UserCtl from './user';
+import LogCtl from './log';
+import KvCtl from './kv';
+import SystemMetricCtl from "./system-metric";
+import fileSystemCtl from "./file-system";
 import config from "../config";
 import Router from "routerex";
 

@@ -1,7 +1,7 @@
 import Router from "routerex";
-import $ from "../../middlewares/safe-call";
-import {requireAdmin} from "../../middlewares/auth";
-import {get, getValue, getAll, set, remove} from "../../business-logic/kv";
+import $ from "../middlewares/safe-call";
+import {requireAdmin} from "../middlewares/auth";
+import {get, getValue, getAll, set, remove} from "../business-logic/kv";
 
 const router = Router()
 

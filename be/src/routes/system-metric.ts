@@ -1,6 +1,6 @@
-import ApiMetricBL from "../../business-logic/metric/api-metric";
-import {requireAdmin} from "../../middlewares/auth";
-import $ from "../../middlewares/safe-call";
+import ApiMetricBL from "../business-logic/metric/api-metric";
+import {requireAdmin} from "../middlewares/auth";
+import $ from "../middlewares/safe-call";
 import Router from "routerex";
 
 const router = Router()

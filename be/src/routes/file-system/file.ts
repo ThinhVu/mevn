@@ -1,9 +1,9 @@
-import {create, update, remove} from "../../../business-logic/file-system/file";
-import {addFileToFolder, removeFileFromFolder} from "../../../business-logic/file-system/folder";
-import DataParser from "../../../utils/data-parser";
+import {create, update, remove} from "../../business-logic/file-system/file";
+import {addFileToFolder, removeFileFromFolder} from "../../business-logic/file-system/folder";
+import DataParser from "../../utils/data-parser";
 import Router from "routerex";
-import {requireAdmin} from "../../../middlewares/auth";
-import $ from "../../../middlewares/safe-call";
+import {requireAdmin} from "../../middlewares/auth";
+import $ from "../../middlewares/safe-call";
 
 const router = Router();
 
