@@ -18,12 +18,13 @@ import Exdogen from "exdogen";
 
 process.on('uncaughtException', err => console.error((err && err.stack) ? err.stack : err))
 
-if (config.startLogOnBoot) {
-   _console.log('[cfg] startLogOnBoot')
-   enableLog();
-}
-
-Db.init().then(Db.migrate).then(async () => {
+async function main() {
+   if (config.startLogOnBoot) {
+      _console.log('[cfg] startLogOnBoot')
+      enableLog();
+   }
+   await Db.init()
+   await Db.migrate()
    const app = express();
    const httpServer = createServer(app);
    app.use(cors());
@@ -64,7 +65,7 @@ Db.init().then(Db.migrate).then(async () => {
       )
    }
 
-   const cache = { html: '', postman: ''};
+   const cache = {html: '', postman: ''};
    const exdogen = Exdogen({
       onHtmlGenerated: html => cache.html = html,
       onPostmanGenerated: postman => cache.postman = postman,
@@ -107,4 +108,6 @@ Db.init().then(Db.migrate).then(async () => {
    }
 
    httpServer.listen({port: config.port}, () => _console.log(`[http server] ready at http://localhost:${config.port}`));
-});
+}
+
+main()
