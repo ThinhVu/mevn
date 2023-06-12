@@ -1,6 +1,8 @@
 <template>
   <t-back-office :sidebar-items="sidebarItems">
-    <temmplate #header>MEVN</temmplate>
+    <template #header>
+      <div class="px-2">MEVN</div>
+    </template>
   </t-back-office>
 </template>
 <script setup lang="tsx">
