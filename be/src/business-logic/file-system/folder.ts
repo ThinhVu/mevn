@@ -1,6 +1,7 @@
-import Folder , {IFolder} from "../../db/models/file-system/folder";
+import Folder  from "../../db/models/file-system/folder";
 import _ from 'lodash';
 import {Types} from "mongoose";
+import {IFolder} from "../../types";
 
 export const getFolderTree = async () => {
    const folders = (await Folder.find({}, {files: 0})).map(folder => folder.toObject());

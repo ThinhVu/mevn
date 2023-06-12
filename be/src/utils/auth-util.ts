@@ -1,8 +1,7 @@
 import {Request} from "express";
-import {IUser} from "../db/models/user";
 import jwt from 'jsonwebtoken';
 import config from "../config";
-import {IAuthData} from "../constants/types";
+import {IAuthData, IUser} from "../types";
 
 export function parseAuthorization(req: Request): IAuthData {
    const authorization = req.headers.authorization

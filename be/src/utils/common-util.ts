@@ -1,9 +1,10 @@
 import {Request, Response} from 'express'
 // @ts-ignore
 import packageJson from "../../package.json"
-import User, {IUser} from "../db/models/user";
+import User from "../db/models/user";
 import jwt from 'jsonwebtoken';
 import config from "../config";
+import {IUser} from "../types";
 
 export function generateRandomCode(length) {
    let output = '';

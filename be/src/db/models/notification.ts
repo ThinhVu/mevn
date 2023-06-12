@@ -1,4 +1,5 @@
-import {Schema, Types, model} from 'mongoose';
+import {model, Schema} from 'mongoose';
+import {INotification} from "../../types";
 
 const Notification = new Schema({
    toUser: Schema.Types.ObjectId,
@@ -7,14 +8,5 @@ const Notification = new Schema({
    metadata: Object,
    seen: Boolean
 }, {versionKey: false})
-
-export interface INotification {
-   _id: Types.ObjectId;
-   toUser: Types.ObjectId;
-   at: Date;
-   event: string;
-   metadata: any;
-   seen: boolean;
-}
 
 export default model<INotification>('Notification', Notification);

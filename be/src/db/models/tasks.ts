@@ -1,4 +1,5 @@
-import {Schema, Types, model} from 'mongoose';
+import {model, Schema} from 'mongoose';
+import {ITask} from "../../types";
 
 const TaskSchema = new Schema({
    type: {type: String},
@@ -8,15 +9,5 @@ const TaskSchema = new Schema({
    error: String,
    metadata: Object
 }, {versionKey: false})
-
-export interface ITask {
-   _id: Types.ObjectId;
-   type: string;
-   completed: boolean;
-   failed: boolean;
-   error: string;
-   at: Date;
-   metadata: any;
-}
 
 export default model<ITask>('Task', TaskSchema)

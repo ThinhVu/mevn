@@ -1,7 +1,8 @@
 // @ts-nocheck
-import UserModel, {IPublicUserInfo, IUser} from '../db/models/user';
+import UserModel from '../db/models/user';
 import _ from 'lodash'
 import {Types} from "mongoose";
+import {IPublicUserInfo, IUser} from "../types";
 
 // Note: This method is only invoked by auth, not for public use
 export const getAuthUser = async (_id: Types.ObjectId): Promise<IUser> => UserModel.findOneAndUpdate({_id}).select('-password');

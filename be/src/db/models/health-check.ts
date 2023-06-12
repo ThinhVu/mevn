@@ -1,13 +1,9 @@
-import mongoose, {Document} from 'mongoose';
+import {model, Schema} from 'mongoose';
+import {IHealthCheck} from "../../types";
 
-const schema = new mongoose.Schema({
+const schema = new Schema({
    serviceName: String,
    url: String,
 })
 
-export interface IHealthCheck extends Document {
-   serviceName: string;
-   url: string;
-}
-
-export default mongoose.model<IHealthCheck>('HealthCheck', schema)
+export default model<IHealthCheck>('HealthCheck', schema)

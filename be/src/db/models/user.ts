@@ -1,5 +1,5 @@
-import {Schema, Types, model} from 'mongoose';
-import {UserRole} from '../../constants/types';
+import {model, Schema} from 'mongoose';
+import {IUser, UserRole} from '../../types';
 
 const UserSchema = new Schema({
    avatar: String,
@@ -37,21 +37,5 @@ const UserSchema = new Schema({
       type: String,
    }
 }, {versionKey: false});
-
-export interface IPublicUserInfo {
-   avatar?: string;
-   role?: UserRole;
-   fullName?: string;
-   username?: string;
-   email?: string;
-}
-
-export interface IUser extends IPublicUserInfo {
-   _id: Types.ObjectId;
-   emailVerified?: boolean;
-   password: string;
-   resetPasswordToken?: string;
-   createdAt: Date;
-}
 
 export default model<IUser>('User', UserSchema);

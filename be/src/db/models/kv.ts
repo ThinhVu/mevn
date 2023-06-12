@@ -1,4 +1,5 @@
-import {Schema, Types, model} from 'mongoose';
+import {model, Schema} from 'mongoose';
+import {ISystemConfig} from "../../types";
 
 const schema = new Schema({
    key: {
@@ -11,12 +12,5 @@ const schema = new Schema({
 }, {versionKey: false})
 
 schema.index({ key: 'hashed' })
-
-export interface ISystemConfig {
-   _id: Types.ObjectId;
-   key: string;
-   value: string;
-   isSecret?: boolean
-}
 
 export default model<ISystemConfig>('SystemConfig', schema)

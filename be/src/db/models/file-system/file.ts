@@ -1,4 +1,5 @@
-import {Schema, Types, model} from 'mongoose';
+import {model, Schema} from 'mongoose';
+import {IFile} from "../../../types";
 
 const File = new Schema({
    name: String,
@@ -8,15 +9,5 @@ const File = new Schema({
    thumbnail: String,
    createdAt: Date,
 }, {versionKey: false})
-
-export interface IFile {
-   _id: Types.ObjectId;
-   name: string;
-   src: string;
-   size: number;
-   type: string;
-   thumbnail: string;
-   createdAt: Date;
-}
 
 export default model<IFile>('File', File);

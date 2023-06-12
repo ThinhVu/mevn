@@ -1,4 +1,4 @@
-import {UserRole} from "../constants/types";
+import {UserRole} from "../types";
 import {Types} from "mongoose";
 import {apiError, auth} from "../utils/common-util";
 

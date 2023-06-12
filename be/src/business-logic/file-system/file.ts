@@ -1,5 +1,6 @@
-import File, {IFile} from '../../db/models/file-system/file';
+import File from '../../db/models/file-system/file';
 import {Types} from "mongoose";
+import {IFile} from "../../types";
 
 export const get = async (fileId: Types.ObjectId) : Promise<IFile> => File.findOne({_id: fileId});
 export const create = async (payload: Partial<IFile>) : Promise<IFile> => File.create(payload);

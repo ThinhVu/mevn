@@ -1,14 +1,9 @@
-import {Schema, Types, model} from 'mongoose';
+import {model, Schema} from 'mongoose';
+import {IAPIMetric} from "../../../types";
 
 const schema = new Schema({
    metric: Object,
    at: Date
 }, {versionKey: false})
-
-export interface IAPIMetric {
-   _id: Types.ObjectId;
-   metric: Record<string, unknown>;
-   at: Date;
-}
 
 export default model<IAPIMetric>('APIMetric', schema)

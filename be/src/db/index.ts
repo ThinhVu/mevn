@@ -5,7 +5,7 @@ import Util from '../utils/common-util';
 import config from '../config';
 import UserModel from './models/user';
 import {createUser} from "../business-logic/user";
-import {UserRole} from "../constants/types";
+import {UserRole} from "../types";
 import bcrypt from 'bcrypt';
 
 async function init() {

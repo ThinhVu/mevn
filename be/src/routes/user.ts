@@ -19,7 +19,7 @@ import rateLimit from "../middlewares/rate-limit";
 import $ from "../middlewares/safe-call";
 import {requireUser} from "../middlewares/auth";
 import Router from "routerex";
-import {UserRequest} from "../constants/types";
+import {UserRequest} from "../types";
 
 const router = Router()
 

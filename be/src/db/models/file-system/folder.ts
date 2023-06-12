@@ -1,4 +1,5 @@
-import {Schema, Types, model} from 'mongoose';
+import {model, Schema} from 'mongoose';
+import {IFolder} from "../../../types";
 
 const Folder = new Schema({
    name: String,
@@ -9,14 +10,5 @@ const Folder = new Schema({
    }],
    createdAt: Date,
 }, {versionKey: false});
-
-export interface IFolder {
-   _id: Types.ObjectId;
-   name: string;
-   parent?: Types.ObjectId;
-   folders?: IFolder[];
-   files?: Types.ObjectId[] | IFolder[];
-   createdAt: Date;
-}
 
 export default model<IFolder>('Folder', Folder);
