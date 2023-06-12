@@ -8,7 +8,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import Db from "./db";
-import api from './routes';
+import routes from './routes';
 import {requireAdmin} from "./middlewares/auth";
 import {apiError} from "./utils/common-util";
 import {enableLog, _console} from "./utils/logger-util";
@@ -78,7 +78,7 @@ async function main() {
          req.realIp = req.headers['x-real-ip'] || req.ip
          next()
       },
-      api));
+      routes));
    app.get('/docs', (req, res) => res.send(cache.html));
    app.get('/docs/index.html', (req, res) => res.send(cache.html));
    app.get('/docs/postman.json', (req, res) => res.send(cache.postman));
