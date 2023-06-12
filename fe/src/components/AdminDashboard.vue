@@ -37,33 +37,33 @@
           <thead>
           <tr>
             <th>
-              <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByName">
+              <div class="fr ai-c fg-4px clickable" @click="sortApiMetricByName">
                 <b>Api</b>
-                <t-icon>fas fa-sort@16:#eee</t-icon>
+                <t-icon>fas fa-sort@16:#444</t-icon>
               </div>
             </th>
             <th>
-              <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByCalled">
+              <div class="fr ai-c fg-4px clickable" @click="sortApiMetricByCalled">
                 <b>Called</b>
-                <t-icon>fas fa-sort@16:#eee</t-icon>
+                <t-icon>fas fa-sort@16:#444</t-icon>
               </div>
             </th>
             <th>
-              <div class="fr ai-c fg-1 clickable" @click="sortApiMetricBySuccess">
+              <div class="fr ai-c fg-4px clickable" @click="sortApiMetricBySuccess">
                 <b>Success</b>
-                <t-icon>fas fa-sort@16:#eee</t-icon>
+                <t-icon>fas fa-sort@16:#444</t-icon>
               </div>
             </th>
             <th>
-              <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByAvgs">
+              <div class="fr ai-c fg-4px clickable" @click="sortApiMetricByAvgs">
                 <b>Average (ms)</b>
-                <t-icon>fas fa-sort@16:#eee</t-icon>
+                <t-icon>fas fa-sort@16:#444</t-icon>
               </div>
             </th>
             <th>
-              <div class="fr ai-c fg-1 clickable" @click="sortApiMetricByError">
+              <div class="fr ai-c fg-4px clickable" @click="sortApiMetricByError">
                 <b>Error</b>
-                <t-icon>fas fa-sort@16:#eee</t-icon>
+                <t-icon>fas fa-sort@16:#444</t-icon>
               </div>
             </th>
           </tr>
