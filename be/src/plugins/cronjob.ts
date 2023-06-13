@@ -1,6 +1,5 @@
 import {CronJob} from "cron";
 import * as AppMetric from "../business-logic/metric/app-metric";
-import APIMetric from "../business-logic/metric/api-metric";
 import * as DAU from "../business-logic/metric/DAU";
 import Tasks from "../db/models/tasks";
 import appHooks from "../hooks";
@@ -34,9 +33,4 @@ export default async function cronjob(app) {
          }
       }
    }, null, true, timeZone)
-
-   if (process.env.USE_API_METRIC) {
-      await APIMetric.clearMetric()
-      setInterval(() => APIMetric.create().catch(console.error), 60000)
-   }
 }

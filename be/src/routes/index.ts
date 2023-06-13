@@ -1,7 +1,6 @@
 import UserCtl from './user';
 import LogCtl from './log';
 import KvCtl from './kv';
-import SystemMetricCtl from "./system-metric";
 import fileSystemCtl from "./file-system";
 import express from 'express';
 import Routerex from "routerex";
@@ -17,8 +16,6 @@ export default async function useRoutes(app) {
    router.use('/user', UserCtl)
    router.use('/kv', KvCtl)
    router.use('/log', LogCtl)
-   if (process.env.USE_API_METRIC)
-      router.use('/system-metric', SystemMetricCtl)
    router.use('/file-system', fileSystemCtl)
 
    const cache = {html: '', postman: ''};
