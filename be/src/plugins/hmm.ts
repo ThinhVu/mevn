@@ -21,7 +21,7 @@ export default function hmm(app) {
       healthCheck: HealthCheck,
       // add more models as you want
    })
-   app.use('/hmm', requireAdmin, bodyParser.raw({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb', type: () => true}),
+   app.post('/hmm', requireAdmin, bodyParser.raw({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb', type: () => true}),
       (req, res) => hmm(jsonFn.parse(req.body.toString()))
       .then(rs => res.send(rs))
       .catch(e => apiError(e, res))
