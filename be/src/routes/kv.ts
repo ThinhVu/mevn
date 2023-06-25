@@ -1,5 +1,5 @@
 import Router from "routerex";
-import $ from "../middlewares/safe-call";
+import $ from "../utils/safe-call";
 import {requireAdmin} from "../middlewares/auth";
 import {get, getValue, getAll, set, remove} from "../business-logic/kv";
 

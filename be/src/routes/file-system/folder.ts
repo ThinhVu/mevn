@@ -3,7 +3,7 @@ import DataParser from "../../utils/data-parser";
 
 import Router from "routerex";
 import {requireAdmin, requireUser} from "../../middlewares/auth";
-import $ from "../../middlewares/safe-call";
+import $ from "../../utils/safe-call";
 
 const router = Router();
 

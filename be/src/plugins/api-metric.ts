@@ -5,7 +5,7 @@ import _ from 'lodash';
 import dayjs from "dayjs";
 import ApiMetricModel from "../db/models/metric/api-metric";
 import {requireAdmin} from "../middlewares/auth";
-import $ from "../middlewares/safe-call";
+import $ from "../utils/safe-call";
 
 export default async function (app) {
    if (!process.env.USE_API_METRIC) return

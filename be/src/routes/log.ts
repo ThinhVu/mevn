@@ -1,4 +1,4 @@
-import $ from "../middlewares/safe-call";
+import $ from "../utils/safe-call";
 import {getLogs, getLog, logSetting, enableLog, disableLog} from "../utils/logger-util";
 import {requireAdmin} from "../middlewares/auth";
 import Router from "routerex";
