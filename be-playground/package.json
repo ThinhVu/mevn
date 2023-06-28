@@ -1,0 +1,28 @@
+{
+  "name": "befriend-api-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThinhVu/befriend-api-playground.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThinhVu/befriend-api-playground/issues"
+  },
+  "homepage": "https://github.com/ThinhVu/befriend-api-playground#readme",
+  "dependencies": {
+    "@faker-js/faker": "^8.0.2",
+    "axios": "^1.4.0",
+    "chalk": "^4.1.2",
+    "socket.io-client": "^4.6.2",
+    "json-fn": "^1.1.1",
+    "@tvux/hmmjs": "^0.69.420"
+  }
+}
