@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@tvux/hmmjs':
+    specifier: ^0.69.420
+    version: 0.69.420
   axios:
     specifier: ^1.3.4
     version: 1.3.4
@@ -10,12 +13,9 @@ dependencies:
   dayjs:
     specifier: ^1.11.5
     version: 1.11.5
-  hmm:
-    specifier: Thinhvu/hmmjs#0.69.420
-    version: github.com/Thinhvu/hmmjs/ce81ae254e945bb96db94a9da2f82e5260aee3d5
   jinguji:
     specifier: github:ThinhVu/jinguji
-    version: github.com/ThinhVu/jinguji/85ebd9c0203f6d381d04f998c69fbb6ae054814e
+    version: github.com/ThinhVu/jinguji/f03f8399c87a85d70e717e6494ee4e93af3fe467
   json-fn:
     specifier: ^1.1.1
     version: 1.1.1
@@ -737,6 +737,10 @@ packages:
 
   /@socket.io/component-emitter@3.1.0:
     resolution: {integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==}
+    dev: false
+
+  /@tvux/hmmjs@0.69.420:
+    resolution: {integrity: sha512-BoR2uRoF5vgoo6RQ0h3OVGVAxLCQ63qJnbgJafmVNWaFv8hp0DqYPd9eSb4mePyIjW3JNHhodVJS0C85g7SyRw==}
     dev: false
 
   /@types/estree@1.0.0:
@@ -2066,6 +2070,7 @@ packages:
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: true
 
   /lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -3080,22 +3085,16 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/ThinhVu/jinguji/85ebd9c0203f6d381d04f998c69fbb6ae054814e:
-    resolution: {tarball: https://codeload.github.com/ThinhVu/jinguji/tar.gz/85ebd9c0203f6d381d04f998c69fbb6ae054814e}
+  github.com/ThinhVu/jinguji/f03f8399c87a85d70e717e6494ee4e93af3fe467:
+    resolution: {tarball: https://codeload.github.com/ThinhVu/jinguji/tar.gz/f03f8399c87a85d70e717e6494ee4e93af3fe467}
     name: vue-ui-lib
     version: 1.0.2
     dependencies:
       axios: 1.3.4
       dayjs: 1.11.5
-      lodash: 4.17.21
+      lodash-es: 4.17.21
       uuid: 9.0.0
       vue: 3.3.4
     transitivePeerDependencies:
       - debug
-    dev: false
-
-  github.com/Thinhvu/hmmjs/ce81ae254e945bb96db94a9da2f82e5260aee3d5:
-    resolution: {tarball: https://codeload.github.com/Thinhvu/hmmjs/tar.gz/ce81ae254e945bb96db94a9da2f82e5260aee3d5}
-    name: hmmjs
-    version: 0.69.420
     dev: false

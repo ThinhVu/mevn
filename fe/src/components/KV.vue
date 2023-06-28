@@ -1,11 +1,11 @@
 <template>
   <section data-name="system-config" class="fc w-100 h-100 fg-12px px-3 py-3">
-    <t-table class="w-100">
+    <t-table class="w-100 max-h-400px">
       <thead>
       <tr>
-        <th>Key</th>
-        <th>Value</th>
-        <th class="w-10px">Action</th>
+        <th class="z-index-1">Key</th>
+        <th class="z-index-1">Value</th>
+        <th class="w-10px z-index-1">Action</th>
       </tr>
       </thead>
       <tbody>

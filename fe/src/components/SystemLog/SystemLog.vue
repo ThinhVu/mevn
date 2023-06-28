@@ -37,7 +37,7 @@ export default {
         <t-switch v-model={logSetting.value.enableLog} onUpdate:modelValue={setLogEnable} label="Enable Log"/>
       </div>
       <div class="fr" style="height: calc(100% - 50px);">
-        <div style="width: 160px; border-right: 1px solid #ddd" class="ovf-y-s hide-scroll-bar">
+        <div style="width: 160px; border-right: 1px solid #ddd" class="ovf-y-s sb-h">
           {
             logFiles.value.map(logFile =>
               <div style="padding: 5px 10px; border-bottom: 1px solid #ddd; font-size: 12px; cursor: pointer;"
@@ -55,7 +55,7 @@ export default {
             <t-text v-model={filter.value} placeholder="Filter"/>
           </div>}
           { (!!logContent.value) && <log-presenter
-              class="ovf-y-s hide-scroll-bar"
+              class="ovf-y-s sb-h"
               style="height: calc(100% - 41px);"
               filter={filter.value}
               content={logContent.value}

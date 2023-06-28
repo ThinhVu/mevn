@@ -48,6 +48,10 @@ select {
 Uno css failed to generate pseudo rule.
 https://github.com/unocss/unocss/issues/2371
 */
+.sb-h::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+}
+
 .hide-scroll-bar::-webkit-scrollbar {
   display: none; /* Hide scrollbar for Chrome, Safari and Opera */
 }

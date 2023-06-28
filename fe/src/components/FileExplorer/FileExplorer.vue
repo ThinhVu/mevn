@@ -111,7 +111,7 @@ export default {
           key={LOADING_FILES_KEY}
           v-slots={{
             default: () => (
-                <div class="w-100 h-100 ovf-y-s hide-scroll-bar px-1 py-1 grid"
+                <div class="w-100 h-100 ovf-y-s sb-h px-1 py-1 grid"
                      style="grid-template-columns: repeat(auto-fill, 100px); grid-template-rows: 140px; grid-auto-rows: 140px; gap: 0.5rem">
                   {get(selectedFolder.value, 'files', []).map(v => <file {...v} onClick={() => onFileClicked(v)}/>)}
                 </div>

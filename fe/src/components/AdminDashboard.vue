@@ -1,5 +1,5 @@
 <template>
-  <section class="fc w-100 h-100 fg-12px py-3 px-3 ovf-y-s hide-scroll-bar bc:rgb(246,248,250)">
+  <section class="fc w-100 h-100 fg-12px py-3 px-3 ovf-y-s sb-h bc:rgb(246,248,250)">
     <!-- api call per duration -->
     <section class="metric-block br-1">
       <div class="fr ai-c fg-4px mb-2">

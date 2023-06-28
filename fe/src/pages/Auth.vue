@@ -12,29 +12,19 @@
   </div>
 </template>
 <script setup>
-import {ref, inject} from 'vue'
+import {ref} from 'vue'
 import {userAPI} from '@/api';
-import UserInfoDialog from '@/components/UserInfoDialog.vue';
 import {useRouter} from 'vue-router';
 
 const router = useRouter()
 
-const {dialog} = inject('TSystem')
-
 const email = ref()
 const password = ref()
 
-const cancel = () => emit('close')
 const signIn = async () => {
-  const succeeded = await userAPI.signIn(email.value, password.value)
-  if (succeeded)
-    await router.push({path: '/'})
+  await userAPI.signIn(email.value, password.value)
 }
 const signUp = async () => {
-  const succeeded = await userAPI.signUp(email.value, password.value)
-  if (succeeded) {
-    await dialog.show({component: UserInfoDialog})
-    await router.push({path: '/'})
-  }
+  await userAPI.signUp(email.value, password.value)
 }
 </script>
