@@ -11,7 +11,7 @@ import {
    updateUserResetPasswordToken
 } from '../business-logic/user';
 import {parseAuthorization} from '../utils/auth-util';
-import {randomNumberInRange} from "../utils/common-util";
+import {ApiError, randomNumberInRange} from "../utils/common-util";
 import {buildEmailPayload, sendEmail} from "../utils/email-util";
 import {genToken} from "../utils/auth-util";
 import To from "../utils/data-parser";
@@ -135,10 +135,10 @@ export default async function useUser(parentRouter) {
       const authData = parseAuthorization(req)
       const {email, password} = authData.user
       if (!email || !password)
-         throw new Error('Missing field "email" or "password"')
+         throw new ApiError('Missing field "email" or "password"')
       const user = await UserModel.findOne({email, password})
       if (!user)
-         throw new Error('Invalid user')
+         throw new ApiError('Invalid user')
       const token = genToken(user)
       res.cookie('token', token)
       return {user, token}
