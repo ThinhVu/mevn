@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken'
 import {get} from 'lodash'
 import {Server, Socket} from 'socket.io'
-import {createAdapter} from "@socket.io/redis-adapter"
+import {createAdapter as createRedisAdapter} from "@socket.io/redis-adapter"
+import {createAdapter as createMongoDbAdapter} from '@socket.io/mongo-adapter'
 import {createClient} from "redis"
 import {instrument} from "@socket.io/admin-ui"
-import * as DAULog from "../business-logic/metric/DAULog"
-import appHooks from "../business-logic/hooks"
+import appHook from "../business-logic/hooks"
+import UserModel from "../db/models/user"
 
 /**
  * https://socket.io/docs/v4/migrating-from-3-x-to-4-0/#the-default-value-of-pingtimeout-was-increased
@@ -22,12 +23,10 @@ const SSE_EVENTS = {
    connection: 'sse_connection',
    disconnect: 'sse_disconnect'
 }
-const SOCKET_MAPS = {
-   userId_SocketId: {},
-   onlineSockets: {}
-}
+const UserId_SocketId_Map = {}
 
-function createSocketServer(httpServer) {
+async function createSocketServer(app) {
+   const httpServer = app.$httpServer
    const io = new Server(httpServer, {
       cors: {
          origin: (process.env.SOCKET_IO__CORS_ORIGIN || '').split(','),
@@ -37,20 +36,29 @@ function createSocketServer(httpServer) {
    })
 
    // socket io adapter
-   const redisAdapter = {
-      url: process.env.SOCKET_IO__REDIS_ADAPTER_URL,
-      password: process.env.SOCKET_IO__REDIS_ADAPTER_PASSWORD
-   }
-   const isRedisAdapterAvailable = redisAdapter.url && redisAdapter.password;
-   if (isRedisAdapterAvailable) {
+   const useSocketIoAdapter = process.env.SOCKET_IO_USE_REDIS_ADAPTER || process.env.SOCKET_IO_USE_MONGODB_ADAPTER
+   if (process.env.SOCKET_IO_USE_REDIS_ADAPTER) {
+      console.log('[socket-io] use redis adapter')
+      const redisAdapter = {
+         url: process.env.SOCKET_IO__REDIS_ADAPTER_URL,
+         password: process.env.SOCKET_IO__REDIS_ADAPTER_PASSWORD
+      }
       const pubClient = createClient(redisAdapter)
       const subClient = pubClient.duplicate()
-
       Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
          pubClient.ping().then(console.log);
          // @ts-ignore
-         io.adapter(createAdapter(pubClient, subClient))
+         io.adapter(createRedisAdapter(pubClient, subClient))
       })
+   } else if (process.env.SOCKET_IO_USE_MONGODB_ADAPTER) {
+      console.log('[socket-io] use mongodb adapter')
+      const mongoCollection = app.$db.connections[0].db.collection(process.env.SOCKET_IO__MONGODB_ADAPTER_COLLECTION || 'socket-io');
+      await mongoCollection.createIndex(
+         {createdAt: 1},
+         {expireAfterSeconds: 3600, background: true}
+      )
+      // @ts-ignore
+      io.adapter(createMongoDbAdapter(mongoCollection, {addCreatedAtField: true}))
    }
 
    // socket io admin
@@ -90,8 +98,11 @@ function createSocketServer(httpServer) {
 
    // @ts-ignore
    io.toUser = (userId: string) => {
-      const socketId = SOCKET_MAPS.userId_SocketId[userId]
+      const socketId = UserId_SocketId_Map[userId]
       if (socketId) {
+         // https://socket.io/docs/v4/redis-adapter/
+         // each socket connected to server will join room = its id
+         // so emit to socket is equal to emit to a room, the message will be sent to all server
          return io.to(socketId)
       } else {
          return {
@@ -102,65 +113,74 @@ function createSocketServer(httpServer) {
    }
 
    function onUserOnline(userId, socketId) {
-      SOCKET_MAPS.userId_SocketId[userId] = socketId
-      SOCKET_MAPS.onlineSockets[socketId] = Date.now()
+      UserId_SocketId_Map[userId] = socketId
    }
 
    function onUserOffline(userId, socketId) {
-      delete SOCKET_MAPS.userId_SocketId[userId]
-      delete SOCKET_MAPS.onlineSockets[socketId]
+      if (UserId_SocketId_Map[userId] === socketId)
+         delete UserId_SocketId_Map[userId]
    }
 
-   io.on(SSE_EVENTS.connection, (userId, socketId) => onUserOnline(userId, socketId))
-   io.on(SSE_EVENTS.disconnect, (userId, socketId) => onUserOffline(userId, socketId))
+   io.on(SSE_EVENTS.connection, onUserOnline)
+   io.on(SSE_EVENTS.disconnect, onUserOffline)
 
-   appHooks.on('logger:write', (level, ...methodArgs) =>
+   appHook.on('logger:write', (level, ...methodArgs) =>
       io.to('server-log').emit('server-log:data', level, ...methodArgs))
 
    io.on('connection', async (socket: Socket) => {
       // @ts-ignore
       const userId = socket.authUser._id
       console.log(`[socket-io] ${userId} connect`)
-      DAULog.log(userId)
+      await UserModel.updateOne({_id: userId}, {isOnline: true})
+
       // update socket connection status in current server
       onUserOnline(userId, socket.id)
+
       // update socket connection status in remote servers
-      if (isRedisAdapterAvailable)
-         io.serverSideEmit(SSE_EVENTS.connection, userId, socket.id)
-      appHooks.trigger('user:online', userId)
-      socket.on('disconnect', reason => {
-         console.log(`Socket: ${userId} disconnect with reason ${reason}`)
+      // https://socket.io/docs/v4/adapter/
+      if (useSocketIoAdapter) io.serverSideEmit(SSE_EVENTS.connection, userId, socket.id)
+
+      appHook.trigger('user:online', userId)
+
+      socket.on('disconnect', async reason => {
+         console.log(`[socket-io] ${userId} disconnect with reason ${reason}`)
+         console.log(`[socket-io] trigger "user:offline" after ${SOCKET_PING_TIMEOUT_IN_MS}ms if the user not re-connect`)
+         onUserOffline(userId, socket.id)
+         if (useSocketIoAdapter)
+            io.serverSideEmit(SSE_EVENTS.disconnect, userId, socket.id) // https://socket.io/docs/v4/adapter/
+         await UserModel.updateOne({_id: userId}, {isOnline: false})
          // There is a case when user disconnect from server A at time (t)
          // Then connect to server B at time (t + x) with x < SOCKET_PING_TIMEOUT
          // The 'disconnect' event will be raise in server A at time (t + SOCKET_PING_TIMEOUT)
          // In this case, we just ignore the disconnection of socket in server A.
-         // NOTE: The assumption may not correct due to Redis network latency.
-         if (SOCKET_MAPS.onlineSockets[socket.id] < Date.now() - SOCKET_PING_TIMEOUT_IN_MS) {
-            onUserOffline(userId, socket.id)
-            if (isRedisAdapterAvailable)
-               io.serverSideEmit(SSE_EVENTS.disconnect, userId, socket.id)
-            appHooks.trigger('user:offline', userId)
-         }
+         setTimeout(async () => {
+            const isUserFinallyOffline = await UserModel.count({_id: userId, isOnline: false})
+            if (isUserFinallyOffline)
+               appHook.trigger('user:offline', userId)
+         }, SOCKET_PING_TIMEOUT_IN_MS)
       });
-      socket.emit("__TEST__", "__TEST__");
+
       socket.on('watch', (...args) => {
          const gr = args.join(':')
          console.log('[socket-io] watch', gr)
          socket.join(gr)
       })
+
       socket.on('un-watch', (...args) => {
          const gr = args.join(':')
          console.log('[socket-io] unwatch', gr)
          socket.leave(gr)
       })
+
+      socket.emit("__TEST__", "__TEST__")
    });
 
    return io
 }
 
-export default function useSocketIO(app) {
+export default async function useSocketIO(app) {
    if (!process.env.USE_SOCKET_IO) return
    console.log('[plugin] socket-io')
    // @ts-ignore
-   global.io = createSocketServer(app.$httpServer)
+   global.io = await createSocketServer(app)
 }

@@ -6,7 +6,7 @@ import useAdmin from "./admin";
 
 export default async function usePlugin(app) {
    console.log('---------------------------')
-   await useMongoDb()
+   await useMongoDb(app)
    await useAdmin()
    await useCronjob()
    await useRabbitMQ()

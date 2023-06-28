@@ -4,10 +4,10 @@ import patches from '../db/patches';
 
 import {getVersion} from "../utils/common-util";
 
-async function connect() {
+async function connect(app) {
    try {
       console.log('[mongodb] Connecting to server...')
-      await mongoose.connect(process.env.MONGO_URL, {connectTimeoutMS: 10000})
+      app.$db = await mongoose.connect(process.env.MONGO_URL, {connectTimeoutMS: 10000})
       console.log('[mongodb] Connected to server!')
    } catch (error) {
       console.error('[mongodb] Failed to connect. Reason:', error)
@@ -48,8 +48,8 @@ async function migrate() {
    }
 }
 
-export default async function mongodb() {
+export default async function mongodb(app) {
    console.log('[plugin] mongodb')
-   await connect()
+   await connect(app)
    await migrate()
 }
