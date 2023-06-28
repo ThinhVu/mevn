@@ -12,7 +12,7 @@ import HealthCheck from "../db/models/health-check";
 export default function hmm(app) {
    if (!process.env.USE_HMM_API) return
 
-   console.log('[route] hmm')
+   console.log('[app-route] hmm')
    const hmm = hmmExecFactory({
       kv: KvModel,
       user: UserModel,
