@@ -5,7 +5,7 @@ import {createAdapter} from "@socket.io/redis-adapter"
 import {createClient} from "redis"
 import {instrument} from "@socket.io/admin-ui"
 import * as DAULog from "../business-logic/metric/DAULog"
-import appHooks from "../hooks"
+import appHooks from "../business-logic/hooks"
 
 /**
  * https://socket.io/docs/v4/migrating-from-3-x-to-4-0/#the-default-value-of-pingtimeout-was-increased

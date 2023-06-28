@@ -2,7 +2,7 @@ import {CronJob} from "cron";
 import * as AppMetric from "../business-logic/metric/app-metric";
 import * as DAU from "../business-logic/metric/DAU";
 import Tasks from "../db/models/tasks";
-import appHooks from "../hooks";
+import appHooks from "../business-logic/hooks";
 
 // https://crontab.guru/
 // https://momentjs.com/timezone

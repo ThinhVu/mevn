@@ -6,7 +6,7 @@ import compression from "compression"
 import cookieParser from "cookie-parser"
 import usePlugins from "./plugins"
 import useRoutes from "./routes"
-import registerAppHooks from "./hooks/register-app-hooks"
+import registerAppHooks from "./business-logic/hooks/register-app-hooks"
 import {_console} from "./utils/logger-util"
 import {createServer} from "http";
 
