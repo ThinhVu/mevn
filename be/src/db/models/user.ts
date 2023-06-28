@@ -35,7 +35,8 @@ const UserSchema = new Schema({
    },
    fullName: {
       type: String,
-   }
+   },
+   test: Boolean,
 }, {versionKey: false});
 
 export default model<IUser>('User', UserSchema);

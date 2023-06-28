@@ -1,4 +1,4 @@
-import makeHook from './make-hook';
+import makeHook from '../utils/hook'
 const appHooks = makeHook()
 
-export default appHooks;
+export default appHooks

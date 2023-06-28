@@ -6,12 +6,36 @@ import dayjs from "dayjs";
 import ApiMetricModel from "../db/models/metric/api-metric";
 import {requireAdmin} from "../middlewares/auth";
 import $ from "../utils/safe-call";
+import Routerex from '@tvux/routerex'
 
-export default async function (app) {
+export default async function useApiMetric(parentRouter) {
    if (!process.env.USE_API_METRIC) return
+
+   console.log('[route] useApiMetric')
 
    await ApiMetricModel.deleteMany({})
    const apiMetric = {}
+
+   const router = Routerex()
+   router.use(metricMiddleware)
+   router.get('/', {
+      title: 'API Call',
+      description: 'Get current API call count',
+      response: {
+         type: 'object',
+         desc: 'metric object'
+      }
+   }, requireAdmin, $(async () => apiMetric))
+   router.get('/history', {
+      title: 'API Call History',
+      description: 'Get API call history',
+      response: {
+         type: 'array',
+         desc: 'metric array'
+      }
+   }, requireAdmin, $(async () => ApiMetricModel.find({}).sort({at: -1}).limit(60)))
+
+   setInterval(takeSnapshot, 60000)
 
    function getRoute(req) {
       const route = _.get(req, 'route.path', '')
@@ -53,24 +77,6 @@ export default async function (app) {
 
       next()
    }
-   app.use(metricMiddleware)
-   app.get('/api-call', {
-      title: 'API Call',
-      description: 'Get current API call count',
-      response: {
-         type: 'object',
-         desc: 'metric object'
-      }
-   }, requireAdmin, $(async () => apiMetric))
-   app.get('/api-call-history', {
-      title: 'API Call History',
-      description: 'Get API call history',
-      response: {
-         type: 'array',
-         desc: 'metric array'
-      }
-   }, requireAdmin, $(async () => ApiMetricModel.find({}).sort({at: -1}).limit(60)))
-
    async function takeSnapshot() {
       try {
          const metricDoc = { metric: apiMetric, at: dayjs().toDate() }
@@ -81,5 +87,6 @@ export default async function (app) {
          console.error(e)
       }
    }
-   setInterval(takeSnapshot, 60000)
+
+   parentRouter.use('/api-metric', router)
 }

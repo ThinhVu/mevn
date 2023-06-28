@@ -29,9 +29,9 @@ const number = (v: any, fallbackValue: number): number => +v || fallbackValue;
  */
 const bool = (v: any): boolean => !(v == false || v == undefined || (typeof(v) === 'string' && (v == '0' || v.toLowerCase() === 'false')));
 
-const date = (v: any): Date => dayjs(v).toDate()
+const date = (v: any): Date => dayjs(v).toDate();
 
-const str = (v: any): string => v + "";
+const str = (v: any): string => (v && v.toString()) || "";
 
 export default {
    objectId,

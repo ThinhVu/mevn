@@ -7,6 +7,15 @@ dependencies:
   '@socket.io/redis-adapter':
     specifier: ^8.1.0
     version: 8.1.0(socket.io-adapter@2.5.2)
+  '@tvux/exdogen':
+    specifier: ^0.0.1
+    version: 0.0.1
+  '@tvux/hmmjs':
+    specifier: ^0.69.420
+    version: 0.69.420
+  '@tvux/routerex':
+    specifier: ^1.0.2
+    version: 1.0.2
   amqplib:
     specifier: ^0.10.3
     version: 0.10.3
@@ -43,18 +52,9 @@ dependencies:
   dotenv:
     specifier: ^8.2.0
     version: 8.2.0
-  exdogen:
-    specifier: Thinhvu/exdogen#0.0.3
-    version: github.com/Thinhvu/exdogen/806ce5347d6a17d052f3b1864251ba1f59807a19
   express:
     specifier: ^4.18.2
     version: 4.18.2
-  express-rate-limit:
-    specifier: ^6.4.0
-    version: 6.4.0(express@4.18.2)
-  hmm:
-    specifier: Thinhvu/hmmjs#0.69.420
-    version: github.com/Thinhvu/hmmjs/ce81ae254e945bb96db94a9da2f82e5260aee3d5
   json-fn:
     specifier: ^1.1.1
     version: 1.1.1
@@ -76,9 +76,6 @@ dependencies:
   redis:
     specifier: ^4.6.5
     version: 4.6.5
-  routerex:
-    specifier: Thinhvu/routerex#1.0.2
-    version: github.com/Thinhvu/routerex/2800e0943354fe66ec65f6549159100508301ed6
   semver:
     specifier: ^7.3.8
     version: 7.3.8
@@ -1008,6 +1005,26 @@ packages:
   /@tsconfig/node16@1.0.3:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
     dev: true
+
+  /@tvux/exdogen@0.0.1:
+    resolution: {integrity: sha512-Q3kmS4cTyS/AgY0gLVG48RGeB8JuWvnCWl/S9mZjmUb/L4DNQffHb9k1UYbeY2SCE0A2rE5/YKVk2iHIblWDFQ==}
+    dependencies:
+      uuid: 9.0.0
+      vue: 3.2.47
+    dev: false
+
+  /@tvux/hmmjs@0.69.420:
+    resolution: {integrity: sha512-BoR2uRoF5vgoo6RQ0h3OVGVAxLCQ63qJnbgJafmVNWaFv8hp0DqYPd9eSb4mePyIjW3JNHhodVJS0C85g7SyRw==}
+    dev: false
+
+  /@tvux/routerex@1.0.2:
+    resolution: {integrity: sha512-C0/Y7sTh+dCvh0TwdRB11vJ8SbmO/VTnZ4KfObeat+gKC3dVnRziZYfB3sqFFxcAWzfH3MtzAGnd6NtbuQKXDw==}
+    dependencies:
+      express: 4.18.2
+      methods: 1.1.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /@types/babel__core@7.20.0:
     resolution: {integrity: sha512-+n8dL/9GWblDO0iU6eZAwEIJVr5DWigtle+Q6HLOrh/pdbXOhOtqzq8VPPE2zvNJzSKY4vH/z3iT3tn0A3ypiQ==}
@@ -2632,15 +2649,6 @@ packages:
       jest-message-util: 28.1.3
       jest-util: 28.1.3
     dev: true
-
-  /express-rate-limit@6.4.0(express@4.18.2):
-    resolution: {integrity: sha512-lxQRZI4gi3qAWTf0/Uqsyugsz57h8bd7QyllXBgJvd6DJKokzW7C5DTaNvwzvAQzwHGFaItybfYGhC8gpu0V2A==}
-    engines: {node: '>= 12.9.0'}
-    peerDependencies:
-      express: ^4 || ^5
-    dependencies:
-      express: 4.18.2
-    dev: false
 
   /express@4.18.2:
     resolution: {integrity: sha512-5/PsL6iGPdfQ/lKM1UuielYgv3BUoJfz1aUwU9vHZ+J7gyvwdQXFEBIEIaxeGf0GIcreATNyBExtalisDbuMqQ==}
@@ -5662,29 +5670,3 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
-
-  github.com/Thinhvu/exdogen/806ce5347d6a17d052f3b1864251ba1f59807a19:
-    resolution: {tarball: https://codeload.github.com/Thinhvu/exdogen/tar.gz/806ce5347d6a17d052f3b1864251ba1f59807a19}
-    name: exdogen
-    version: 0.0.3
-    dependencies:
-      uuid: 9.0.0
-      vue: 3.2.47
-    dev: false
-
-  github.com/Thinhvu/hmmjs/ce81ae254e945bb96db94a9da2f82e5260aee3d5:
-    resolution: {tarball: https://codeload.github.com/Thinhvu/hmmjs/tar.gz/ce81ae254e945bb96db94a9da2f82e5260aee3d5}
-    name: hmmjs
-    version: 0.69.420
-    dev: false
-
-  github.com/Thinhvu/routerex/2800e0943354fe66ec65f6549159100508301ed6:
-    resolution: {tarball: https://codeload.github.com/Thinhvu/routerex/tar.gz/2800e0943354fe66ec65f6549159100508301ed6}
-    name: routerex
-    version: 1.0.2
-    dependencies:
-      express: 4.18.2
-      methods: 1.1.2
-    transitivePeerDependencies:
-      - supports-color
-    dev: false

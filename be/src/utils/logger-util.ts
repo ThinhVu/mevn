@@ -3,14 +3,10 @@ import path from 'path'
 import dayjs from 'dayjs'
 import Timeout = NodeJS.Timeout;
 import _ from 'lodash';
-import appHooks from "../hooks";
-
-// TODO: extract file logger to another file, this file should only contain log interface
-// log implementations (file logger, frontend pipe, jeager, sentry) should be in another files.
 
 export const logSetting = {
    enableLog: false,
-   logDirPath: 'logs',
+   logDirPath: './logs',
    maximumLogLine: 1000,
    keepLogInDays: 1
 }
@@ -20,6 +16,7 @@ let lineCtr = 0;
 let cleanThreadId : Timeout;
 
 function ensureLogFolderExist() {
+   _console.log('[logger] ensureLogFolderExist')
    if (!fs.existsSync(logSetting.logDirPath)) {
       _console.log('[logger] log file directory doesn\'t exist. create new one at: ', logSetting.logDirPath);
       fs.mkdirSync(logSetting.logDirPath);
@@ -40,7 +37,7 @@ function generateFileName() : string {
  */
 function createNewLogFile() : string {
    ensureLogFolderExist()
-   const filePath = path.resolve(logSetting.logDirPath, generateFileName());
+   const filePath = path.join(logSetting.logDirPath, generateFileName());
    _console.log(`[logger] creating log file: ${filePath}`);
    lineCtr = 0;
    writeStream = fs.createWriteStream(filePath);
@@ -84,7 +81,8 @@ function getMethodArgsString(methodArgs) {
 function write(level: string, methodArgs: any[]) {
    ensureWritable();
    writeStream.write(`[${dayjs().toISOString()}] [${level}] ${getMethodArgsString(methodArgs)}\n`,);
-   appHooks.trigger('logger:write', level, methodArgs);
+   if (process.env.NODE_ENV !== 'production')
+      _console[level](...methodArgs)
    lineCtr++;
 }
 
@@ -94,14 +92,14 @@ function logToFile(...args: any[]) {
 }
 
 export function cleanOldLogs() {
-   _console.log('[logger] clean old log files')
+   _console.log('[logger] cleanOldLogs')
    if (!fs.existsSync(logSetting.logDirPath))
       return;
    const files = fs.readdirSync(path.resolve(logSetting.logDirPath));
    for (const file of files) {
       try {
          const filePath = path.resolve(logSetting.logDirPath, file)
-         fs.unlink(filePath, () => _console.log(`${filePath} will be removed due to out-date.`))
+         fs.unlink(filePath, () => _console.log(`[logger] Log file at "${filePath}" will be removed due to out-date.`))
       } catch (e) {
          _console.warn(e.message)
       }
@@ -109,6 +107,7 @@ export function cleanOldLogs() {
 }
 
 export function enableLog() {
+   _console.log('[logger] enableLog')
    cleanOldLogs()
    if (!logSetting.enableLog) {
       _console = {
@@ -135,6 +134,7 @@ export function enableLog() {
       logSetting.enableLog = true
       ensureLogFolderExist()
    }
+   _console.log('[logger] log enabled')
 }
 
 export function disableLog() {
@@ -151,7 +151,7 @@ export function disableLog() {
    }
 }
 
-export function getLogs(): string[] {
+export function getLogs() {
    return _.reverse(fs.readdirSync(logSetting.logDirPath));
 }
 

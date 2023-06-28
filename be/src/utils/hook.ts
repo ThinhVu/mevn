@@ -1,4 +1,4 @@
-export default function makeHook() {
+export default function hook() {
    const ehMap = {}
    return {
       on(event, handler) {

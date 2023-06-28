@@ -5,12 +5,12 @@ import Tasks from "../db/models/tasks";
 import appHooks from "../hooks";
 
 // https://crontab.guru/
-export default async function cronjob(app) {
+// https://momentjs.com/timezone
+export default async function useCronjob() {
    if (!process.env.RUN_CRONJOB) return
    console.log('[plugin] cronjob')
 
-   // TODO: time zone
-   const timeZone = 'America/Los_Angeles'
+   const timeZone = 'Europe/London' // UTC-0
 
    const runDailyAtNight = '50 11 * * *'
    new CronJob(runDailyAtNight, () => {

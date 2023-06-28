@@ -1,32 +1,28 @@
-import {UserRole} from "../types";
-import {Types} from "mongoose";
-import {apiError, auth} from "../utils/common-util";
+import {handleApiError} from "../utils/common-util"
+import {parseAuthorization} from "../utils/auth-util"
+import {UserRole} from "../types"
 
-export async function requireAdmin(req, res, next){
+export async function requireAdmin(req, res, next) {
    try {
-      const user = await auth(req);
-      const isAdmin = user.role === UserRole.Admin;
-
-      if (!isAdmin) {
-         return res.status(400).send({error: 'Not authorized.'});
-      }
-
-      user._id = new Types.ObjectId(user._id);
-      req.user = user;
-
-      return next();
+      const {user, expired} = parseAuthorization(req)
+      if (expired) throw new Error("Token expired")
+      if (!user) throw new Error("Invalid user")
+      if (user.role !== UserRole.Admin) throw new Error("Permission denied")
+      req.user = user
+      return next()
    } catch (e) {
-      apiError(e, res);
+      handleApiError(e, res)
    }
 }
 
 export async function requireUser(req, res, next) {
    try {
-      const user = await auth(req);
-      user._id = new Types.ObjectId(user._id);
-      req.user = user;
-      return next();
+      const {user, expired} = parseAuthorization(req)
+      if (expired) throw new Error("Token expired")
+      if (!user) throw new Error("Invalid user")
+      req.user = user
+      return next()
    } catch (e) {
-      apiError(e, res);
+      handleApiError(e, res)
    }
 }

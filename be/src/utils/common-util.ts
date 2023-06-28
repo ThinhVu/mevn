@@ -1,13 +1,9 @@
-import {Request, Response} from 'express'
+import {Response} from 'express'
 // @ts-ignore
 import packageJson from "../../package.json"
-import User from "../db/models/user";
-import jwt from 'jsonwebtoken';
-import {IUser} from "../types";
-
 export function generateRandomCode(length) {
    let output = '';
-   for (let i = 0; i<length; ++i) {
+   for (let i = 0; i < length; ++i) {
       const useNumber = randomBoolean()
       if (useNumber) {
          output += String.fromCharCode(randomNumberInRange(48, 57))
@@ -23,59 +19,44 @@ export function randomBoolean() {
 }
 
 export function randomNumberInRange(lower, upper) {
-   return lower + Math.floor(Math.random() * (upper-lower))
+   return lower + Math.floor(Math.random() * (upper - lower))
 }
 
-export function apiError(e: Error | string, res: Response) {
-   console.error(e)
+export class ApiError extends Error {
+   errorCode: string
+   message: string
+   __API_ERROR__: boolean
+
+   constructor(errorCode: string, message?: string) {
+      super(errorCode)
+      this.__API_ERROR__ = true
+      this.errorCode = errorCode
+      this.message = message
+   }
+}
+
+function readableResp(e) {
+   if (e.data && e.data.data) {
+      return e.data.data
+   }
+   if (e.response && e.response.data) {
+      return e.response.data
+   }
+   return e.message
+}
+
+export function handleApiError(e: ApiError | Error | string, res: Response) {
+   // for some reason, the error is not an instance of ApiError
    // @ts-ignore
-   res.__error = true;
-   res.status(500).send({error: typeof(e) === 'string' ? e : e.message})
+   if (e.__API_ERROR__) {
+      // @ts-ignore
+      res.status(400).send({error: e.errorCode, message: e.message})
+   } else {
+      const reason = typeof (e) === 'string' ? e : readableResp(e)
+      res.status(500).send({error: "E_000", reason})
+   }
 }
 
 export function getVersion() {
    return packageJson.version
-}
-
-export function parseAuthorization(req: Request) {
-   const authorization = req.headers.authorization
-   if (authorization) {
-      const jwtToken = req.headers.authorization.split(' ')[1];
-      const data = jwt.decode(jwtToken, process.env.JWT_SECRET);
-      if (data) {
-         return {
-            user: data.user,
-            expired: Date.now() > data.exp * 1000
-         }
-      }
-   }
-   return { user: null, expired: null }
-}
-
-export async function auth(req: Request): Promise<IUser> {
-   // eslint-disable-next-line prefer-const
-   let {user, expired} = parseAuthorization(req);
-   if (expired) {
-      // jwt expired -> get user info from provided username & password
-      user = await User.findOne({email: user.email, password: user.password}, {_id: 1, email: 1, password: 1, role: 1});
-
-      // if account password has been changed -> user not found -> token failed to renew -> return error
-      if (!user)
-         throw new Error("Invalid user");
-   }
-
-   if (!user)
-      throw new Error("Invalid user");
-
-   return user;
-}
-
-export default {
-   parseAuthorization,
-   auth,
-   apiError,
-   randomBoolean,
-   randomNumberInRange,
-   generateRandomCode,
-   getVersion
 }

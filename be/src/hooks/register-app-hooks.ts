@@ -1,12 +1,12 @@
 import appHooks from "./index"
-import {Types} from 'mongoose';
+import {Types} from 'mongoose'
 
 export default function () {
-   appHooks.on('user:online', async function(uid: Types.ObjectId) {
-      console.log('user', uid, 'online');
-   });
+   appHooks.on('user:online', async function(userId: Types.ObjectId) {
+      console.log('user', userId, 'online')
+   })
 
-   appHooks.on('user:offline', async function(uid: Types.ObjectId) {
-      console.log('user', uid, 'offline');
-   });
+   appHooks.on('user:offline', async function(userId: Types.ObjectId) {
+      console.log('user', userId, 'offline')
+   })
 }

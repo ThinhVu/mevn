@@ -158,9 +158,9 @@ function createSocketServer(httpServer) {
    return io
 }
 
-export default function socketIoPlugin(app) {
+export default function useSocketIO(app) {
    if (!process.env.USE_SOCKET_IO) return
    console.log('[plugin] socket-io')
    // @ts-ignore
-   global.io = createSocketServer(app.httpServer);
+   global.io = createSocketServer(app.$httpServer)
 }

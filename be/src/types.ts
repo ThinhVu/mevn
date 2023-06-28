@@ -6,27 +6,11 @@ export enum UserRole {
   Admin = 'Admin'
 }
 
-export interface AuthUser {
+export interface IAuthUser {
   _id: Types.ObjectId,
   email: string,
   password: string,
   role: UserRole
-}
-
-export interface AuthRequest extends Request {
-  user: AuthUser
-}
-
-export interface IAuthUser {
-   _id: Types.ObjectId;
-   phone: string;
-   password: string;
-}
-
-export interface IAuthAdmin {
-   _id: Types.ObjectId;
-   email: string;
-   password: string;
 }
 
 export interface IAuthData {
@@ -140,4 +124,5 @@ export interface IUser extends IPublicUserInfo {
    password: string;
    resetPasswordToken?: string;
    createdAt: Date;
+   test: boolean;
 }
