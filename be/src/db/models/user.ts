@@ -1,5 +1,9 @@
-import {model, Schema} from 'mongoose';
-import {IUser, UserRole} from '../../types';
+import {model, Schema, Types} from 'mongoose';
+
+export enum UserRole {
+   Regular = 'Regular',
+   Admin = 'Admin'
+}
 
 const UserSchema = new Schema({
    avatar: String,
@@ -38,5 +42,22 @@ const UserSchema = new Schema({
    },
    test: Boolean,
 }, {versionKey: false});
+
+export interface IPublicUserInfo {
+   avatar?: string;
+   role?: UserRole;
+   fullName?: string;
+   username?: string;
+   email?: string;
+}
+
+export interface IUser extends IPublicUserInfo {
+   _id: Types.ObjectId;
+   emailVerified?: boolean;
+   password: string;
+   resetPasswordToken?: string;
+   createdAt: Date;
+   test: boolean;
+}
 
 export default model<IUser>('User', UserSchema);

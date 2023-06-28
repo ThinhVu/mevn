@@ -1,6 +1,5 @@
-import UserModel from "../db/models/user";
+import UserModel, {UserRole} from "../db/models/user";
 import {createUser} from "../business-logic/user";
-import {UserRole} from "../types";
 import bcrypt from 'bcrypt';
 
 export default async function useAdmin() {

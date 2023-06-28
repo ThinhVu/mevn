@@ -1,7 +1,7 @@
 import {create, update, remove} from "../business-logic/file-system/file";
 import {addFileToFolder, removeFileFromFolder} from "../business-logic/file-system/folder";
 import DataParser from "../utils/data-parser";
-import {requireAdmin} from "../middlewares/auth";
+import {requireAdmin, UserRequest} from "../middlewares/auth";
 import $ from "../utils/safe-call";
 import Routerex from '@tvux/routerex';
 
@@ -51,7 +51,7 @@ export default async function useFile(parentRouter) {
             type: 'object',
          }
       }
-   }, requireAdmin, $(async req => {
+   }, requireAdmin, $(async (req: UserRequest) => {
       const {name, src, size, type, thumbnail, folderId} = req.body
       const file = await create({name, src, size, type, thumbnail, createdAt: new Date()})
       if (folderId)
@@ -82,7 +82,7 @@ export default async function useFile(parentRouter) {
             type: 'object',
          }
       }
-   }, requireAdmin, $(async req => {
+   }, requireAdmin, $(async (req: UserRequest) => {
       return update(DataParser.objectId(req.params.id), req.body.change)
    }))
    router.delete('/:id', {
@@ -102,7 +102,7 @@ export default async function useFile(parentRouter) {
             type: 'object',
          }
       }
-   }, requireAdmin, $(async req => {
+   }, requireAdmin, $(async (req: UserRequest) => {
       const folderId = DataParser.objectId(req.query.folderId, false)
       const fileId = DataParser.objectId(req.params.id)
       const data = await remove(fileId)

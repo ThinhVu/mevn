@@ -16,8 +16,7 @@ import {buildEmailPayload, sendEmail} from "../utils/email-util";
 import {genToken} from "../utils/auth-util";
 import To from "../utils/data-parser";
 import $ from "../utils/safe-call";
-import {requireUser} from "../middlewares/auth";
-import {UserRequest} from "../types";
+import {requireUser, UserRequest} from "../middlewares/auth";
 import Routerex from '@tvux/routerex';
 
 export default async function useUser(parentRouter) {

@@ -1,6 +1,19 @@
 import {handleApiError} from "../utils/common-util"
 import {parseAuthorization} from "../utils/auth-util"
-import {UserRole} from "../types"
+import {UserRole} from "../db/models/user";
+import {Request} from "express";
+import {Types} from "mongoose";
+
+export interface IAuthUser {
+   _id: Types.ObjectId,
+   email: string,
+   password: string,
+   role: UserRole
+}
+
+export interface UserRequest extends Request {
+   user: IAuthUser
+}
 
 export async function requireAdmin(req, res, next) {
    try {

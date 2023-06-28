@@ -2,7 +2,12 @@ import {Request} from "express";
 import jwt from 'jsonwebtoken';
 // @ts-ignore
 import CryptoJS from 'crypto-js';
-import {IAuthData, IUser} from "../types";
+import {IUser} from "../db/models/user";
+
+export interface IAuthData {
+   user: Record<string, any>,
+   expired: boolean
+}
 
 export function parseAuthorization(req: Request): IAuthData {
    const authorization = req.headers.authorization
