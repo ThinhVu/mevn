@@ -1,5 +1,5 @@
 <script lang="jsx">
-import {compact, last} from 'lodash-es';
+import {compact, last, trim} from 'lodash-es';
 import dayjs from 'dayjs';
 import {computed} from 'vue';
 
