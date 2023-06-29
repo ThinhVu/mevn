@@ -13,7 +13,9 @@
         <td>{{kv.key}}</td>
         <td>
           <div class="fr ai-c jc-sb fg-4px">
-            {{ ((!kv.showValue) && kv.encrypted) || kv.value}}
+            <span class="ovf-h max-w-500px" style="text-overflow: ellipsis;">
+              {{ ((!kv.showValue) && kv.encrypted) || kv.value}}
+            </span>
             <div v-if="kv.isSecret" class="px-1 py-1 br-1 clickable h-24px w-24px bc:#3c5bb7">
               <t-icon @click="kv.showValue = !kv.showValue">fas fa-search@16px:#fff</t-icon>
             </div>
