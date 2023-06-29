@@ -131,7 +131,7 @@ const chartData = computed(() => {
   for (let i = 0; i<apiMetricHistory.value.length; ++i) {
     const {metric} = apiMetricHistory.value[i]
     if (i === 0) {
-      const metricKeys = Object.keys(metric)
+      const metricKeys = Object.keys(metric || {})
       for (const key of metricKeys) {
         immediate[key] = [metric[key].n]
       }
