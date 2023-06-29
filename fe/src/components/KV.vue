@@ -76,13 +76,13 @@ async function loadConfigs() {
 onBeforeMount(loadConfigs)
 onMounted(() => {
   console.log('watch system-config');
-  window.$socket.emit('watch', 'system-config');
-  window.$socket.on('system-config:set', () => loadConfigs())
-  window.$socket.on('system-config:unset', () => loadConfigs())
+  window.$socket.emit('watch', 'kv');
+  window.$socket.on('kv:set', loadConfigs)
+  window.$socket.on('kv:unset', loadConfigs)
 })
 onBeforeUnmount(() => {
-  window.$socket.emit('un-watch', 'system-config');
-  window.$socket.off('system-config:set')
-  window.$socket.off('system-config:unset')
+  window.$socket.emit('un-watch', 'kv');
+  window.$socket.off('kv:set', loadConfigs)
+  window.$socket.off('kv:unset', loadConfigs)
 })
 </script>

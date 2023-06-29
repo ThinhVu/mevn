@@ -76,7 +76,7 @@ export default async function useKv(parentRouter) {
       const {value, isSecret} = req.body
       const cfg = await set(req.params.key, value, isSecret)
       // @ts-ignore
-      global.io.to('system-config').emit(`system-config:set`, cfg)
+      global.io.to('kv').emit(`kv:set`, cfg)
       return cfg
    }))
 
@@ -104,7 +104,7 @@ export default async function useKv(parentRouter) {
       const deleted = deletedCount === 1
       if (deleted) {
          // @ts-ignore
-         global.io.to('system-config').emit(`system-config:unset`, cfg)
+         global.io.to('kv').emit(`kv:unset`, cfg)
       }
       return deleted
    }));
