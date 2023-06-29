@@ -14,12 +14,13 @@ export async function getAll() {
 }
 
 export async function get(k) {
-   return KV.findOne({key: k})
+   const doc = await KV.findOne({key: k}).lean()
+   return doc || {_id: undefined, key: k, value: undefined}
 }
 
 export async function getValue(k) {
    const kvDoc = await KV.findOne({key: k});
-   if (!kvDoc) return null;
+   if (!kvDoc) return undefined
    return kvDoc.isSecret ? decrypt(kvDoc.value, process.env.KV_SECRET) : kvDoc.value;
 }
 
