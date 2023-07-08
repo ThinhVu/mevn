@@ -12,11 +12,11 @@ const schema = new Schema({
 
 schema.index({ key: 'hashed' })
 
-export interface ISystemConfig {
+export interface Kv {
    _id: Types.ObjectId;
    key: string;
    value: string;
    isSecret?: boolean
 }
 
-export default model<ISystemConfig>('SystemConfig', schema)
+export default model<Kv>('KV', schema)
