@@ -27,13 +27,12 @@ export default async function useRoutes(app) {
    const apiPath = '/api'
    app.use(apiPath,
       express.json({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb'}),
-      express.urlencoded({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb'}),
+      express.urlencoded({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb', extended: true}),
       router)
    const document = await generateApiDocument(apiPath, router)
    console.log('[useDocumentGenerator] document generated!')
    app.get('/docs', (req, res) => res.send(document.html))
    app.get('/docs/index.html', (req, res) => res.send(document.html))
    app.get('/docs/postman.json', (req, res) => res.send(document.postman))
-
    await useHmmApp(app)
 }
