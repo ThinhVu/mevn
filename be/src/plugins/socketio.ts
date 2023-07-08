@@ -29,19 +29,19 @@ async function createSocketServer(app) {
    const httpServer = app.$httpServer
    const io = new Server(httpServer, {
       cors: {
-         origin: (process.env.SOCKET_IO__CORS_ORIGIN || '').split(','),
+         origin: (process.env.SOCKET_IO_CORS_ORIGIN || '').split(','),
          methods: ['GET', 'POST', 'DELETE', 'PUT'],
          credentials: true
       }
    })
 
    // socket io adapter
-   const useSocketIoAdapter = process.env.SOCKET_IO_USE_REDIS_ADAPTER || process.env.SOCKET_IO_USE_MONGODB_ADAPTER
-   if (process.env.SOCKET_IO_USE_REDIS_ADAPTER) {
+   const useSocketIoAdapter = process.env.USE_SOCKET_IO_REDIS_ADAPTER || process.env.USE_SOCKET_IO_MONGO_ADAPTER
+   if (process.env.USE_SOCKET_IO_REDIS_ADAPTER) {
       console.log('[socket-io] use redis adapter')
       const redisAdapter = {
-         url: process.env.SOCKET_IO__REDIS_ADAPTER_URL,
-         password: process.env.SOCKET_IO__REDIS_ADAPTER_PASSWORD
+         url: process.env.SOCKET_IO_REDIS_ADAPTER_URL,
+         password: process.env.SOCKET_IO_REDIS_ADAPTER_PASSWORD
       }
       const pubClient = createClient(redisAdapter)
       const subClient = pubClient.duplicate()
@@ -50,9 +50,9 @@ async function createSocketServer(app) {
          // @ts-ignore
          io.adapter(createRedisAdapter(pubClient, subClient))
       })
-   } else if (process.env.SOCKET_IO_USE_MONGODB_ADAPTER) {
+   } else if (process.env.USE_SOCKET_IO_MONGO_ADAPTER) {
       console.log('[socket-io] use mongodb adapter')
-      const mongoCollection = app.$db.connections[0].db.collection(process.env.SOCKET_IO__MONGODB_ADAPTER_COLLECTION || 'socket-io');
+      const mongoCollection = app.$db.connections[0].db.collection(process.env.SOCKET_IO_MONGODB_ADAPTER_COLLECTION || 'socket-io');
       await mongoCollection.createIndex(
          {createdAt: 1},
          {expireAfterSeconds: 3600, background: true}
@@ -63,8 +63,8 @@ async function createSocketServer(app) {
 
    // socket io admin
    const instrumentOptions = {
-      user: process.env.SOCKET_IO__INSTRUMENT_USERNAME,
-      pass: process.env.SOCKET_IO__INSTRUMENT_PASSWORD
+      user: process.env.SOCKET_IO_INSTRUMENT_USERNAME,
+      pass: process.env.SOCKET_IO_INSTRUMENT_PASSWORD
    }
    if (instrumentOptions.user && instrumentOptions.pass) {
       instrument(io, {
@@ -80,7 +80,7 @@ async function createSocketServer(app) {
       const token = get(socket, 'handshake.query.token')
       if (token) {
          try {
-            const {user} = jwt.decode(token, process.env.JWT_SECRET)
+            const {user} = jwt.decode(token)
             if (user) {
                // @ts-ignore
                socket.authUser = user

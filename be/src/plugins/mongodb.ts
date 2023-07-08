@@ -7,7 +7,7 @@ import {getVersion} from "../utils/common-util";
 async function connect(app) {
    try {
       console.log('[mongodb] Connecting to server...')
-      app.$db = await mongoose.connect(process.env.MONGO_URL, {connectTimeoutMS: 10000})
+      app.$db = await mongoose.connect(process.env.DATABASE_URL, {connectTimeoutMS: 10000})
       console.log('[mongodb] Connected to server!')
    } catch (error) {
       console.error('[mongodb] Failed to connect. Reason:', error)
