@@ -1,6 +1,6 @@
 {
   "name": "mevn-be",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "dev-be": "NODE_ENV=development ts-node-dev --respawn --transpile-only --watch \"src/**\" --poll src/index.ts",
