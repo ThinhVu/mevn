@@ -2,7 +2,7 @@ import {z} from "zod";
 import dotenv from "dotenv";
 dotenv.config();
 
-const envVariables = z.object({
+const envVar = z.object({
    ADMIN_CODE: z.string(),
    DATABASE_URL: z.string(),
    EMAIL_HOST: z.string(),
@@ -36,11 +36,11 @@ const envVariables = z.object({
    USE_SOCKET_IO_REDIS_ADAPTER: z.string(),
 })
 
-envVariables.parse(process.env)
+envVar.parse(process.env)
 
 declare global {
    namespace NodeJS {
       interface ProcessEnv
-         extends z.infer<typeof envVariables> {}
+         extends z.infer<typeof envVar> {}
    }
 }

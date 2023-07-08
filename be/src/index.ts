@@ -1,4 +1,4 @@
-import './envVariables';
+import './env-var';
 import express from "express"
 import cors from "cors"
 import compression from "compression"
