@@ -3,7 +3,8 @@ const child_process = require('child_process');
 const packageJson = require('./package.json');
 
 const {name, version} = packageJson;
-const imageTag = `${process.env.DOCKER_REGISTRY}/${name}:${version}.${Date.now()}`;
+const registry = '{your-registry-url}'
+const imageTag = `${registry}/${name}:${version}.${Date.now()}`;
 
 const cmds = [
   `docker build -t ${imageTag} .`,
