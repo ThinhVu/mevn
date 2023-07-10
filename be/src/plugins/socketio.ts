@@ -80,7 +80,7 @@ async function createSocketServer(app) {
       const token = get(socket, 'handshake.query.token')
       if (token) {
          try {
-            const {user} = jwt.decode(token)
+            const {user} = jwt.verify(token, process.env.JWT_SECRET)
             if (user) {
                // @ts-ignore
                socket.authUser = user

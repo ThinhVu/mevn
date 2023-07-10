@@ -15,7 +15,7 @@ export function parseAuthorization(req: Request): IAuthData {
       return {user: null, expired: null}
 
    const jwtToken = req.headers.authorization.split(' ')[1];
-   const data = jwt.decode(jwtToken) as { user: Record<string, unknown>, exp: number, iat: number }
+   const data = jwt.verify(jwtToken, process.env.JWT_SECRET) as { user: Record<string, unknown>, exp: number, iat: number }
    if (!data)
       return {user: null, expired: null}
 
