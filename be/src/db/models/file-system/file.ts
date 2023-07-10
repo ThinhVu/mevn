@@ -1,6 +1,6 @@
 import {model, Schema, Types} from 'mongoose';
 
-const File = new Schema({
+const schema = new Schema({
    name: String,
    src: String,
    size: Number,
@@ -19,4 +19,4 @@ export interface IFile {
    createdAt: Date;
 }
 
-export default model<IFile>('File', File);
+export default model<IFile>('File', schema);
