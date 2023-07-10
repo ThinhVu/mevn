@@ -11,8 +11,15 @@ import useHmmApp from './hmm.app'
 import Routerex from '@tvux/routerex';
 import generateApiDocument from '@tvux/exdogen';
 import express from "express";
+import mongoSanitize from "express-mongo-sanitize"
+import helmet from "helmet"
+import xss from "xss-clean"
+import rateLimit from "express-rate-limit"
+import hpp from "hpp"
 
 export default async function useRoutes(app) {
+   await useHmmApp(app)
+
    const router = Routerex()
    await useDevServer(router)
    await useApiMetricPlugin(router)
@@ -23,16 +30,23 @@ export default async function useRoutes(app) {
    await useKv(router)
    await useFile(router)
    await useFolder(router)
-   console.log('[useDocumentGenerator] generating document...')
+   const limiter = rateLimit({
+      windowMs: 10 * 60 * 1000, // 10 minutes
+      max: 200
+   })
+   app.use(limiter)
+   app.use(express.json({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb'}))
+   app.use(express.urlencoded({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb'}))
+   app.use(mongoSanitize())
+   app.use(helmet())
+   app.use(xss())
+   app.use(hpp())
    const apiPath = '/api'
-   app.use(apiPath,
-      express.json({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb'}),
-      express.urlencoded({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb', extended: true}),
-      router)
+   app.use(apiPath, router)
+   console.log('[useDocumentGenerator] generate document')
    const document = await generateApiDocument(apiPath, router)
-   console.log('[useDocumentGenerator] document generated!')
    app.get('/docs', (req, res) => res.send(document.html))
    app.get('/docs/index.html', (req, res) => res.send(document.html))
    app.get('/docs/postman.json', (req, res) => res.send(document.postman))
-   await useHmmApp(app)
+   console.log('[useDocumentGenerator] document generated!')
 }
