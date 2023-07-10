@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import _ from 'lodash';
 
 let mailSender, mailConfig: any;
 try {
@@ -19,21 +20,21 @@ try {
    console.error('[email] failed to initialize mail sender', e)
 }
 
-export const sendEmail = ({ to, subject, html }) => {
+export const sendEmail = ({to, subject, html = undefined, text = undefined}) => {
    return new Promise((resolve, reject) => {
       if (!mailConfig.auth.user || !mailConfig.auth.pass) {
          console.log('[email] You need to provide EMAIL_USER and EMAIL_PASSWORD environment variables for sending emails.');
          return resolve('An error occurred while sending an email: (Credentials missing).');
       }
 
-      mailSender.sendMail(
-         {
-            from: mailConfig.auth.user,
-            to,
-            subject,
-            html
-         },
-         function (err, info) {
+      const mailData = _.omitBy({
+         from: mailConfig.auth.user,
+         to,
+         subject,
+         html,
+         text
+      }, _.isNil)
+      mailSender.sendMail(mailData, function (err, info) {
             if (err) {
                console.log('[email] An error occurred while sending an email: ', err);
                return reject(err);
@@ -45,7 +46,7 @@ export const sendEmail = ({ to, subject, html }) => {
    });
 };
 
-export const buildEmailPayload = (metadata: { content: string, to: string, subject: string}) => {
+export const buildEmailPayload = (metadata: { content: string, to: string, subject: string }) => {
    return {
       to: metadata.to,
       subject: metadata.subject,
@@ -61,5 +62,6 @@ export const buildEmailPayload = (metadata: { content: string, to: string, subje
      <pre style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">${metadata.content}</pre>
     </body>
 </html>
-`}
+`
+   }
 }
