@@ -43,7 +43,8 @@ export default async function useRoutes(app) {
    app.use(hpp())
    const apiPath = '/api'
    app.use(apiPath, router)
-   console.log('[useDocumentGenerator] generate document')
+   console.log('[route] useDocumentGenerator')
+   console.log('[useDocumentGenerator] document generating...')
    const document = await generateApiDocument(apiPath, router)
    app.get('/docs', (req, res) => res.send(document.html))
    app.get('/docs/index.html', (req, res) => res.send(document.html))
