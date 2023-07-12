@@ -12,10 +12,6 @@ import Routerex from '@tvux/routerex';
 import generateApiDocument from '@tvux/exdogen';
 import express from "express";
 import mongoSanitize from "express-mongo-sanitize"
-import helmet from "helmet"
-import xss from "xss-clean"
-import rateLimit from "express-rate-limit"
-import hpp from "hpp"
 
 export default async function useRoutes(app) {
    await useHmmApp(app)
@@ -30,17 +26,9 @@ export default async function useRoutes(app) {
    await useKv(router)
    await useFile(router)
    await useFolder(router)
-   const limiter = rateLimit({
-      windowMs: 10 * 60 * 1000, // 10 minutes
-      max: 200
-   })
-   app.use(limiter)
    app.use(express.json({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb'}))
    app.use(express.urlencoded({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb', extended: true}))
    app.use(mongoSanitize())
-   app.use(helmet())
-   app.use(xss())
-   app.use(hpp())
    const apiPath = '/api'
    app.use(apiPath, router)
    console.log('[route] useDocumentGenerator')
