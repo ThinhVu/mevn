@@ -25,8 +25,9 @@ async function cleanup() {
 }
 
 export default async function useDevServer(parentRouter) {
-
    if (!process.env.USE_DEV_SERVER) return
+   console.log('[route] useDevServer')
+
    await cleanup()
    await initUser()
 
