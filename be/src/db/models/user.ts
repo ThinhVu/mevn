@@ -24,6 +24,7 @@ const UserSchema = new Schema({
    },
    resetPasswordToken: String,
    createdAt: Date,
+   fcm: String,
    // profile info
    username: {
       type: String,
@@ -57,6 +58,7 @@ export interface IUser extends IPublicUserInfo {
    password: string;
    resetPasswordToken?: string;
    createdAt: Date;
+   fcm: string;
    test: boolean;
 }
 

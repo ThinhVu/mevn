@@ -1,10 +1,10 @@
 import {model, Schema, Types} from 'mongoose';
 
 const Notification = new Schema({
-   toUser: Schema.Types.ObjectId,
+   to: [Schema.Types.ObjectId],
    at: Date,
    event: String,
-   metadata: Object,
+   data: Object,
    seen: Boolean
 }, {versionKey: false})
 
