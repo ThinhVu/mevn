@@ -36,7 +36,7 @@ export default async function useRoutes(app) {
    })
    app.use(limiter)
    app.use(express.json({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb'}))
-   app.use(express.urlencoded({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb'}))
+   app.use(express.urlencoded({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb', extended: true}))
    app.use(mongoSanitize())
    app.use(helmet())
    app.use(xss())
