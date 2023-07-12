@@ -4,7 +4,7 @@ import _ from 'lodash';
 let mailSender, mailConfig: any;
 try {
    mailConfig = {
-      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+      host: process.env.EMAIL_HOST,
       port: +process.env.EMAIL_PORT || 587,
       auth: {
          user: process.env.EMAIL_USER,
@@ -12,7 +12,7 @@ try {
       },
       secureConnection: false,
       secure: false, // process.env.NODE_ENV === 'production',
-      tls: { ciphers: 'SSLv3' },
+      tls: {ciphers: 'SSLv3'},
    }
    console.log('[email] init mail config')
    mailSender = nodemailer.createTransport(mailConfig)

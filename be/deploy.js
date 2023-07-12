@@ -1,4 +1,3 @@
-require('dotenv').config();
 const child_process = require('child_process');
 const packageJson = require('./package.json');
 

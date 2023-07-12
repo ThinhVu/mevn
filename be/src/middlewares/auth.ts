@@ -12,7 +12,10 @@ export interface IAuthUser {
 }
 
 export interface UserRequest extends Request {
-   user: IAuthUser
+   user: IAuthUser,
+   body: any,
+   params: any,
+   query: any
 }
 
 export async function requireAdmin(req, res, next) {

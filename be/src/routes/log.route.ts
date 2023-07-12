@@ -4,6 +4,8 @@ import {requireAdmin} from "../middlewares/auth";
 import Routerex from '@tvux/routerex'
 
 export default async function useLog(parentRouter) {
+   if (!process.env.USE_LOGGER) return
+
    console.log('[route] useLog')
 
    const router = Routerex()
@@ -15,7 +17,7 @@ export default async function useLog(parentRouter) {
       response: {200: {type: 'array', items: {type: 'string'}}}
    }, requireAdmin, $(async () => getLogs()))
    router.get('/file/:logFile', {
-      schema: {params:{logFile: 'string'}},
+      schema: {params: {logFile: 'string'}},
       title: 'Read specified log file',
       desc: 'Read specified log file',
       response: {200: {type: 'string'}}

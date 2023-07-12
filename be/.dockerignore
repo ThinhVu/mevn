@@ -1,21 +1,39 @@
-# Dependencies
-node_modules/
-
-# IDE
-.idea/
-.vscode/
-
-# Misc
-.env
-.DS_Store
-
-# Package manager
+# Exclude development files and directories
+node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Exclude build artifacts
+dist
+build
+*.log
+
+# Exclude version control directories
+.git
+.svn
+
+# Exclude editor-specific files
+.vscode
+.idea
+
+# Exclude test files
+*.spec.js
+*.test.js
+jest.config.js
+/tests
+
+# Exclude documentation files
+docs
+
+# Misc
+.env
+.DS_Store
 /logs/
 /build/
 /drawio/
 /postman/
 /tests/
+deploy.js
+CHANGELOG.md
+README.md
