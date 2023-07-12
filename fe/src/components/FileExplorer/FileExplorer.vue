@@ -1,14 +1,15 @@
-<script lang="tsx">
+<script lang="jsx">
 import {get} from 'lodash-es';
 import CreateFolderDlg from './CreateFolderDlg.vue';
 import IcoFolder from '@/assets/images/folder.svg';
 import UploadZone from '@/components/FileUpload/UploadZone.vue';
+import FileUploadProgressDialog from '@/components/FileUpload/FileUploadProgressDialog.vue';
 import File from './File.vue';
 import {feAPI} from '@/api/index.js';
 import {ref, inject, onMounted} from 'vue';
 
 export default {
-  components: {File, UploadZone},
+  components: {File, UploadZone, FileUploadProgressDialog},
   setup() {
     const folderTree = ref([])
     const selectedFolder = ref();
@@ -42,10 +43,12 @@ export default {
         await loadFolderTree();
       }
     }
-    const addNewFile = async (files) => {
+    const addNewFile = async (file) => {
       try {
-        const createdItems = await Promise.all(files.map(file => feAPI.file.create(file, selectedFolder.value && selectedFolder.value._id)));
-        selectedFolder.value.files.push(...createdItems);
+        console.log('[FileExplorer] addNewFile', file)
+        const createdFile = await feAPI.file.create(file, selectedFolder.value && selectedFolder.value._id)
+        selectedFolder.value.files.push(createdFile);
+        console.log('[addNewFile] Upload completed');
         notification.success('[addNewFile] Upload completed');
       } catch (e) {
         console.error(e, '[addNewFile]')
@@ -83,7 +86,7 @@ export default {
     </div>
 
     // files
-    const LOADING_FILES_KEY = Symbol('loading-file')
+    const LOADING_FILES_KEY = 'loading-file'
     const onFileClicked = async (file) => {
       console.log('onFileClicked', file)
       dialog.show({
@@ -98,28 +101,32 @@ export default {
       })
     }
     const loadFilesInSelectedFolder = async () => {
+      console.log('loadFilesInSelectedFolder')
       loading.begin(LOADING_FILES_KEY)
       try {
         selectedFolder.value.files = await feAPI.folder.getFiles(selectedFolder.value._id)
+        console.log('selectedFolder.value.files', selectedFolder.value.files)
       } catch (e) {
         console.warn(e);
       }
+      console.log('loadFilesInSelectedFolder completed')
       loading.end(LOADING_FILES_KEY)
     }
     const renderFiles = () =>
-      <t-loading
-          key={LOADING_FILES_KEY}
-          v-slots={{
-            default: () => (
-                <div class="w-100 h-100 ovf-y-s sb-h px-1 py-1 grid"
-                     style="grid-template-columns: repeat(auto-fill, 100px); grid-template-rows: 140px; grid-auto-rows: 140px; gap: 0.5rem">
-                  {get(selectedFolder.value, 'files', []).map(v => <file {...v} onClick={() => onFileClicked(v)}/>)}
-                </div>
-            )
-      }}/>
+        <t-loading
+            action={LOADING_FILES_KEY}
+            class="w-100 h-100"
+            v-slots={{
+              default: () => (
+                  <div class="w-100 h-100 ovf-y-s sb-h px-1 py-1 grid"
+                       style="grid-template-columns: repeat(auto-fill, 100px); grid-template-rows: 140px; grid-auto-rows: 140px; gap: 0.5rem">
+                    {get(selectedFolder.value, 'files', []).map(v => <file {...v} onClick={() => onFileClicked(v)}/>)}
+                  </div>
+              )
+            }}/>
 
     return () => <div class="fc w-100 h-100">
-      <div class="fr ai-c fg-4px px-3 h-50px" style="border-bottom: 1px solid #ddd">
+      <div class="fr ai-c fg-8px px-2 h-50px" style="border-bottom: 1px solid #ddd">
         <upload-zone multiple onUploaded={addNewFile}>
           <t-btn secondary>Upload</t-btn>
         </upload-zone>
@@ -132,6 +139,7 @@ export default {
           {renderFolderTree(folderTree.value, false)}
         </div>
         {renderFiles()}
+        <FileUploadProgressDialog/>
       </div>
     </div>
   }

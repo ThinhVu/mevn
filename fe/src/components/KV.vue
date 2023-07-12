@@ -26,7 +26,7 @@
             <t-btn edit class="fn-btn" @click="prepareEdit(kv)">
               <t-icon>fas fa-edit@20px:#fff</t-icon>
             </t-btn>
-            <t-btn delete class="fn-btn" @click="unsetConfig(kv)">
+            <t-btn delete class="fn-btn" @click="unsetKV(kv)">
               <t-icon>fas fa-times@20px:#fff</t-icon>
             </t-btn>
           </div>
@@ -38,12 +38,12 @@
       <t-text class="w-100" placeholder="Key" label="Key" v-model="key"/>
       <t-text class="w-100" placeholder="Value" label="Value" v-model="value"/>
       <t-switch v-model="isSecret" label="Is Secret"/>
-      <t-btn @click="setConfig" save class="min-w-100px">Add</t-btn>
+      <t-btn @click="setKV" save class="min-w-100px">Add</t-btn>
     </div>
   </section>
 </template>
 <script setup>
-import {kvAPI} from '../api';
+import {kvAPI} from '@/api';
 import {ref, onMounted, onBeforeMount, onBeforeUnmount, inject} from 'vue'
 
 const {msgBox} = inject('TSystem')
@@ -54,37 +54,34 @@ const key = ref('')
 const value = ref('')
 const isSecret = ref(false)
 
-function inspect(kv) {
-  console.log(kv)
-}
 function prepareEdit(kv) {
   key.value = kv.key
   value.value = kv.value
 }
-function setConfig() {
+function setKV() {
   kvAPI.set(key.value, value.value, isSecret.value)
   key.value = ''
   value.value = ''
 }
-async function unsetConfig(config) {
+async function unsetKV(config) {
   const answer = await msgBox.show('Delete', `Are you sure you want to unset "${config.key}"?`)
   if (answer !== msgBox.Results.yes) return
   await kvAPI.unset(config.key)
 }
-async function loadConfigs() {
-  console.log('load config');
+async function loadKV() {
+  console.log('load kv');
   kvs.value = await kvAPI.gets()
 }
-onBeforeMount(loadConfigs)
+onBeforeMount(loadKV)
 onMounted(() => {
-  console.log('watch system-config');
+  console.log('watch kv');
   window.$socket.emit('watch', 'kv');
-  window.$socket.on('kv:set', loadConfigs)
-  window.$socket.on('kv:unset', loadConfigs)
+  window.$socket.on('kv:set', loadKV)
+  window.$socket.on('kv:unset', loadKV)
 })
 onBeforeUnmount(() => {
   window.$socket.emit('un-watch', 'kv');
-  window.$socket.off('kv:set', loadConfigs)
-  window.$socket.off('kv:unset', loadConfigs)
+  window.$socket.off('kv:set', loadKV)
+  window.$socket.off('kv:unset', loadKV)
 })
 </script>

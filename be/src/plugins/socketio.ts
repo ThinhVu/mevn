@@ -29,7 +29,7 @@ const UserId_SocketId_Map = {}
 async function createSocketServer(app) {
    console.log('[socket.io] createSocketServer')
    const httpServer = app.$httpServer
-   const corsOrigins = (process.env.SOCKET_IO_CORS_ORIGIN || '').split(',')
+   const corsOrigins = (process.env.SOCKET_IO_CORS_ORIGIN || 'http://localhost:5173,http://127.0.0.1:5173' /*VITE*/).split(',')
    console.log('[socket.io] corsOrigins', corsOrigins)
    const transports = (process.env.SOCKET_IO_TRANSPORTS_METHOD || 'polling,websocket').split(',')
    console.log('[socket.io] transports', transports)
@@ -107,15 +107,17 @@ async function createSocketServer(app) {
       }
    })
    adminNs.on('connection', socket => {
+      console.log('[socket.io/admin] socket connected')
+
       socket.on('watch', (...args) => {
          const gr = args.join(':')
-         console.log('[socket-io] watch', gr)
+         console.log('[socket.io] watch', gr)
          socket.join(gr)
       })
 
       socket.on('un-watch', (...args) => {
          const gr = args.join(':')
-         console.log('[socket-io] unwatch', gr)
+         console.log('[socket.io] unwatch', gr)
          socket.leave(gr)
       })
    })
