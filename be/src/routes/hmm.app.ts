@@ -27,7 +27,7 @@ export default function hmm(app) {
          try {
             const qry = jsonFn.parse(req.body.toString());
             const rs = await hmm(qry)
-            res.send(rs)
+            res.json(rs)
          } catch (e) {
             console.error(e)
             handleApiError(e, res)

@@ -8,7 +8,7 @@ export default function safeCall(fn: SafeCallHandler): SafeCallResponse  {
   return async (req, res, next) => {
     try {
       const rs = await fn(req, res, next)
-      res.send(rs)
+      res.json(rs)
     } catch(e) {
       handleApiError(e, res)
     }
