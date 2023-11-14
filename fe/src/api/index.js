@@ -78,10 +78,6 @@ export const userAPI = {
 }
 
 export const systemAPI = {
-  getLogs: async () => exec(() => axios.get(`${API_URL}/api/log`, axiosOpts)),
-  getLog: async logFile => exec(() => axios.get(`${API_URL}/api/log/file/${logFile}`, axiosOpts)),
-  getLogSetting: async () => exec(() => axios.get(`${API_URL}/api/log/setting`, axiosOpts)),
-  updateLogSetting: async ({enable, maximumLogLine, keepLogInDays}) => exec(() => axios.post(`${API_URL}/api/log/setting`, { enable, maximumLogLine, keepLogInDays }, axiosOpts)),
   getApiCallCounter: async () => exec(() => axios.get(`${API_URL}/api/api-metric/`, axiosOpts)),
   getApiCallHistory: async (from, to) => exec(() => axios.get(`${API_URL}/api/api-metric/history?from=${from}&to=${to}`, axiosOpts)),
   healthCheck: async api_url => await axios.get(`${api_url}/health-check`, axiosOpts)

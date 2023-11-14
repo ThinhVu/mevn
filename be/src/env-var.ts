@@ -1,8 +1,5 @@
 import {z} from "zod";
-import dotenv from "dotenv";
-dotenv.config();
-
-const envVar = z.object({
+export const envVar = z.object({
    ADMIN_CODE: z.string(),
    DATABASE_URL: z.string(),
    EMAIL_HOST: z.string().optional(),
@@ -41,8 +38,6 @@ const envVar = z.object({
    USE_SOCKET_IO_MONGO_ADAPTER: z.string().optional(),
    USE_SOCKET_IO_REDIS_ADAPTER: z.string().optional(),
 })
-
-envVar.parse(process.env)
 
 declare global {
    namespace NodeJS {

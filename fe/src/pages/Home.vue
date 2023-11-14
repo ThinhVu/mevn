@@ -17,7 +17,6 @@ import {userAPI} from '@/api';
 import socket from '@/socket/socket';
 import AdminDashboard from "../components/AdminDashboard.vue";
 import KV from "../components/KV.vue";
-import SystemLog from "../components/SystemLog/SystemLog.vue";
 import FileExplorer from "../components/FileExplorer/FileExplorer.vue";
 import {user} from '@/app-state'
 import Auth from "./Auth.vue";
@@ -25,7 +24,6 @@ import Auth from "./Auth.vue";
 const sidebarItems = [
   {title: 'Dashboard', icon: 'fas fa-play@20px:#aaa', component: AdminDashboard},
   {title: 'KV', icon: 'fas fa-book@20px:#aaa', component: KV},
-  {title: 'System Log', icon: 'fas fa-align-justify@20px:#aaa', component: SystemLog},
   {title: 'File System', icon: 'fas fa-folder@20px:#aaa', component: FileExplorer}
 ]
 

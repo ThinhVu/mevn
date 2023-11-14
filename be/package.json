@@ -11,6 +11,7 @@
     "release": "datetime=$(date +\"%y%m%d%H%M%S\") && git tag -a v$datetime -m \"Release v$datetime\""
   },
   "dependencies": {
+    "@axiomhq/winston": "1.0.0-rc.1",
     "@socket.io/admin-ui": "^0.5.1",
     "@socket.io/mongo-adapter": "^0.3.0",
     "@socket.io/redis-adapter": "^8.1.0",
@@ -28,6 +29,7 @@
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.0",
     "debug": "^4.3.4",
+    "discord.js": "^14.14.1",
     "dotenv": "^8.2.0",
     "express": "^4.18.2",
     "express-mongo-sanitize": "^2.2.0",
@@ -45,6 +47,8 @@
     "semver": "^7.3.8",
     "socket.io": "^4.6.2",
     "socket.io-client": "^4.6.2",
+    "winston": "^3.11.0",
+    "winston-transport": "^4.6.0",
     "xss-clean": "^0.1.4",
     "zod": "^3.21.4"
   },
