@@ -2,25 +2,32 @@ import nodemailer from 'nodemailer';
 import _ from 'lodash';
 
 let mailSender, mailConfig: any;
-try {
-   mailConfig = {
-      host: process.env.EMAIL_HOST,
-      port: +process.env.EMAIL_PORT || 587,
-      auth: {
-         user: process.env.EMAIL_USER,
-         pass: process.env.EMAIL_PASSWORD,
-      },
-      secureConnection: false,
-      secure: false, // process.env.NODE_ENV === 'production',
-      tls: {ciphers: 'SSLv3'},
+
+function initEmailSender() {
+   try {
+      mailConfig = {
+         host: process.env.EMAIL_HOST,
+         port: +process.env.EMAIL_PORT || 587,
+         auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASSWORD,
+         },
+         secureConnection: false,
+         secure: false, // process.env.NODE_ENV === 'production',
+         tls: {ciphers: 'SSLv3'},
+      }
+      console.log('[email] init mail config')
+      mailSender = nodemailer.createTransport(mailConfig)
+   } catch (e) {
+      console.error('[email] failed to initialize mail sender', e)
    }
-   console.log('[email] init mail config')
-   mailSender = nodemailer.createTransport(mailConfig)
-} catch (e) {
-   console.error('[email] failed to initialize mail sender', e)
 }
 
 export const sendEmail = ({to, subject, html = undefined, text = undefined}) => {
+   if (!mailSender) {
+      initEmailSender()
+   }
+
    return new Promise((resolve, reject) => {
       if (!mailConfig.auth.user || !mailConfig.auth.pass) {
          console.log('[email] You need to provide EMAIL_USER and EMAIL_PASSWORD environment variables for sending emails.');
