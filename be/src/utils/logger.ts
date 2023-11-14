@@ -1,6 +1,6 @@
 import winston from 'winston'
 import { WinstonTransport as AxiomTransport } from '@axiomhq/winston';
-import { WinstonTransport as DiscordBotTransport } from "./discord-bot-transport";
+import { WinstonTransport as DiscordTransport } from "./discord-transport";
 
 const logger = winston.createLogger({
    level: process.env.LOG_LEVEL || 'error',
@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'production') {
    //    orgId: process.env.AXIOM_ORG,
    // }))
 
-   // logger.add(new DiscordBotTransport({
+   // logger.add(new DiscordTransport({
    //    webHookUrl: process.env.DISCORD_WEBHOOK_URL
    // }))
 

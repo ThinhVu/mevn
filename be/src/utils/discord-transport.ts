@@ -1,16 +1,20 @@
-import Transport from 'winston-transport';
+import Transport, {TransportStreamOptions} from 'winston-transport';
 import {WebhookClient} from 'discord.js'
+
+interface Options extends TransportStreamOptions {
+   webHookUrl: string
+}
 
 export class WinstonTransport extends Transport {
    client: WebhookClient;
 
-   constructor(opts) {
+   constructor(opts: Options) {
       super(opts);
       if (opts.webHookUrl) {
          this.client = new WebhookClient({ url: opts.webHookUrl })
       }
    }
-   log(info, callback) {
+   log(info: any, callback: any) {
       if (this.client) {
          setImmediate(async () => {
             try {

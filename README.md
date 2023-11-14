@@ -13,15 +13,14 @@ MEVN stand for MongoDB, Express, Vue, Nodejs. It's an all-in-one solution for bu
 - System config API: shared storage for both fe + be.
 - Notification api
 - Built-in API metric: meter api call, average ms spent on each API call.
-- Built-in logger: async log to file system.
 - Built-in cronjob workflow.
 - Built-in long task workflow.
 - App hooks.
-- Realtime: SocketIO + Redis, Rabbitmq.
+- Realtime: SocketIO + Redis
 - Tracing: jaeger (coming soon).
-- Monitoring: Prometheus + SocketIO admin.
-- Email delivery
+- Email sender
 - Docker script to built & publish container.
+- GitHub action auto build on release
 
 ### File Server (https://github.com/ThinhVu/file-server)
 - mongodb gridfs, s3
@@ -62,9 +61,6 @@ System config
 
 File System
 ![file-system.png](images%2Ffile-system-1.png)
-
-System log viewer
-![log-viewer.png](images%2Flog-viewer-1.png)
 
 ### Research
 - https://dev.to/samchon/typia-15000x-faster-validator-and-its-histories-1fmg
