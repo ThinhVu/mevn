@@ -7,7 +7,8 @@
     "build": "tsc",
     "start": "cd build && NODE_ENV=production node index.js",
     "ts:check": "tsc -p tsconfig.json --noEmit",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "release": "datetime=$(date +\"%y%m%d%H%M%S\") && git tag -a v$datetime -m \"Release v$datetime\""
   },
   "dependencies": {
     "@socket.io/admin-ui": "^0.5.1",
