@@ -28,12 +28,9 @@ export default async function useDevServer(parentRouter) {
    if (!process.env.USE_DEV_SERVER) return
    console.log('[route] useDevServer')
 
-   await cleanup()
-   await initUser()
-
    const router = Routerex()
 
-   router.post('/reset', $(async () => {
+   router.post('/init', $(async () => {
       await cleanup()
       await initUser()
       return true
