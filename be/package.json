@@ -40,7 +40,6 @@
     "lodash": "^4.17.21",
     "mongoose": "^7.0.3",
     "nodemailer": "^6.4.2",
-    "prom-client": "^14.1.1",
     "redis": "^4.6.5",
     "semver": "^7.3.8",
     "socket.io": "^4.6.2",

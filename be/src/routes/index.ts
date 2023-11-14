@@ -1,6 +1,5 @@
 import useHealthCheck from "./health-check.route";
 import useApiMetricPlugin from "./metrics.route";
-import usePrometheusPlugin from "./prometheus.route";
 import useDevServer from "./dev-server.route";
 import useUser from "./user.route";
 import useKv from "./kv.route";
@@ -19,7 +18,6 @@ export default async function useRoutes(app) {
    await useDevServer(router)
    await useApiMetricPlugin(router)
    await useHealthCheck(router)
-   await usePrometheusPlugin(router)
    await useUser(router)
    await useKv(router)
    await useFile(router)
