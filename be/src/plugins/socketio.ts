@@ -69,21 +69,6 @@ async function createSocketServer(app) {
       io.adapter(createMongoDbAdapter(mongoCollection, {addCreatedAtField: true}))
    }
 
-   // socket io admin
-   const instrumentOptions = {
-      user: process.env.SOCKET_IO_INSTRUMENT_USERNAME,
-      pass: process.env.SOCKET_IO_INSTRUMENT_PASSWORD
-   }
-   if (instrumentOptions.user && instrumentOptions.pass) {
-      instrument(io, {
-         auth: {
-            type: "basic",
-            username: instrumentOptions.user,
-            password: instrumentOptions.pass
-         },
-      })
-   }
-
    const adminNs = io.of('/admin');
    adminNs.use((socket: Socket, next) => {
       const token = _.get(socket, 'handshake.query.token')

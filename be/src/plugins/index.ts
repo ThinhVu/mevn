@@ -1,5 +1,4 @@
 import useMongoDb from "./mongodb";
-import useRabbitMQ from "./rabbitmq";
 import useSocketIO from './socketio'
 import useCronjob from "./cronjob";
 import useAdmin from "./admin";
@@ -9,7 +8,6 @@ export default async function usePlugin(app) {
    await useMongoDb(app)
    await useAdmin()
    await useCronjob()
-   await useRabbitMQ()
    await useSocketIO(app)
    console.log('---------------------------')
 }
