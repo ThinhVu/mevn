@@ -37,8 +37,6 @@ COPY --from=builder /app/build ./dist
 COPY --from=builder /app/ecosystem.config.js ./ecosystem.config.js
 
 # Install production dependencies only
-RUN npm install pm2 -g
-RUN npm install pnpm -g
 RUN pnpm install --prod
 
 # Expose the necessary port(s) for your app
@@ -46,4 +44,4 @@ ENV API_PORT=4000
 EXPOSE 4000
 
 # Start the Node.js application
-CMD ["pm2-runtime", "ecosystem.config.js"]
+ENTRYPOINT ["/bin/sh", "-c" , "node ./dist/index.js"]
