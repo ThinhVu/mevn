@@ -37,6 +37,7 @@ COPY --from=builder /app/build ./dist
 COPY --from=builder /app/ecosystem.config.js ./ecosystem.config.js
 
 # Install production dependencies only
+RUN npm install pnpm -g
 RUN pnpm install --prod
 
 # Expose the necessary port(s) for your app
