@@ -12,13 +12,13 @@ export const getFolderTree = async () => {
 
    const folderTree = []
    for (const folder of folders) {
-      if (_.isEmpty(folder.parent)) {
-         folderTree.push(folder)
-      } else {
+      if (folder.parent) {
          const parentFolder = folderMap.get(folder.parent.toString());
          if (!parentFolder) continue;
          if (!parentFolder.folders) parentFolder.folders = [];
          parentFolder.folders.push(folder);
+      } else {
+         folderTree.push(folder)
       }
    }
    return folderTree;
