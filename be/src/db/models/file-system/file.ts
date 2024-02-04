@@ -1,22 +1,11 @@
-import {model, Schema, Types} from 'mongoose';
+import {ObjectId} from "mongodb";
 
-const schema = new Schema({
-   name: String,
-   src: String,
-   size: Number,
-   type: String,
-   thumbnail: String,
-   createdAt: Date,
-}, {versionKey: false})
-
-export interface IFile {
-   _id: Types.ObjectId;
+export type IFile = Partial<{
+   _id: ObjectId;
    name: string;
    src: string;
    size: number;
    type: string;
    thumbnail: string;
    createdAt: Date;
-}
-
-export default model<IFile>('File', schema);
+}>

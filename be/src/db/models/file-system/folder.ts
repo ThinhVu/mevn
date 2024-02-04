@@ -1,22 +1,10 @@
-import {model, Schema, Types} from 'mongoose';
+import {ObjectId} from "mongodb";
 
-const Folder = new Schema({
-   name: String,
-   parent: Schema.Types.ObjectId,
-   files: [{
-      type: Schema.Types.ObjectId,
-      ref: 'File'
-   }],
-   createdAt: Date,
-}, {versionKey: false});
-
-export interface IFolder {
-   _id: Types.ObjectId;
+export type IFolder = Partial<{
+   _id: ObjectId;
    name: string;
-   parent?: Types.ObjectId;
-   folders?: IFolder[];
-   files?: Types.ObjectId[] | IFolder[];
+   parent: ObjectId; // ref Folder._id
+   folders: IFolder[]; // ref Folder._id
+   files: ObjectId[] | IFolder[]; // ref File._id
    createdAt: Date;
-}
-
-export default model<IFolder>('Folder', Folder);
+}>

@@ -1,22 +1,9 @@
-import {model, Schema, Types} from 'mongoose';
+import {ObjectId} from "mongodb";
+import {Unique, HashedIndex} from "../../utils/types";
 
-const schema = new Schema({
-   key: {
-      type: String,
-      required: true,
-      unique: true
-   },
-   value: String,
-   isSecret: Boolean,
-}, {versionKey: false})
-
-schema.index({ key: 'hashed' })
-
-export interface Kv {
-   _id: Types.ObjectId;
-   key: string;
+export type IKV = Partial<{
+   _id: ObjectId;
+   key: Unique<HashedIndex<string>>;
    value: string;
-   isSecret?: boolean
-}
-
-export default model<Kv>('KV', schema)
+   isSecret?: boolean;
+}>

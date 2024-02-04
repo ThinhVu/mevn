@@ -1,13 +1,11 @@
 import useMongoDb from "./mongodb";
-import useSocketIO from './socketio'
+import migrate from "./migration";
 import useCronjob from "./cronjob";
-import useAdmin from "./admin";
+import useSocketIO from "./socketio";
 
-export default async function usePlugin(app) {
-   console.log('---------------------------')
-   await useMongoDb(app)
-   await useAdmin()
+export default async function usePlugin(app: any) {
+   await useMongoDb()
+   if (process.env.RUN_DB_MIGRATE) await migrate()
    await useCronjob()
-   await useSocketIO(app)
-   console.log('---------------------------')
+   if (process.env.USE_SOCKET_IO) await useSocketIO(app)
 }

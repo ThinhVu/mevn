@@ -1,16 +1,8 @@
-import {model, Schema, Types} from 'mongoose';
+import {ObjectId} from "mongodb";
 
-const schema = new Schema({
-   id: String,
-   success: Boolean,
-   date: Date,
-}, {versionKey: false})
-
-export interface IDbMigrateHistory {
-   _id: Types.ObjectId;
+export type IDbMigrateHistory = Partial<{
+   _id: ObjectId;
    id: string;
    success: boolean;
    date: Date;
-}
-
-export default model<IDbMigrateHistory>('DbMigrateHistory', schema)
+}>

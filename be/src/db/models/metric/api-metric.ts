@@ -1,14 +1,8 @@
-import {model, Schema, Types} from 'mongoose';
+import {ObjectId} from "mongodb";
+import {Indexed} from "../../../utils/types";
 
-const schema = new Schema({
-   metric: Object,
-   at: Date
-}, {versionKey: false})
-
-export interface IAPIMetric {
-   _id: Types.ObjectId;
+export type IAPIMetric = Partial<{
+   _id: ObjectId;
    metric: Record<string, unknown>;
-   at: Date;
-}
-
-export default model<IAPIMetric>('APIMetric', schema)
+   at: Indexed<Date>;
+}>

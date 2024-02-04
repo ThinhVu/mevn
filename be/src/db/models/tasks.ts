@@ -1,22 +1,13 @@
-import {model, Schema, Types} from 'mongoose';
+import {ObjectId} from "mongodb";
+import {Indexed} from "../../utils/types";
 
-const TaskSchema = new Schema({
-   type: {type: String},
-   at: Date,
-   completed: Boolean,
-   failed: Boolean,
-   error: String,
-   metadata: Object
-}, {versionKey: false})
-
-export interface ITask {
-   _id: Types.ObjectId;
+export type ITask = Partial<{
+   _id: ObjectId;
    type: string;
-   completed: boolean;
-   failed: boolean;
+   completed: Indexed<boolean>;
+   failed: Indexed<boolean>;
+   running: Indexed<boolean>;
    error: string;
    at: Date;
    metadata: any;
-}
-
-export default model<ITask>('Task', TaskSchema)
+}>

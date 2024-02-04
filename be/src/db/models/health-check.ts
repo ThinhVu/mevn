@@ -1,13 +1,7 @@
-import {model, Schema} from 'mongoose';
+import {ObjectId} from "mongodb";
 
-const schema = new Schema({
-   serviceName: String,
-   url: String,
-})
-
-export interface IHealthCheck {
+export type IHealthCheck = Partial<{
+   _id: ObjectId;
    serviceName: string;
    url: string;
-}
-
-export default model<IHealthCheck>('HealthCheck', schema)
+}>

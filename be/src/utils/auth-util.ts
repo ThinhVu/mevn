@@ -1,7 +1,6 @@
-import {Request} from "express";
+import {Request} from "hyper-express";
 import jwt from 'jsonwebtoken';
-// @ts-ignore
-import CryptoJS from 'crypto-js';
+import _ from 'lodash';
 import {IUser} from "../db/models/user";
 
 export interface IAuthData {
@@ -9,27 +8,37 @@ export interface IAuthData {
    expired: boolean
 }
 
+type TokenPayload = { user: {_id: string}, exp: number, iat: number }
+const tokenCache = new Map<string, TokenPayload>();
 export function parseAuthorization(req: Request): IAuthData {
-   const authorization = req.headers.authorization
-   if (!authorization)
-      return {user: null, expired: null}
-
-   const jwtToken = req.headers.authorization.split(' ')[1];
-   const data = jwt.verify(jwtToken, process.env.JWT_SECRET) as { user: Record<string, unknown>, exp: number, iat: number }
-   if (!data)
-      return {user: null, expired: null}
-
-   return {user: data.user, expired: Date.now() > data.exp * 1000}
-}
-
-export function genToken(user: IUser) {
-   const payload = {
-      user: {
-         _id: user._id,
-         email: user.email,
-         role: user.role,
-         password: user.password
+   const authorization = req.headers.authorization || req.headers.Authorization;
+   if (!authorization) return {user: null, expired: null};
+   const jwtToken = authorization.split(' ')[1];
+   if (process.env.PERF_BOOST) {
+      const data = tokenCache.get(jwtToken);
+      if (data) {
+         const expired = Date.now() > data.exp * 1000;
+         if (expired) tokenCache.delete(jwtToken);
+         return {user: data.user, expired}
       }
    }
+   const data = jwt.verify(jwtToken, process.env.JWT_SECRET) as TokenPayload;
+   if (data) {
+      if (process.env.PERF_BOOST) {
+         tokenCache.set(jwtToken, data)
+      }
+      return {user: data.user, expired: Date.now() > data.exp * 1000}
+   } else {
+      return {user: null, expired: null}
+   }
+}
+
+export function genToken(user: IUser): string {
+   const payload = {user: {_id: user._id}}
+   return jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '7d'})
+}
+
+export function genAdminToken(admin): string {
+   const payload = {user: admin}
    return jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '7d'})
 }

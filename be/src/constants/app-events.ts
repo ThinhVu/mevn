@@ -1,0 +1,3 @@
+export const AppEvents = {
+   SYSTEM_NOTIFICATION: 'SYSTEM_NOTIFICATION'
+}

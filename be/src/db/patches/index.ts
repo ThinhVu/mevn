@@ -1,3 +1,3 @@
-import v0_0_1 from './v0.0.1'
+import demo from './demo'
 
-export default [v0_0_1]
+export default [demo]

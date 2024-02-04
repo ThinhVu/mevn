@@ -1,65 +1,71 @@
-import {model, Schema, Types} from 'mongoose';
+import {ObjectId} from "mongodb";
+import {Indexed} from "../../utils/types";
 
-export enum UserRole {
-   Regular = 'Regular',
-   Admin = 'Admin'
+export enum Gender {
+   Male = 'Male',
+   Female = 'Female',
+   LGBT = 'LGBT',
+   NotSpecified = 'NotSpecified'
 }
 
-const UserSchema = new Schema({
-   avatar: String,
-   // access info
-   email: {
-      type: String,
-      lowercase: true,
-      trim: true,
-      unique: true,
-      required: true,
+export interface IAddress {
+   coordinates?: {
+      long: number;
+      lat: number;
    },
-   emailVerified: {
-      type: Boolean,
-      default: false,
-   },
-   password: {
-      type: String,
-   },
-   resetPasswordToken: String,
-   createdAt: Date,
-   fcm: String,
-   // profile info
-   username: {
-      type: String,
-      lowercase: true,
-      trim: true,
-      sparse: true,
-   },
-   role: {
-      type: String,
-      required: true,
-      default: UserRole.Regular,
-      enum: Object.values(UserRole),
-   },
-   fullName: {
-      type: String,
-   },
-   test: Boolean,
-}, {versionKey: false});
+   addressLine?: string;
+   zipCode?: string;
+   city?: string;
+   country?: string;
+}
 
 export interface IPublicUserInfo {
-   avatar?: string;
-   role?: UserRole;
-   fullName?: string;
-   username?: string;
-   email?: string;
+   _id: ObjectId;
+   avatar: string;
+   email: string;
+   fullName: string;
+   username: string;
 }
 
-export interface IUser extends IPublicUserInfo {
-   _id: Types.ObjectId;
-   emailVerified?: boolean;
+export interface Prefs {
+   language: string
+}
+
+export type IUser = Partial<{
+   _id: ObjectId
+   avatar: string;
+   email: Indexed<string>;
+   emailVerified: boolean;
+   phone: Indexed<string>;
+   phoneVerified: boolean;
    password: string;
-   resetPasswordToken?: string;
-   createdAt: Date;
-   fcm: string;
+   createdAt: Indexed<Date>;
+   OAuthProvider: Indexed<string>;
+   OAuthUserId: Indexed<string>;
+   // profile info
+   username: Indexed<string>;
+   fullName: string;
+   gender: string;
+   birthday: Date;
+   address: IAddress;
+   about: string;
+   prefs: Prefs;
+   notificationSetting: {
+      allow: Boolean,
+      systemNotification: Boolean,
+   },
+   fcm: string[];
+   apn: string[];
+   // online/offline
+   isOnline: Boolean,
+   // social
+   facebook: string;
+   instagram: string;
+   telegram: string;
+   twitter: string;
+   twitch: string;
+   // delete info
+   deleteAccountRequest: any;
+   // dev
    test: boolean;
-}
-
-export default model<IUser>('User', UserSchema);
+}>

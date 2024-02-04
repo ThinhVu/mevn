@@ -1,113 +1,50 @@
-import {create, update, remove} from "../business-logic/file-system/file";
-import {addFileToFolder, removeFileFromFolder} from "../business-logic/file-system/folder";
+import {create, update, remove} from "../logic/file-system/file";
+import {addFileToFolder, removeFileFromFolder} from "../logic/file-system/folder";
 import DataParser from "../utils/data-parser";
-import {requireAdmin, UserRequest} from "../middlewares/auth";
+import {requireAdmin, requireUser, UserProps} from "../middlewares/auth";
 import $ from "../utils/safe-call";
-import Routerex from '@tvux/routerex';
+import {Router, Request} from 'hyper-express';
+import axios from "axios";
+import _ from 'lodash';
+import {rateLimitByUser} from "../middlewares/rate-limit";
 
-export default async function useFile(parentRouter) {
+import {m2ms} from "../utils/date-time-util";
+
+export default async function useFile(parentRouter: Router) {
    console.log('[route] useFile')
 
-   const router = Routerex()
+   const router = new Router()
 
-   router.post('/', {
-      title: 'Create file',
-      desc: 'Create file',
-      schema: {
-         body: {
-            name: {
-               type: 'string',
-               desc: 'File name',
-               required: true
-            },
-            src: {
-               type: 'string',
-               desc: 'File source',
-               required: true
-            },
-            size: {
-               type: 'number',
-               desc: 'File size',
-               required: true
-            },
-            type: {
-               type: 'string',
-               desc: 'File type',
-               required: true
-            },
-            thumbnail: {
-               type: 'string',
-               desc: 'File thumbnail',
-            },
-            folderId: {
-               type: 'string',
-               desc: 'Folder id',
-               required: true
-            }
-         }
-      },
-      response: {
-         200: {
-            type: 'object',
-         }
-      }
-   }, requireAdmin, $(async (req: UserRequest) => {
-      const {name, src, size, type, thumbnail, folderId} = req.body
+   router.post('/', {middlewares: [requireAdmin]}, $(async (req) => {
+      const {name, src, size, type, thumbnail, folderId} = await req.json()
       const file = await create({name, src, size, type, thumbnail, createdAt: new Date()})
       if (folderId)
          await addFileToFolder(DataParser.objectId(folderId), file._id)
       return file
    }))
-   router.put('/:id', {
-      title: 'Update file',
-      desc: 'Update file',
-      schema: {
-         params: {
-            id: {
-               type: 'string',
-               desc: 'File id',
-               required: true
-            }
-         },
-         body: {
-            change: {
-               type: 'object',
-               desc: 'Change',
-               required: true
-            }
-         }
-      },
-      response: {
-         200: {
-            type: 'object',
-         }
-      }
-   }, requireAdmin, $(async (req: UserRequest) => {
-      return update(DataParser.objectId(req.params.id), req.body.change)
+   router.put('/:id', {middlewares: [requireAdmin]}, $(async (req) => {
+      const {id} = req.path_parameters
+      const {change} = await req.json()
+      return update(DataParser.objectId(id), change)
    }))
    router.delete('/:id', {
-      title: 'Delete file',
-      desc: 'Delete file',
-      schema: {
-         params: {
-            id: {
-               type: 'string',
-               desc: 'File id',
-               required: true
-            }
-         }
-      },
-      response: {
-         200: {
-            type: 'object',
-         }
-      }
-   }, requireAdmin, $(async (req: UserRequest) => {
-      const folderId = DataParser.objectId(req.query.folderId, false)
-      const fileId = DataParser.objectId(req.params.id)
+      middlewares: [requireAdmin]
+   }, $(async (req: Request<UserProps>) => {
+      const {id} = req.path_parameters
+      const folderId = DataParser.objectId(req.query_parameters.folderId, false)
+      const fileId = DataParser.objectId(id)
       const data = await remove(fileId)
       if (folderId)
          await removeFileFromFolder(folderId, fileId)
+      return data
+   }))
+   router.get('/upload-form', {
+      middlewares: [requireUser, await rateLimitByUser({windowMs: m2ms(10), max: 60})]
+   }, $(async (req) => {
+      const {filename, mimeType} = req.query_parameters;
+      const folder = _.get(req.query_parameters, 'folder', 'user-data')
+      const url = `${process.env.FS_API_ENDPOINT}/upload-form?folder=${folder}&filename=${filename}&mimeType=${mimeType}&apiKey=${process.env.FS_API_KEY}`
+      const {data} = await axios.get(url)
       return data
    }))
 

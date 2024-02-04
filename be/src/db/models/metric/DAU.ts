@@ -1,15 +1,8 @@
-// daily active user
-import {model, Schema, Types} from 'mongoose';
+import {ObjectId} from "mongodb";
+import {Indexed} from "../../../utils/types";
 
-const DAUSchema = new Schema({
-   activeUsers: Number,
-   at: Date
-}, {versionKey: false})
-
-export interface IDAU {
-   _id: Types.ObjectId;
-   activeUsers: number;
-   at: Date
-}
-
-export default model<IDAU>("DAU", DAUSchema)
+export type IDAU = Partial<{
+   _id: ObjectId;
+   n: number;
+   t: Indexed<Date>;
+}>

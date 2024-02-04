@@ -1,37 +1,32 @@
-import useHealthCheck from "./health-check.route";
-import useApiMetricPlugin from "./metrics.route";
+import useAdmin from "./admin.route";
 import useDevServer from "./dev-server.route";
-import useUser from "./user.route";
-import useKv from "./kv.route";
 import useFile from "./file.route";
 import useFolder from "./folder.route";
-import useHmmApp from './hmm.app'
-import Routerex from '@tvux/routerex';
-import generateApiDocument from '@tvux/exdogen';
-import express from "express";
-import mongoSanitize from "express-mongo-sanitize"
+import useHealthCheck from "./health-check.route";
+import useI18n from "./i18n.route";
+import useKv from "./kv.route";
+import useUserMetric from "./user-metric.route";
+import useNotification from "./notification.route";
+import useUser from "./user.route";
+import useHmmApp from './hmm.app';
+import useMetrics from './metrics.app';
+import {Router} from "hyper-express";
 
 export default async function useRoutes(app) {
    await useHmmApp(app)
+   await useMetrics(app)
 
-   const router = Routerex()
-   await useDevServer(router)
-   await useApiMetricPlugin(router)
+   const router = new Router()
    await useHealthCheck(router)
-   await useUser(router)
-   await useKv(router)
+   await useDevServer(router)
+   await useI18n(router)
+   await useUserMetric(router)
+   await useAdmin(router)
    await useFile(router)
    await useFolder(router)
-   app.use(express.json({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb'}))
-   app.use(express.urlencoded({limit: process.env.REQUEST_BODY_MAX_SIZE || '50mb', extended: true}))
-   app.use(mongoSanitize())
-   const apiPath = '/api'
-   app.use(apiPath, router)
-   console.log('[route] useDocumentGenerator')
-   console.log('[useDocumentGenerator] document generating...')
-   const document = await generateApiDocument(apiPath, router)
-   app.get('/docs', (req, res) => res.send(document.html))
-   app.get('/docs/index.html', (req, res) => res.send(document.html))
-   app.get('/docs/postman.json', (req, res) => res.send(document.postman))
-   console.log('[useDocumentGenerator] document generated!')
+   await useKv(router)
+   await useNotification(router)
+   await useUser(router)
+
+   app.use('/', router)
 }

@@ -1,14 +1,7 @@
-import {model, Schema, Types} from 'mongoose';
+import {ObjectId} from "mongodb";
 
-const schema = new Schema({
-   content: String,
-   at: Date
-}, {versionKey: false})
-
-export interface IAnnouncement {
-   _id: Types.ObjectId;
+export type IAnnouncement = Partial<{
+   _id: ObjectId;
    content: string;
    at: Date;
-}
-
-export default model<IAnnouncement>('Announcement', schema)
+}>

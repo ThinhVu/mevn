@@ -1,38 +1,41 @@
 import {CronJob} from "cron";
-import * as AppMetric from "../business-logic/metric/app-metric";
-import * as DAU from "../business-logic/metric/DAU";
-import Tasks from "../db/models/tasks";
-import appHooks from "../business-logic/hooks";
+import {snapshot as appMetricSnapshot} from "../logic/metric/app-metric";
+import {snapshot as userMetricSnapshot} from "../logic/metric/user-metric";
+import appHook from "../logic/hooks";
+import {getLogger} from "../utils/logger";
+import {Model} from "../db/models";
 
-// https://crontab.guru/
-// https://momentjs.com/timezone
-export default async function useCronjob() {
+// https://crontab.guru
+export default async function cronjob() {
    if (!process.env.RUN_CRONJOB) return
-   console.log('[plugin] cronjob')
+   getLogger().info('[plugin] cronjob')
+   const Tasks = Model.Tasks;
 
-   const timeZone = 'Europe/London' // UTC-0
-
-   const runDailyAtNight = '50 11 * * *'
-   new CronJob(runDailyAtNight, () => {
-      AppMetric.snapshot().catch(console.error)
-      DAU.snapshot().catch(console.error)
-   }, null, true, timeZone)
-
-   const runEach5Minutes = '*/12 * * * *';
-   new CronJob(runEach5Minutes, async () => {
-      const tasks = await Tasks.find({completed: false, failed: false, running: false, at: {$lte: new Date()}})
+   new CronJob('*/12 * * * *' /* runEach5Minutes */, async () => {
+      const tasks = await Tasks.find({completed: false, failed: false, running: false, at: {$lte: new Date()}}).toArray()
       for (const task of tasks) {
          const {_id, type, metadata} = task
          try {
-            Tasks.updateOne({_id}, {running: true})
-            .then(async () => await appHooks.trigger(`task:${type}`, metadata))
-            .then(async () => await Tasks.updateOne({_id}, {completed: true, running: false}))
-            .catch(console.error)
+            Tasks.updateOne({_id}, {$set: {running: true}})
+            .then(async () => await appHook.trigger(`task:${type}`, metadata))
+            .then(async () => await Tasks.updateOne({_id}, {$set: {completed: true, running: false}}))
+            .catch(e => getLogger().error(e.message, {fn: 'cronjob::Tasks.updateOne:try'}))
          } catch (e) {
-            Tasks.updateOne({_id}, {failed: true, error: e.message, running: false}).catch(console.error)
+            Tasks.updateOne({_id}, {$set: {failed: true, error: e.message, running: false}}).catch(
+               e => getLogger().error(e.message, {fn: 'cronjob::Tasks.updateOne:catch'}))
          }
       }
-   }, null, true, timeZone)
+   }, null, true)
 
-   // short frequent task?? cloud cost??
+   // new CronJob('0 * * * *' /* runEachHour */, () => {}, null, true)
+   // new CronJob('0 0 * * *' /* run at new day */, () => {}, null, true)
+
+   const runDailyAtNight = '50 11 * * *'
+   new CronJob(runDailyAtNight, () => {
+      appMetricSnapshot()
+      userMetricSnapshot()
+   }, null, true)
+
+   appMetricSnapshot()
+   userMetricSnapshot()
 }

@@ -1,13 +1,13 @@
-import jwt from 'jsonwebtoken'
 import _ from 'lodash'
+import jwt from 'jsonwebtoken'
 import {Server, Socket} from 'socket.io'
-import {createAdapter as createRedisAdapter} from "@socket.io/redis-adapter"
+import {createAdapter} from "@socket.io/redis-adapter"
 import {createAdapter as createMongoDbAdapter} from '@socket.io/mongo-adapter'
 import {createClient} from "redis"
-import {instrument} from "@socket.io/admin-ui"
-import appHook from "../business-logic/hooks"
-import UserModel, {UserRole} from "../db/models/user"
-import process from "process";
+import appHook from "../logic/hooks"
+import * as process from "process";
+import {Model} from "../db/models";
+import {getColl} from "./mongodb";
 
 /**
  * https://socket.io/docs/v4/migrating-from-3-x-to-4-0/#the-default-value-of-pingtimeout-was-increased
@@ -24,59 +24,51 @@ const SSE_EVENTS = {
    connection: 'sse_connection',
    disconnect: 'sse_disconnect'
 }
-const UserId_SocketId_Map = {}
+const UserId_SocketIds_Map = {}
 
 async function createSocketServer(app) {
    console.log('[socket.io] createSocketServer')
-   const httpServer = app.$httpServer
-   const corsOrigins = (process.env.SOCKET_IO_CORS_ORIGIN || 'http://localhost:5173,http://127.0.0.1:5173' /*VITE*/).split(',')
+   const corsOrigins = (process.env.SOCKET_IO_CORS_ORIGIN || 'http://127.0.0.1:5173' /*VITE*/).split(',')
    console.log('[socket.io] corsOrigins', corsOrigins)
-   const transports = (process.env.SOCKET_IO_TRANSPORTS_METHOD || 'polling,websocket').split(',')
+   const transports = (process.env.SOCKET_IO_TRANSPORTS_METHOD || 'websocket').split(',')
    console.log('[socket.io] transports', transports)
-   const io = new Server(httpServer, {
+   // @ts-ignore
+   const io = new Server({
       cors: {
          origin: corsOrigins,
          methods: ['GET', 'POST', 'DELETE', 'PUT'],
          credentials: true
       },
-      // @ts-ignore
       transports
-   })
+   });
+   io.attachApp(app.uws_instance);
 
    // socket io adapter
    const useSocketIoAdapter = process.env.USE_SOCKET_IO_REDIS_ADAPTER || process.env.USE_SOCKET_IO_MONGO_ADAPTER
    if (process.env.USE_SOCKET_IO_REDIS_ADAPTER) {
       console.log('[socket.io] use redis adapter')
-      const redisAdapter = {
-         url: process.env.SOCKET_IO_REDIS_ADAPTER_URL,
-         password: process.env.SOCKET_IO_REDIS_ADAPTER_PASSWORD
-      }
-      const pubClient = createClient(redisAdapter)
+      const pubClient = createClient({url: process.env.SOCKET_IO_REDIS_ADAPTER_URL})
       const subClient = pubClient.duplicate()
-      Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
-         pubClient.ping().then(console.log);
-         // @ts-ignore
-         io.adapter(createRedisAdapter(pubClient, subClient))
-      })
+      await Promise.all([pubClient.connect(), subClient.connect()]);
+      io.adapter(createAdapter(pubClient, subClient));
    } else if (process.env.USE_SOCKET_IO_MONGO_ADAPTER) {
-      console.log('[socket-io] use mongodb adapter')
-      const mongoCollection = app.$db.connections[0].db.collection(process.env.SOCKET_IO_MONGODB_ADAPTER_COLLECTION || 'socket-io');
+      console.log('[socket.io] use mongodb adapter')
+      const mongoCollection = getColl('socket-io');
       await mongoCollection.createIndex(
-         {createdAt: 1},
-         {expireAfterSeconds: 3600, background: true}
+        {createdAt: 1},
+        {expireAfterSeconds: 7200, background: true}
       )
       // @ts-ignore
       io.adapter(createMongoDbAdapter(mongoCollection, {addCreatedAtField: true}))
    }
 
    const adminNs = io.of('/admin');
-   adminNs.use((socket: Socket, next) => {
+   adminNs.use(async (socket: Socket, next) => {
       const token = _.get(socket, 'handshake.query.token')
       if (token) {
          try {
-            const {user} = jwt.verify(token, process.env.JWT_SECRET)
-            if (user.role !== UserRole.Admin)
-               next(new Error('Not admin user'))
+            const payload = jwt.verify(token, process.env.JWT_SECRET)
+            const user = await Model.AdminUsers.findOne({email: payload.user.email})
             if (user) {
                // @ts-ignore
                socket.authUser = user
@@ -90,10 +82,8 @@ async function createSocketServer(app) {
       } else {
          next(new Error('Authentication error'))
       }
-   })
+   });
    adminNs.on('connection', socket => {
-      console.log('[socket.io/admin] socket connected')
-
       socket.on('watch', (...args) => {
          const gr = args.join(':')
          console.log('[socket.io] watch', gr)
@@ -126,30 +116,29 @@ async function createSocketServer(app) {
       } else {
          next(new Error('Authentication error'))
       }
-   })
+   });
    // @ts-ignore
    appNs.toUser = (userId: string) => {
-      const socketId = UserId_SocketId_Map[userId]
-      if (socketId) {
+      const socketIds = Object.keys(UserId_SocketIds_Map[userId] || {})
+      return {
          // https://socket.io/docs/v4/redis-adapter/
          // each socket connected to server will join room = its id
          // so emit to socket is equal to emit to a room, the message will be sent to all server
-         return appNs.to(socketId)
-      } else {
-         return {
-            emit: () => {/* nothing */
+         emit: (ev, ...args) => {
+            for (const socketId of socketIds) {
+               appNs.to(socketId).emit(ev, ...args)
             }
          }
       }
    }
-
    function onUserOnline(userId, socketId) {
-      UserId_SocketId_Map[userId] = socketId
+      if (!UserId_SocketIds_Map[userId])
+         UserId_SocketIds_Map[userId] = {}
+      UserId_SocketIds_Map[userId][socketId] = 1
    }
-
    function onUserOffline(userId, socketId) {
-      if (UserId_SocketId_Map[userId] === socketId)
-         delete UserId_SocketId_Map[userId]
+      if (UserId_SocketIds_Map[userId])
+         delete UserId_SocketIds_Map[userId][socketId]
    }
 
    appNs.on(SSE_EVENTS.connection, onUserOnline)
@@ -159,7 +148,8 @@ async function createSocketServer(app) {
       // @ts-ignore
       const userId = socket.authUser._id
       console.log(`[socket.io] ${userId} connect`)
-      await UserModel.updateOne({_id: userId}, {isOnline: true})
+      await Model.Users.updateOne({_id: userId}, {$set: {isOnline: true}})
+
 
       // update socket connection status in current server
       onUserOnline(userId, socket.id)
@@ -177,13 +167,13 @@ async function createSocketServer(app) {
          onUserOffline(userId, socket.id)
          if (useSocketIoAdapter)
             appNs.serverSideEmit(SSE_EVENTS.disconnect, userId, socket.id) // https://socket.io/docs/v4/adapter/
-         await UserModel.updateOne({_id: userId}, {isOnline: false})
+         await Model.Users.updateOne({_id: userId}, {$set: {isOnline: false}})
          // There is a case when user disconnect from server A at time (t)
          // Then connect to server B at time (t + x) with x < SOCKET_PING_TIMEOUT
          // The 'disconnect' event will be raise in server A at time (t + SOCKET_PING_TIMEOUT)
          // In this case, we just ignore the disconnection of socket in server A.
          setTimeout(async () => {
-            const isUserFinallyOffline = await UserModel.count({_id: userId, isOnline: false})
+            const isUserFinallyOffline = await Model.Users.countDocuments({_id: userId, isOnline: false})
             if (isUserFinallyOffline)
                appHook.trigger('user:offline', userId)
          }, SOCKET_PING_TIMEOUT_IN_MS)
@@ -196,7 +186,6 @@ async function createSocketServer(app) {
 }
 
 export default async function useSocketIO(app) {
-   if (!process.env.USE_SOCKET_IO) return
    console.log('[plugin] socket.io')
    // @ts-ignore
    global.io = await createSocketServer(app)

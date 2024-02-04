@@ -1,3 +1,0 @@
-export const Events = {
-   SYSTEM_NOTIFICATION: 'SYSTEM_NOTIFICATION'
-}

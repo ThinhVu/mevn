@@ -1,179 +1,42 @@
-import DataParser from "../utils/data-parser"
+import To from "../utils/data-parser"
 import {requireAdmin, requireUser} from "../middlewares/auth"
 import $ from "../utils/safe-call"
 import {
    addFileToFolder, removeFileFromFolder, getFolderTree,
    getFiles, create, update, remove
-} from "../business-logic/file-system/folder"
-import Routerex from '@tvux/routerex';
+} from "../logic/file-system/folder"
+import {Router} from 'hyper-express';
 
-export default async function useFolder(parentRouter) {
+export default async function useFolder(parentRouter: Router) {
    console.log('[route] useFolder')
 
-   const router = Routerex()
+   const router = new Router()
 
-   router.get('/', {
-      title: 'Get folder tree',
-      desc: 'Get folder tree',
-      response: {
-         200: {
-            type: 'object',
-            desc: 'Folder tree'
-         }
-      }
-   }, requireUser, $(async () => getFolderTree()))
-   router.post('/', {
-      title: 'Create folder',
-      desc: 'Create folder',
-      schema: {
-         body: {
-            name: {
-               type: 'string',
-               desc: 'Folder name',
-               required: true
-            },
-            parent: {
-               type: 'string',
-               desc: 'Parent folder id'
-            }
-         }
-      },
-      response: {
-         200: {
-            type: 'object',
-            desc: 'Folder'
-         }
-      }
-   }, requireAdmin, $(async req => {
-      const {name, parent} = req.body;
-      return create(name, DataParser.objectId(parent, false))
+   router.get('/', {middlewares: [requireUser]}, $(async () => getFolderTree()))
+   router.post('/', {middlewares: [requireAdmin]}, $(async req => {
+      const {name, parent} = await req.json();
+      return create(name, To.objectId(parent, false))
    }))
-   router.get('/:id', {
-      title: 'Get folder files',
-      desc: 'Get folder files',
-      schema: {
-         params: {
-            id: {
-               type: 'string',
-               desc: 'Folder id',
-               required: true
-            }
-         }
-      },
-      response: {
-         200: {
-            type: 'array',
-            desc: 'Folder files'
-         }
-      }
-   }, requireUser, $(async req => {
-      const folderId = DataParser.objectId(req.params.id)
+   router.get('/:id', {middlewares: [requireUser]}, $(async req => {
+      const folderId = To.objectId(req.path_parameters.id)
       return getFiles(folderId)
    }))
-   router.put('/:id', {
-      title: 'Update folder',
-      desc: 'Update folder',
-      schema: {
-         params: {
-            id: {
-               type: 'string',
-               desc: 'Folder id',
-               required: true
-            }
-         },
-         body: {
-            name: {
-               type: 'string',
-               desc: 'Folder name',
-               required: true
-            }
-         }
-      },
-      response: {
-         200: {
-            type: 'object',
-            desc: 'Folder'
-         }
-      }
-   }, requireAdmin, $(async req => {
-      const folderId = DataParser.objectId(req.params.id)
-      const {name} = req.body
+   router.put('/:id', { middlewares: [requireAdmin] }, $(async req => {
+      const folderId = To.objectId(req.path_parameters.id)
+      const {name} = await req.json()
       return update(folderId, {name})
    }))
-   router.delete('/:id', {
-      title: 'Delete folder',
-      desc: 'Delete folder',
-      schema: {
-         params: {
-            id: {
-               type: 'string',
-               desc: 'Folder id',
-               required: true
-            }
-         }
-      },
-      response: {
-         200: {
-            type: 'object',
-         }
-      }
-   }, requireAdmin, $(async req => {
-      const folderId = DataParser.objectId(req.params.id)
+   router.delete('/:id', { middlewares: [requireAdmin] }, $(async req => {
+      const folderId = To.objectId(req.path_parameters.id)
       return remove(folderId)
    }))
-   router.post('/add-file', {
-      title: 'Add file to folder',
-      desc: 'Add file to folder',
-      schema: {
-         body: {
-            folderId: {
-               type: 'string',
-               desc: 'Folder id',
-               required: true
-            },
-            fileId: {
-               type: 'string',
-               desc: 'File id',
-               required: true
-            }
-         }
-      },
-      response: {
-         200: {
-            type: 'object',
-            desc: 'Folder'
-         }
-      }
-   }, requireAdmin, $(async req => {
-      const {folderId, fileId} = req.body
-      return addFileToFolder(DataParser.objectId(folderId), DataParser.objectId(fileId))
+   router.post('/add-file', { middlewares: [requireAdmin] }, $(async req => {
+      const {folderId, fileId} = await req.json()
+      return addFileToFolder(To.objectId(folderId), To.objectId(fileId))
    }))
-   router.post('/remove-file', {
-      title: 'Remove file from folder',
-      desc: 'Remove file from folder',
-      schema: {
-         body: {
-            folderId: {
-               type: 'string',
-               desc: 'Folder id',
-               required: true
-            },
-            fileId: {
-               type: 'string',
-               desc: 'File id',
-               required: true
-            }
-         }
-      },
-      response: {
-         200: {
-            type: 'object',
-            desc: 'Folder'
-         }
-      }
-   }, requireAdmin, $(async req => {
-      const {folderId, fileId} = req.body
-      return removeFileFromFolder(DataParser.objectId(folderId), DataParser.objectId(fileId))
+   router.post('/remove-file', { middlewares: [requireAdmin] }, $(async req => {
+      const {folderId, fileId} = await req.json()
+      return removeFileFromFolder(To.objectId(folderId), To.objectId(fileId))
    }))
 
    parentRouter.use('/folder', router)

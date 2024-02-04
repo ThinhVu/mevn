@@ -1,5 +1,8 @@
+# https://github.com/uNetworking/uWebSockets.js/discussions/158
 # Stage 1: Build Stage
-FROM node:18-alpine as builder
+FROM node:20-alpine as builder
+
+RUN ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2
 
 # Set the working directory
 WORKDIR /app
@@ -19,13 +22,12 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Runtime Stage
-FROM node:18-alpine as runner
+FROM node:20-alpine as runner
+
+RUN ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2
 
 # Set the working directory
 WORKDIR /app
-
-# add bash
-RUN apk update && apk add bash
 
 # Set production env
 ENV NODE_ENV=production
@@ -34,7 +36,6 @@ ENV NODE_ENV=production
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /app/build ./dist
-COPY --from=builder /app/ecosystem.config.js ./ecosystem.config.js
 
 # Install production dependencies only
 RUN npm install pnpm -g

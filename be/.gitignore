@@ -6,7 +6,7 @@ node_modules/
 .vscode/
 
 # Misc
-.env.production
+.env
 .DS_Store
 
 # Package manager
@@ -16,4 +16,3 @@ yarn-error.log*
 
 build/
 /logs/
-/.env

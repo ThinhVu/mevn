@@ -1,112 +1,38 @@
 import $ from "../utils/safe-call";
 import {requireAdmin} from "../middlewares/auth";
-import {get, getValue, getAll, set, remove} from "../business-logic/kv";
-import Routerex from '@tvux/routerex';
+import {get, getValue, getAll, set, remove} from "../logic/kv";
+import {Router} from 'hyper-express';
 
-export default async function useKv(parentRouter) {
+export default async function useKv(parentRouter: Router) {
    console.log('[route] useKv')
-   const router = Routerex()
+   const router = new Router()
 
-   const getAllKvsMetadata = {
-      title: 'Get all key-value pair',
-      desc: 'Get all key-value pair',
-      response: {
-         type: 'array',
-         items: {
-            type: 'object',
-            properties: {
-               key: {type: 'string'},
-               value: {type: 'string'}
-            }
-         }
-      }
-   }
-   router.get('/', getAllKvsMetadata, requireAdmin, $(async () => getAll()));
+   router.get('/', {
+      middlewares: [requireAdmin]
+   }, $(async () => getAll()));
 
-   const getSpecifiedKvMetadata = {
-      title: 'Get specified kv',
-      desc: 'Get specified kv',
-      schema: {
-         params: {
-            key: {
-               type: 'string',
-               desc: 'A string containing the name of the key you want to create/update.'
-            }
-         }
-      },
-      response: {
-         type: 'string',
-         desc: 'The value of the key'
-      }
-   }
-   router.get('/:key', getSpecifiedKvMetadata, requireAdmin, $(async req => {
-      const rs = await getValue(req.params.key)
+   router.get('/:key', {
+      middlewares: [requireAdmin]
+   }, $(async req => {
+      const rs = await getValue(req.path_parameters.key)
       return rs
    }))
 
-   const setKvMetadata = {
-      title: 'Set system config value',
-      desc: 'Set value of system config',
-      schema: {
-         params: {
-            key: {
-               type: 'string',
-               desc: 'A string containing the name of the key you want to create/update.'
-            }
-         },
-         body: {
-            type: 'object',
-            properties: {
-               payload: {
-                  type: 'string',
-                  desc: 'The value of the key'
-               }
-            }
-         }
-      },
-      response: {
-         type: 'object',
-         properties: {
-            key: {type: 'string'},
-            value: {type: 'string'}
-         }
-      }
-   }
-   router.post('/:key', setKvMetadata, requireAdmin, $(async req => {
-      const {value, isSecret} = req.body
-      const cfg = await set(req.params.key, value, isSecret)
-      // @ts-ignore
-      global.io.of('/admin').to('kv').emit(`kv:set`, cfg)
-      return cfg
+   router.post('/:key', {
+      middlewares: [requireAdmin]
+   }, $(async req => {
+      const {value, isSecret} = await req.json()
+      return set(req.path_parameters.key, value, isSecret)
    }))
 
-   const unsetKvMetadata = {
-      title: 'Delete system config',
-      desc: 'Delete system config',
-      schema: {
-         params: {
-            key: {
-               type: 'string',
-               desc: 'A string containing the name of the key you want to delete.'
-            }
-         }
-      },
-      response: {
-         type: 'boolean',
-         desc: 'Whether the key is deleted'
-      }
-   }
-   router.delete('/:key', unsetKvMetadata, requireAdmin, $(async req => {
-      const {key} = req.params
+   router.delete('/:key', {
+      middlewares: [requireAdmin]
+   }, $(async req => {
+      const {key} = req.path_parameters
       const cfg = await get(key)
       if (!cfg) throw new Error("Not found")
       const {deletedCount} = await remove(key)
-      const deleted = deletedCount === 1
-      if (deleted) {
-         // @ts-ignore
-         global.io.of('/admin').to('kv').emit(`kv:unset`, cfg)
-      }
-      return deleted
+      return deletedCount === 1
    }));
 
    parentRouter.use('/kv', router)

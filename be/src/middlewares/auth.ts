@@ -1,44 +1,51 @@
-import {handleApiError} from "../utils/common-util"
-import {parseAuthorization} from "../utils/auth-util"
-import {UserRole} from "../db/models/user";
-import {Request} from "express";
-import {Types} from "mongoose";
+import {ApiError} from "../utils/common-util";
+import {parseAuthorization} from "../utils/auth-util";
+import To from "../utils/data-parser";
+import {ObjectId} from "mongodb";
+import {type Request, type Response, type MiddlewareNext} from "hyper-express";
+import {Model} from "../db/models";
 
-export interface IAuthUser {
-   _id: Types.ObjectId,
-   email: string,
-   password: string,
-   role: UserRole
+interface IAuthUser {
+   _id: ObjectId;
+   email?: string;
+   password?: string;
 }
 
-export interface UserRequest extends Request {
-   user: IAuthUser,
-   body: any,
-   params: any,
-   query: any
+export interface UserProps {
+   user: IAuthUser
 }
 
-export async function requireAdmin(req, res, next) {
-   try {
-      const {user, expired} = parseAuthorization(req)
-      if (expired) throw new Error("Token expired")
-      if (!user) throw new Error("Invalid user")
-      if (user.role !== UserRole.Admin) throw new Error("Permission denied")
-      req.user = user
-      return next()
-   } catch (e) {
-      handleApiError(e, res)
+export function requireAdmin(req: Request<UserProps>, res: Response, next: MiddlewareNext) {
+   const {user} = parseAuthorization(req)
+   Model.AdminUsers.findOne({email: user.email, password: user.password}).then(admin => {
+      if (!admin) {
+         next(new ApiError("E_000", "Invalid admin", 401))
+         return
+      }
+      const authUser = {
+         _id: admin._id,
+         email: admin.email,
+         password: admin.password
+      }
+      if (req.locals)
+         req.locals.user = authUser
+      else
+         req.locals = { user: authUser }
+      next()
+   }).catch(e => next(new ApiError("E_000", "Invalid admin", 401)))
+}
+
+export function requireUser(req: Request<UserProps>, res: Response, next: MiddlewareNext) {
+   const {user, expired} = parseAuthorization(req)
+   if (!user || expired) {
+      next(new ApiError("E_000", "Invalid user", 401))
+      return
    }
-}
+   const authUser = {_id: To.objectId(user._id)}
+   if (req.locals)
+      req.locals.user = authUser
+   else
+      req.locals = {user: authUser}
 
-export async function requireUser(req, res, next) {
-   try {
-      const {user, expired} = parseAuthorization(req)
-      if (expired) throw new Error("Token expired")
-      if (!user) throw new Error("Invalid user")
-      req.user = user
-      return next()
-   } catch (e) {
-      handleApiError(e, res)
-   }
+   next()
 }

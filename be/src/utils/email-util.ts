@@ -1,9 +1,10 @@
 import nodemailer from 'nodemailer';
 import _ from 'lodash';
+import {getLogger} from "./logger";
 
 let mailSender, mailConfig: any;
 
-function initEmailSender() {
+function initMailSender() {
    try {
       mailConfig = {
          host: process.env.EMAIL_HOST,
@@ -12,30 +13,34 @@ function initEmailSender() {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASSWORD,
          },
-         secureConnection: false,
-         secure: false, // process.env.NODE_ENV === 'production',
+         secureConnection: process.env.EMAIL_SECURE,
+         secure: process.env.EMAIL_SECURE, // process.env.NODE_ENV === 'production',
          tls: {ciphers: 'SSLv3'},
       }
-      console.log('[email] init mail config')
+      getLogger().info('[email] init mail config')
       mailSender = nodemailer.createTransport(mailConfig)
    } catch (e) {
-      console.error('[email] failed to initialize mail sender', e)
+      getLogger().error(e.message, {fn: 'email::init'})
    }
 }
 
 export const sendEmail = ({to, subject, html = undefined, text = undefined}) => {
    if (!mailSender) {
-      initEmailSender()
+      initMailSender()
    }
-
    return new Promise((resolve, reject) => {
       if (!mailConfig.auth.user || !mailConfig.auth.pass) {
-         console.log('[email] You need to provide EMAIL_USER and EMAIL_PASSWORD environment variables for sending emails.');
+         getLogger().error('[email] You need to provide EMAIL_USER and EMAIL_PASSWORD environment variables for sending emails.');
          return resolve('An error occurred while sending an email: (Credentials missing).');
       }
 
+      let from = `"No Reply" <${
+         mailConfig.auth.user.includes('@') 
+             ? mailConfig.auth.user 
+             : `${mailConfig.auth.user}@${process.env.EMAIL_FROM_DOMAIN}`
+      }>`
       const mailData = _.omitBy({
-         from: mailConfig.auth.user,
+         from,
          to,
          subject,
          html,
@@ -43,7 +48,7 @@ export const sendEmail = ({to, subject, html = undefined, text = undefined}) => 
       }, _.isNil)
       mailSender.sendMail(mailData, function (err, info) {
             if (err) {
-               console.log('[email] An error occurred while sending an email: ', err);
+               getLogger().error('email-util', err);
                return reject(err);
             } else {
                return resolve(info);
