@@ -144,12 +144,13 @@ export default {
 
     return () => <div class="fc w-100 h-100">
       <div class="fr ai-c fg-8px px-2 h-50px" style="border-bottom: 1px solid #ddd">
-        <UploadZone multiple onUploaded={addNewFile}>
-          <TBtn secondary>Upload</TBtn>
-        </UploadZone>
         <TBtn secondary onClick={createFolder}>New Folder</TBtn>
-        <TBtn secondary onClick={createSubFolder}>New Sub Folder</TBtn>
-        {selectedFolder.value && <TBtn delete onClick={showDeleteFolderDialog}>Delete</TBtn> }
+        {selectedFolder.value && <>
+          <TBtn secondary onClick={createSubFolder}>New Sub Folder</TBtn>
+          <UploadZone multiple onUploaded={addNewFile}><TBtn secondary>Upload</TBtn></UploadZone>
+          <TSpacer/>
+          <TBtn delete onClick={showDeleteFolderDialog}>Delete</TBtn>
+        </> }
       </div>
       <div class="fr f1" style="height: calc(100% - 50px)">
         <div style="width: 200px; min-width: 200px; border-right: 1px solid #ddd">
