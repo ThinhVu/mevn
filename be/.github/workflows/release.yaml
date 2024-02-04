@@ -58,3 +58,9 @@ jobs:
           push: true
           tags: hub.docker.com/mevn:${{ steps.extract_version.outputs.version }}
           file: ./Dockerfile
+
+#      - name: Notify Discord
+#        uses: tsickert/discord-webhook@v5.3.0
+#        with:
+#          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+#          content: ${{ format('new version {0}', steps.extract_version.outputs.version) }}
