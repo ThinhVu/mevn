@@ -14,9 +14,9 @@ function initLogger() {
 
   if (process.env.NODE_ENV === 'production') {
     logger.add(new AxiomTransport({
-      dataset: 'backend-api',
-      token: 'xaat-2fabcf3d-b7cf-499f-801c-f80921a2d544',
-      orgId: 'befriendasia-gj8o',
+      dataset: process.env.AXIOM_DATA_SET,
+      token: process.env.AXIOM_TOKEN,
+      orgId: process.env.AXIOM_ORG,
     }))
     logger.add(new DiscordBotTransport({}))
   } else {
