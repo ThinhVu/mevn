@@ -6,7 +6,7 @@ import {CollNames, Model} from "../../db/models";
 export const getFolderTree = async () => {
    const folders = await Model.Folders.find({}, {projection: {files: 0}}).toArray()
 
-   const folderMap = new Map<string, IFolder>();
+   const folderMap = new Map<string, IFolder & {folders?: Array<IFolder>}>();
    for (const folder of folders)
       folderMap.set(folder._id.toString(), folder);
 
@@ -15,15 +15,12 @@ export const getFolderTree = async () => {
       if (_.isEmpty(folder.parent)) {
          folderTree.push(folder)
       } else {
-         const cate = folderMap.get(folder.parent.toString());
-         if (cate) {
-            if (!cate.folders)
-               cate.folders = []
-            cate.folders.push(folder)
-         }
+         const parentFolder = folderMap.get(folder.parent.toString());
+         if (!parentFolder) continue;
+         if (!parentFolder.folders) parentFolder.folders = [];
+         parentFolder.folders.push(folder);
       }
    }
-
    return folderTree;
 }
 export const getFiles = async (folderId: ObjectId) => {
