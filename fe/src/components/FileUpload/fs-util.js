@@ -1,26 +1,59 @@
-import {ref} from 'vue';
-import FsClient from './fs-client';
+import {ref, isRef} from 'vue';
+import axios from "axios";
+import {v4} from "uuid";
+import {feAPI} from "@/api";
 
 export const uploadingItems = ref([])
 export const showFileUploadProgressDialog = ref(false)
 
-/**
- * Upload file
- * @param files {[File]} selected files
- * @return {[Promise<any>]} promise contain the results
- */
-export function uploadFile(files) {
-  const uploadProgress = []
+export function uploadFiles(files, {onSuccess, onError}) {
   for (const file of files) {
-    uploadProgress.push(new Promise((resolve, reject) => {
-      showFileUploadProgressDialog.value = true
-      uploadingItems.value.push(FsClient.uploadFile(file, {
-        uploadCompletedCallback: async response => resolve(response.data),
-        uploadProgressCallback: console.log
-      }))
-    }))
+    showFileUploadProgressDialog.value = true
+    const source = axios.CancelToken.source()
+    const upload = ref({
+      key: v4(),
+      progress: 0,
+      inProgress: true,
+      cancel: source.cancel,
+      fileName: file.name,
+      success: false,
+      error: null,
+    })
+    uploadingItems.value.push(upload)
+    function handleUploadFailed(context, e) {
+      console.error(e, `[fs-util] ${context} failed`)
+      upload.value.progress = 0
+      upload.value.inProgress = false
+      upload.value.success = false
+      upload.value.error = e
+      onError(e)
+    }
+    console.log('[fs-util] upload file', file.name)
+    feAPI.file.uploadForm(file.name, file.type).then(uploadForm => {
+      const {url, fields, imageUrl} = uploadForm;
+      const formData = new FormData();
+      Object.keys(fields).forEach(key => formData.append(key, fields[key]));
+      formData.append('file', file);
+      axios.post(url, formData, {
+        cancelToken: source.token,
+        headers: {"Content-Type": "multipart/form-data"},
+        onUploadProgress: (progress) => {
+          upload.value.progress = Math.round(progress.loaded * 100 / progress.total)
+        }
+      }).then(() => {
+        upload.value.progress = 100
+        upload.value.success = true
+        upload.value.inProgress = false
+        onSuccess({
+          name: file.name,
+          src: `https://${imageUrl}`,
+          size: file.size,
+          type: file.type,
+          thumbnail: undefined,
+        })
+      }).catch(e => handleUploadFailed('upload', e))
+    }).catch(e => handleUploadFailed('get upload form', e))
   }
-  return uploadProgress;
 }
 
 export function clearUploadingItems() {

@@ -1,8 +1,10 @@
+import {socket} from "@/socket/socket"
+
 export function pipeServerLog() {
-  window.$socket.emit('server-log:pipe');
-  window.$socket.on('server-log:data', (method, ...args) => console[method](...args));
+  socket.emit('server-log:pipe');
+  socket.on('server-log:data', (method, ...args) => console[method](...args));
 }
 
 export function unpipeServerLog() {
-  window.$socket.emit('server-log:unpipe');
+  socket.emit('server-log:unpipe');
 }

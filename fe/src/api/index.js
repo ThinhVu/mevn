@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {API_URL} from '@/constants';
-import {user} from '@/app-state';
+import {user as appUser} from '@/app-state';
 
 function getRespData({data, error}) {
   if (error) {
@@ -12,11 +12,11 @@ function getRespData({data, error}) {
   return data
 }
 
-async function exec(asyncFn) {
+async function exec(promise) {
   try {
-    const rs = getRespData(await asyncFn())
+    const rs = getRespData(await promise)
     if (window.__debug)
-      console.log(rs)
+      console.log(rs.data)
     return rs;
   } catch (e) {
     console.log(e)
@@ -25,31 +25,16 @@ async function exec(asyncFn) {
 
 let axiosOpts = {};
 
-async function _saveAuthSession({token}) {
+async function _saveAuthSession({user, token}) {
   axiosOpts = {headers: {Authorization: `bearer ${token}`}};
   window.localStorage.setItem('access_token', token);
-  user.value = await userAPI.about('me');
+  appUser.value = user
 }
 
 export const userAPI = {
-  about: async (userId) => exec(() => axios.get(`${API_URL}/api/user/profile/${userId}`, axiosOpts)),
-  update: async (change) => exec(() => axios.put(`${API_URL}/api/user/profile`, change, axiosOpts)),
-  signUp: async (email, password) => {
-    try {
-      const {data} = await axios.post(`${API_URL}/api/user/sign-up/`, {email: email, password: password})
-      if (data.token) {
-        await _saveAuthSession(data);
-      } else {
-        console.error('Token missed!');
-      }
-      return data.token;
-    } catch (e) {
-      console.error(e)
-    }
-  },
   signIn: async (email, password) => {
     try {
-      const {data} = await axios.post(`${API_URL}/api/user/sign-in/`, {email, password})
+      const data = await exec(axios.post(`${API_URL}/admin/sign-in`, {email, password}))
       console.log('data', data)
       if (data.token) {
         await _saveAuthSession(data);
@@ -63,7 +48,7 @@ export const userAPI = {
   },
   auth: async token => {
     try {
-      const {data} = await axios.get(`${API_URL}/api/user/auth/`, {headers: {Authorization: `bearer ${token}`}});
+      const data = await exec(axios.get(`${API_URL}/admin/auth`, {headers: {Authorization: `bearer ${token}`}}));
       if (data.token) {
         await _saveAuthSession(data);
       } else {
@@ -74,35 +59,41 @@ export const userAPI = {
       return null;
     }
   },
-  signOut: async () => exec(() => axios.post(`${API_URL}/api/user/sign-out/`), {}, axiosOpts)
+  signOut: async () => exec(axios.post(`${API_URL}/admin/sign-out`), {}, axiosOpts)
 }
 
 export const systemAPI = {
-  getApiCallCounter: async () => exec(() => axios.get(`${API_URL}/api/api-metric/`, axiosOpts)),
-  getApiCallHistory: async (from, to) => exec(() => axios.get(`${API_URL}/api/api-metric/history?from=${from}&to=${to}`, axiosOpts)),
+  getDAUHistory: async (from, to) => exec(axios.get(`${API_URL}/user-metric/dau/history?from=${from}&to=${to}`, axiosOpts)),
+  getWAUHistory: async (from, to) => exec(axios.get(`${API_URL}/user-metric/wau/history?from=${from}&to=${to}`, axiosOpts)),
+  getMAUHistory: async (from, to) => exec(axios.get(`${API_URL}/user-metric/mau/history?from=${from}&to=${to}`, axiosOpts)),
+  getAppMetric: async () => exec(axios.get(`${API_URL}/app-metric`, axiosOpts)),
+  getAppMetricHistory: async (from, to) => exec(axios.get(`${API_URL}/app-metric/history?from=${from}&to=${to}`, axiosOpts)),
+  getApiCallCounter: async () => exec(axios.get(`${API_URL}/api-metric`, axiosOpts)),
+  getApiCallHistory: async () => exec(axios.get(`${API_URL}/api-metric/history`, axiosOpts)),
   healthCheck: async api_url => await axios.get(`${api_url}/health-check`, axiosOpts)
 }
 
 export const kvAPI = {
-  gets: async () => exec(() => axios.get(`${API_URL}/api/kv`, axiosOpts)),
-  get: async key => exec(() => axios.get(`${API_URL}/api/kv/${key}`, axiosOpts)),
-  set: async (key, value, isSecret) => exec(() => axios.post(`${API_URL}/api/kv/${key}`, {value, isSecret}, axiosOpts)),
-  unset: async key => exec(() => axios.delete(`${API_URL}/api/kv/${key}`, axiosOpts)),
+  gets: async () => exec(axios.get(`${API_URL}/kv`, axiosOpts)),
+  get: async key => exec(axios.get(`${API_URL}/kv/${key}`, axiosOpts)),
+  set: async (key, value, isSecret) => exec(axios.post(`${API_URL}/kv/${key}`, {value, isSecret}, axiosOpts)),
+  unset: async key => exec(axios.delete(`${API_URL}/kv/${key}`, axiosOpts)),
 }
 
 export const feAPI = {
   folder: {
-    create: async (name, parent) => exec(() => axios.post(`${API_URL}/api/folder`, {name, parent}, axiosOpts)),
-    update: async (id, change) => exec(() => axios.put(`${API_URL}/api/folder/${id}`, change, axiosOpts)),
-    remove: async (id) => exec(() => axios.delete(`${API_URL}/api/folder/${id}`, axiosOpts)),
-    getFolderTree: async () => exec(() => axios.get(`${API_URL}/api/folder`, axiosOpts)),
-    getFiles: async (folderId) => exec(() => axios.get(`${API_URL}/api/folder/${folderId}`, axiosOpts)),
-    addFileToFolder: async (folderId, fileId) => exec(() => axios.post(`${API_URL}/api/folder/add-file`, {folderId, fileId}, axiosOpts)),
-    removeFileFromFolder: async (folderId, fileId) => exec(() => axios.post(`${API_URL}/api/folder/remove-file`, {folderId, fileId}, axiosOpts)),
+    create: async (name, parent) => exec(axios.post(`${API_URL}/folder`, {name, parent}, axiosOpts)),
+    update: async (id, change) => exec(axios.put(`${API_URL}/folder/${id}`, change, axiosOpts)),
+    remove: async (id) => exec(axios.delete(`${API_URL}/folder/${id}`, axiosOpts)),
+    getFolderTree: async () => exec(axios.get(`${API_URL}/folder`, axiosOpts)),
+    getFiles: async (folderId) => exec(axios.get(`${API_URL}/folder/${folderId}`, axiosOpts)),
+    addFileToFolder: async (folderId, fileId) => exec(axios.post(`${API_URL}/folder/add-file`, {folderId, fileId}, axiosOpts)),
+    removeFileFromFolder: async (folderId, fileId) => exec(axios.post(`${API_URL}/folder/remove-file`, {folderId, fileId}, axiosOpts)),
   },
   file: {
-    create: async (item, folderId) => exec(() => axios.post(`${API_URL}/api/file`, {...item, folderId}, axiosOpts)),
-    update: async (fileId, change) => exec(() => axios.put(`${API_URL}/api/file/${fileId}`, {change}, axiosOpts)),
-    remove: async (fileId, folderId) => exec(() => axios.delete(`${API_URL}/api/file/${fileId}?folderId=${folderId}`, axiosOpts))
+    uploadForm: async (fileName, mimeType) => exec(axios.get(`${API_URL}/file/upload-form?fileName=${fileName}&mimeType=${mimeType}`, axiosOpts)),
+    create: async (item, folderId) => exec(axios.post(`${API_URL}/file`, {...item, folderId}, axiosOpts)),
+    update: async (fileId, change) => exec(axios.put(`${API_URL}/file/${fileId}`, {change}, axiosOpts)),
+    remove: async (fileId, folderId) => exec(axios.delete(`${API_URL}/file/${fileId}?folderId=${folderId}`, axiosOpts))
   }
 }
