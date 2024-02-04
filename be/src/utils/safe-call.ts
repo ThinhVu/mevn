@@ -6,6 +6,6 @@ type SafeCallResponse = (req: Request, res: Response, next: MiddlewareNext) => P
 export default function safeCall<T>(fn: SafeCallHandler<T>): SafeCallResponse {
    return async (req, res, next) => {
       const rs = await fn(req, res, next)
-      res.json({data: rs})
+      res.json(rs)
    }
 }
