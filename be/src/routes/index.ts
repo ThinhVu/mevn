@@ -10,6 +10,7 @@ import useNotification from "./notification.route";
 import useUser from "./user.route";
 import useHmmApp from './hmm.app';
 import useMetrics from './metrics.app';
+import useAppMetrics from './app-metric.route'
 import {Router} from "hyper-express";
 
 export default async function useRoutes(app) {
@@ -27,6 +28,7 @@ export default async function useRoutes(app) {
    await useKv(router)
    await useNotification(router)
    await useUser(router)
+   await useAppMetrics(router)
 
    app.use('/', router)
 }
