@@ -20,4 +20,7 @@ export default {
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    include: ['dayjs']
+  }
 }
