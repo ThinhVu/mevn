@@ -9,17 +9,16 @@ WORKDIR /app
 
 # Copy package.json and pnpm-lock.json
 COPY package*.json ./
-COPY pnpm-lock.yaml ./
+COPY yarn.lock ./
 
 # Install dependencies
-RUN npm install pnpm -g
-RUN pnpm install
+RUN yarn install
 
 # Copy the rest of the app's source code
 COPY . .
 
 # Build
-RUN npm run build
+RUN yarn build
 
 # Stage 2: Runtime Stage
 FROM node:20-alpine as runner
@@ -34,12 +33,11 @@ ENV NODE_ENV=production
 
 # Copy only the necessary artifacts from the build stage
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /app/yarn.lock ./yarn.lock
 COPY --from=builder /app/build ./dist
 
 # Install production dependencies only
-RUN npm install pnpm -g
-RUN pnpm install --prod
+RUN yarn install --prod
 
 # Expose the necessary port(s) for your app
 ENV API_PORT=4000
