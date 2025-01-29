@@ -1,11 +1,9 @@
-# MEVN
+# MHVN
 
-MEVN stand for MongoDB, Express, Vue, Nodejs. It's an all-in-one solution for building monolith web app with Vue3, Express, MongoDB, Nodejs.
+MHVN stand for MongoDB, HyperExpress, Vue, NodeJS. It's an all-in-one solution for building monolith web app with Vue3, HyperExpress, MongoDB, NodeJS.
 
 ### Backend (be)
-- Automatically generate API documents (as images below), you don't need to create/maintain it manually
-- db mongoose with predefined collections (User, DAU, DbMigration, HealthCheck, API Metric, FileStorage, SystemConfig, Tasks, Notification, Announcement).
-- mongoose replication configuration (coming soon).
+- mongodb with predefined collections (User, DAU, DbMigration, HealthCheck, API Metric, FileStorage, SystemConfig, Tasks, Notification, Announcement).
 - Built-in database migration workflow.
 - Built-in authentication using json web token.
 - User API: predefined api to create user, modifier user profile, forgot password, recover password via email, delete account request & cancel.
@@ -46,12 +44,6 @@ MEVN stand for MongoDB, Express, Vue, Nodejs. It's an all-in-one solution for bu
 - and a lot more...
 
 ### Example images
-
-API document generated automatically
-![api-doc.png](images%2Fapi-doc-1.png)
-
-Postman file generated automatically
-![postman.png](images%2Fpostman.png)
 
 Dashboard with API metric in chart & health check
 ![admin-dashboard.png](images%2Fadmin-dashboard-1.png)
